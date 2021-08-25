@@ -1,0 +1,1 @@
+# Energetic Macroscopic Representation Library for Typhoon HIL Schematic Editor
