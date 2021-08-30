@@ -1,0 +1,734 @@
+<ui_settings>
+    <version>2.1</version>
+    <model_locked>True</model_locked>
+    <canvas_bg_color>#ffffff</canvas_bg_color>
+    <initialization_code><![CDATA[# NOTE: Variables and functions defined here will be
+# available for use in all Macro and Expression scripts.
+# This code is always executed prior simulation start.
+# HIL API
+import typhoon.api.hil as hil
+
+# Variable 'SETTINGS_DIR' holds directory where loaded Panel .cus file is located.
+# Also you can call 'get_settings_dir_path()' function in any
+# Macro and Expression scripts to get the same directory.
+SETTINGS_DIR = get_settings_dir_path()
+
+# Numpy module is imported as 'np'
+# Scipy module is imported as 'sp'
+
+CYCL_ECE = [0.00,
+     0.00,
+     0.00,
+     0.00,
+     0.00,
+     0.00,
+     0.00,
+     0.00,
+     0.00,
+     0.00,
+     0.00,
+     0.00,
+     1.04,
+     2.08,
+     3.13,
+     4.17,
+     4.17,
+     4.17,
+     4.17,
+     4.17,
+     4.17,
+     4.17,
+     4.17,
+     4.17,
+     3.47,
+     2.78,
+     1.85,
+     0.93,
+     0.00,
+     0.00,
+     0.00,
+     0.00,
+     0.00,
+     0.00,
+     0.00,
+     0.00,
+     0.00,
+     0.00,
+     0.00,
+     0.00,
+     0.00,
+     0.00,
+     0.00,
+     0.00,
+     0.00,
+     0.00,
+     0.00,
+     0.00,
+     0.00,
+     0.00,
+     0.00,
+     0.83,
+     1.67,
+     2.50,
+     3.33,
+     4.17,
+     4.17,
+     4.17,
+     5.11,
+     6.06,
+     7.00,
+     7.94,
+     8.89,
+     8.89,
+     8.89,
+     8.89,
+     8.89,
+     8.89,
+     8.89,
+     8.89,
+     8.89,
+     8.89,
+     8.89,
+     8.89,
+     8.89,
+     8.89,
+     8.89,
+     8.89,
+     8.89,
+     8.89,
+     8.89,
+     8.89,
+     8.89,
+     8.89,
+     8.89,
+     8.89,
+     8.13,
+     7.36,
+     6.60,
+     5.83,
+     5.07,
+     4.31,
+     3.54,
+     2.78,
+     1.85,
+     0.93,
+     0.00,
+     0.00,
+     0.00,
+     0.00,
+     0.00,
+     0.00,
+     0.00,
+     0.00,
+     0.00,
+     0.00,
+     0.00,
+     0.00,
+     0.00,
+     0.00,
+     0.00,
+     0.00,
+     0.00,
+     0.00,
+     0.00,
+     0.00,
+     0.00,
+     0.00,
+     0.00,
+     0.83,
+     1.67,
+     2.50,
+     3.33,
+     4.17,
+     4.17,
+     4.17,
+     4.78,
+     5.40,
+     6.02,
+     6.64,
+     7.25,
+     7.87,
+     8.49,
+     9.10,
+     9.72,
+     9.72,
+     9.72,
+     10.24,
+     10.76,
+     11.28,
+     11.81,
+     12.33,
+     12.85,
+     13.37,
+     13.89,
+     13.89,
+     13.89,
+     13.89,
+     13.89,
+     13.89,
+     13.89,
+     13.89,
+     13.89,
+     13.89,
+     13.89,
+     13.89,
+     13.89,
+     13.37,
+     12.85,
+     12.33,
+     11.81,
+     11.28,
+     10.76,
+     10.24,
+     9.72,
+     9.72,
+     9.72,
+     9.72,
+     9.72,
+     9.72,
+     9.72,
+     9.72,
+     9.72,
+     9.72,
+     9.72,
+     9.72,
+     9.72,
+     9.72,
+     9.31,
+     8.89,
+     8.02,
+     7.14,
+     6.27,
+     5.40,
+     4.52,
+     3.65,
+     2.78,
+     1.85,
+     0.93,
+     0.00,
+     0.00,
+     0.00,
+     0.00,
+     0.00,
+     0.00,
+     0.00,
+     0.00 ];]]></initialization_code>
+    <components>
+        <component_data>
+                <id>643bd31e3a2611e787c28ca982b03a50</id>
+                <name><![CDATA[Velocity]]></name>
+                <type>TraceDisplay</type>
+                <description><![CDATA[]]></description>
+                <data_type>Analog signal</data_type>
+                <code><![CDATA[#----------------------- MANDATORY IMPORT --------------------------
+# HIL API
+import typhoon.api.hil as hil
+
+# NOTE: Only read functions are available from the HIL API
+#-------------------------------------------------------------------
+
+# mandatory variable used for storing value
+# that will be displayed
+displayValue = 0.0
+
+]]></code>
+                <signal_name><![CDATA[Mechanical Variables.Velocity]]></signal_name>
+                <updateRate>250</updateRate>
+                <background_color>#ffffff</background_color>
+                <hierarchy_position>1</hierarchy_position>
+                <widget_settings>
+                    <x>312</x>
+                    <y>8</y>
+                    <width>400</width>
+                    <height>200</height>
+                    <appearance><![CDATA[Flat]]></appearance>
+                </widget_settings>
+                <advance_widget_settings>
+                    <x_title><![CDATA[x axes]]></x_title>
+                    <y_title><![CDATA[y axes]]></y_title>
+                    <y_range_min>-20.0</y_range_min>
+                    <y_range_max>100.0</y_range_max>
+                    <time_window>200</time_window>
+                    <auto_scale_enabled>False</auto_scale_enabled>
+                    <legend_enabled>False</legend_enabled>
+                    <x_axis_title_enabled>False</x_axis_title_enabled>
+                    <y_axis_title_enabled>False</y_axis_title_enabled>
+                    <use_reference_curve>False</use_reference_curve>
+                    <reference_curve_code><![CDATA[# NOTE: Global namespace variables are available
+# Selected time window is available through variable 'timeWindow'
+# Selected update rate is available through variable 'updateRate'
+
+# reference curve data point
+curveData = 12.0
+
+# specify curve options ('data' part is mandatory)
+refCurveData1 = {
+    # reference curve data point
+    "data": curveData,
+
+    # curve line style: 'solid', 'dashed', 'dashdot', 'dotted'
+    "line_style": "dashed",
+
+    # curve line color: 'red', 'green', 'blue', 'cyan', 'magenta', 'yellow'
+    "line_color": 'red',
+
+    # curve line width: float number
+    "line_width": 2.0,
+    
+    # reference curve title
+    "title": "Reference curve",
+
+    # show a title in the legend
+    "show_in_legend": True
+}
+
+# list of reference curves data: [ref1, ref2,...refN]
+referenceCurves = [refCurveData1]
+
+]]></reference_curve_code>
+                </advance_widget_settings>
+            </component_data>
+        <component_data>
+                <id>85ff788f3a2611e7b4fb8ca982b03a50</id>
+                <name><![CDATA[Vehicle Speed [km/h]]]></name>
+                <type>SliderMacro</type>
+                <description><![CDATA[]]></description>
+                <on_use_code active="True"><![CDATA[#------------- MANDATORY IMPORTS ---------------
+# HIL API
+import typhoon.api.hil as hil
+
+# Function for printing text to console (e.g printf("Hello world"))
+from typhoon.utilities.misc import printf
+#------------------------------------------------
+
+# NOTE: entered value is available through variable 'inputValue'
+hil.set_scada_input_value('Reference', inputValue/3.6)
+]]></on_use_code>
+                <on_start_code active="True"><![CDATA[# NOTE: The code specified in this handler will be executed on simulation start.
+# HIL API
+import typhoon.api.hil as hil
+
+
+# Change widget value by setting this variable.
+# NOTE: If you not specify 'widgetValue' variable or assign 'None' to it, widget value won't be changed.
+widgetValue = None
+]]></on_start_code>
+                <on_timer_code active="True"><![CDATA[# NOTE: The code specified in this handler will be executed periodically each 1000ms.
+# NOTE: Only read functions are available from the HIL API
+# HIL API
+import typhoon.api.hil as hil
+
+
+# Change widget value by setting this variable.
+# NOTE: If you not specify 'widgetValue' variable or assign 'None' to it, widget value won't be changed.
+
+# get SCADA Input settings parameters
+scada_input_settings = hil.get_scada_input_settings("Reference")
+
+# unpack parameters from dictionary
+widgetValue = scada_input_settings["input_value"]*3.6
+
+]]></on_timer_code>
+                <on_start_code_source><![CDATA[Macro code]]></on_start_code_source>
+                <inputValue><![CDATA[34.992]]></inputValue>
+                <min>0.0</min>
+                <max>100.0</max>
+                <step>1.0</step>
+                <hierarchy_position>1</hierarchy_position>
+                <widget_settings>
+                    <x>360</x>
+                    <y>216</y>
+                    <width>288</width>
+                    <height>48</height>
+                    <appearance><![CDATA[Flat]]></appearance>
+                </widget_settings>
+            </component_data>
+        <component_data>
+                <id>ecfd64803a3011e7b62e8ca982b03a50</id>
+                <name><![CDATA[Capture/Scope]]></name>
+                <type>Capture/Scope</type>
+                <description><![CDATA[]]></description>
+                <hierarchy_position>1</hierarchy_position>
+                <working_mode>embedded</working_mode>
+                <widget_settings>
+                    <x>16.0</x>
+                    <y>312.0</y>
+                    <width>680</width>
+                    <height>320</height>
+                    <appearance><![CDATA[Flat]]></appearance>
+                    <state>Scope</state>
+                    <layout>None</layout>
+
+                    <capture>
+                        <time_interval>60.0</time_interval>
+                        <sample_rate>50000.0</sample_rate>
+                        <background_color>False</background_color>
+                        <layout>Vertical</layout>
+                        <legend>True</legend>
+                        <trigger>
+                            <type>Analog</type>
+                            <source>Mechanical Variables.Velocity</source>
+                            <edge>Rising edge</edge>
+                            <treshold>60.0</treshold>
+                            <offset>0.0</offset>
+                        </trigger>
+
+                        <analog_signals>
+                            <analog>
+                            <chanel>0</chanel>
+                            <name>Mechanical Variables.Velocity</name>
+                            <vertical_scale>Auto</vertical_scale>
+                            <vertical_offset>0</vertical_offset>
+                            <coupling>False</coupling>
+                            <viewports>
+                                
+                                <num_viewport>1</num_viewport>
+                                
+                           </viewports>
+                        </analog>
+                            <analog>
+                            <chanel>1</chanel>
+                            <name>Mechanical Variables.Distance</name>
+                            <vertical_scale>Auto</vertical_scale>
+                            <vertical_offset>0</vertical_offset>
+                            <coupling>False</coupling>
+                            <viewports>
+                                
+                           </viewports>
+                        </analog>
+                            </analog_signals>
+
+                         <digital_signals>
+                            </digital_signals>
+
+                    </capture>
+
+                    <scope>
+                        <time_base>0.005 </time_base>
+                        <background_color>False</background_color>
+                        <layout>Vertical</layout>
+                        <legend>True</legend>
+                        <trigger>
+                            <mode>Auto</mode>
+                            <type>Analog</type>
+                            <source>Mechanical Variables.Velocity</source>
+                            <edge>Rising edge</edge>
+                            <treshold>60.0</treshold>
+                            <offset>0.0</offset>
+                        </trigger>
+
+                         <analog_signals>
+                            <analog>
+                            <chanel>0</chanel>
+                            <name>Mechanical Variables.Velocity</name>
+                            <vertical_scale>Auto</vertical_scale>
+                            <vertical_offset>0.0</vertical_offset>
+                            <coupling>False</coupling>
+                            <viewports>
+                                
+                                <num_viewport>1</num_viewport>
+                                
+                           </viewports>
+                        </analog>
+                            <analog>
+                            <chanel>1</chanel>
+                            <name>Mechanical Variables.Distance</name>
+                            <vertical_scale>Auto</vertical_scale>
+                            <vertical_offset>0.0</vertical_offset>
+                            <coupling>False</coupling>
+                            <viewports>
+                                
+                           </viewports>
+                        </analog>
+                            </analog_signals>
+
+                        <digital_signals>
+                            </digital_signals>
+
+                    </scope>
+
+                </widget_settings>
+
+            </component_data>
+        <component_data>
+                <id>111cbe4f3a5f11e788bf8ca982b03a50</id>
+                <name><![CDATA[Velocity]]></name>
+                <type>Gauge</type>
+                <description><![CDATA[]]></description>
+                <data_type>Analog signal</data_type>
+                <code><![CDATA[#----------------------- MANDATORY IMPORT --------------------------
+# HIL API
+import typhoon.api.hil as hil
+
+# NOTE: Only read functions are available from the HIL API
+#-------------------------------------------------------------------
+
+# mandatory variable used for storing value
+# that will be displayed
+displayValue = 0.0
+
+]]></code>
+                <signal_name><![CDATA[Mechanical Variables.Velocity]]></signal_name>
+                <unit><![CDATA[km/h]]></unit>
+                <automatic_unit>True</automatic_unit>
+                <updateRate>500</updateRate>
+                <hierarchy_position>1</hierarchy_position>
+                <widget_settings>
+                    <x>16.0</x>
+                    <y>16.0</y>
+                    <width>248</width>
+                    <height>144</height>
+                    <appearance><![CDATA[Flat]]></appearance>
+                </widget_settings>
+                <advance_widget_settings>
+                    <color_range>False</color_range>
+                    <min>0.0</min>
+                    <max>100.0</max>
+                    <warning_range>(0, 0, 0, 0)</warning_range>
+                    <critical_range>(0, 0, 0, 0)</critical_range>
+                </advance_widget_settings>
+            </component_data>
+        <component_data>
+                <id>e6dc05de3a6011e7acda8ca982b03a50</id>
+                <name><![CDATA[Distance]]></name>
+                <type>DigitalDisplay</type>
+                <description><![CDATA[]]></description>
+                <data_type>Expression</data_type>
+                <code><![CDATA[#----------------------- MANDATORY IMPORT --------------------------
+# HIL API
+import typhoon.api.hil as hil
+
+# NOTE: Only read functions are available from the HIL API
+#-------------------------------------------------------------------
+
+# mandatory variable used for storing value
+# that will be displayed
+displayValue = hil.read_analog_signal('Mechanical Variables.Distance')/1000.0
+
+]]></code>
+                <signal_name><![CDATA[]]></signal_name>
+                <unit><![CDATA[km]]></unit>
+                <automatic_unit>True</automatic_unit>
+                <decimals><![CDATA[2]]></decimals>
+                <updateRate>500</updateRate>
+                <hierarchy_position>1</hierarchy_position>
+                <widget_settings>
+                    <x>64.0</x>
+                    <y>176.0</y>
+                    <width>144</width>
+                    <height>56</height>
+                    <appearance><![CDATA[Flat]]></appearance>
+                </widget_settings>
+                <advance_widget_settings>
+                    <color_range>False</color_range>
+                    <green_range>(0, 0, 0, 0)</green_range>
+                    <orange_range>(0, 0, 0, 0)</orange_range>
+                    <red_range>(0, 0, 0, 0)</red_range>
+                </advance_widget_settings>
+            </component_data>
+        <component_data>
+                <id>54e9d9e13a6111e79b108ca982b03a50</id>
+                <name><![CDATA[Armature winding inversion - Control]]></name>
+                <type>ComboBoxMacro</type>
+                <description><![CDATA[]]></description>
+                <on_use_code active="True"><![CDATA[#------------- MANDATORY IMPORTS ---------------
+# HIL API
+import typhoon.api.hil as hil
+
+# Function for printing text to console (e.g printf("Hello world"))
+from typhoon.utilities.misc import printf
+#------------------------------------------------
+
+# NOTE: entered value is available through variable 'inputValue'
+
+if inputValue == 'P':
+    hil.set_scada_input_value('Armature Winding Inversion.Controller Choice', 1.0)
+elif inputValue == 'PI pp':
+    hil.set_scada_input_value('Armature Winding Inversion.Controller Choice', 2.0)
+elif inputValue == 'PI pc':
+    hil.set_scada_input_value('Armature Winding Inversion.Controller Choice', 3.0)
+elif inputValue == 'IP':
+    hil.set_scada_input_value('Armature Winding Inversion.Controller Choice', 4.0)
+
+]]></on_use_code>
+                <on_start_code active="False"><![CDATA[# NOTE: The code specified in this handler will be executed on simulation start.
+# HIL API
+import typhoon.api.hil as hil
+
+
+# Change widget value by setting this variable.
+# NOTE: If you not specify 'widgetValue' variable or assign 'None' to it, widget value won't be changed.
+widgetValue = None
+]]></on_start_code>
+                <on_timer_code active="False"><![CDATA[# NOTE: The code specified in this handler will be executed periodically each 1000ms.
+# NOTE: Only read functions are available from the HIL API
+# HIL API
+import typhoon.api.hil as hil
+
+
+# Change widget value by setting this variable.
+# NOTE: If you not specify 'widgetValue' variable or assign 'None' to it, widget value won't be changed.
+widgetValue = None
+]]></on_timer_code>
+                <on_start_code_source><![CDATA[Custom code]]></on_start_code_source>
+                <inputValue><![CDATA[PI pc]]></inputValue>
+                <availableValues><![CDATA[[u'P', u'PI pp', u'PI pc', u'IP']]]></availableValues>
+                <unit><![CDATA[]]></unit>
+                <hierarchy_position>1</hierarchy_position>
+                <widget_settings>
+                    <x>736.0</x>
+                    <y>32.0</y>
+                    <width>256</width>
+                    <height>32</height>
+                    <appearance><![CDATA[Flat]]></appearance>
+                </widget_settings>
+            </component_data>
+        <component_data>
+                <id>9bf3bbcf3a6111e787138ca982b03a50</id>
+                <name><![CDATA[Chassis inversion - Control]]></name>
+                <type>ComboBoxMacro</type>
+                <description><![CDATA[]]></description>
+                <on_use_code active="True"><![CDATA[#------------- MANDATORY IMPORTS ---------------
+# HIL API
+import typhoon.api.hil as hil
+
+# Function for printing text to console (e.g printf("Hello world"))
+from typhoon.utilities.misc import printf
+#------------------------------------------------
+
+# NOTE: entered value is available through variable 'inputValue'
+
+if inputValue == 'P':
+    hil.set_scada_input_value('Chassis Inversion.Controller Choice', 1.0)
+elif inputValue == 'PI':
+    hil.set_scada_input_value('Chassis Inversion.Controller Choice', 2.0)
+elif inputValue == 'IP':
+    hil.set_scada_input_value('Chassis Inversion.Controller Choice', 3.0)
+
+]]></on_use_code>
+                <on_start_code active="False"><![CDATA[# NOTE: The code specified in this handler will be executed on simulation start.
+# HIL API
+import typhoon.api.hil as hil
+
+
+# Change widget value by setting this variable.
+# NOTE: If you not specify 'widgetValue' variable or assign 'None' to it, widget value won't be changed.
+widgetValue = None
+]]></on_start_code>
+                <on_timer_code active="False"><![CDATA[# NOTE: The code specified in this handler will be executed periodically each 1000ms.
+# NOTE: Only read functions are available from the HIL API
+# HIL API
+import typhoon.api.hil as hil
+
+
+# Change widget value by setting this variable.
+# NOTE: If you not specify 'widgetValue' variable or assign 'None' to it, widget value won't be changed.
+widgetValue = None
+]]></on_timer_code>
+                <on_start_code_source><![CDATA[Custom code]]></on_start_code_source>
+                <inputValue><![CDATA[P]]></inputValue>
+                <availableValues><![CDATA[[u'P', u'PI', u'IP']]]></availableValues>
+                <unit><![CDATA[]]></unit>
+                <hierarchy_position>1</hierarchy_position>
+                <widget_settings>
+                    <x>784.0</x>
+                    <y>72.0</y>
+                    <width>208</width>
+                    <height>32</height>
+                    <appearance><![CDATA[Flat]]></appearance>
+                </widget_settings>
+            </component_data>
+        <component_data>
+                <id>fdf351b03a6111e7bdde8ca982b03a50</id>
+                <name><![CDATA[Battery Voltage]]></name>
+                <type>TextBoxMacro</type>
+                <description><![CDATA[]]></description>
+                <on_use_code active="True"><![CDATA[#------------- MANDATORY IMPORTS ---------------
+# HIL API
+import typhoon.api.hil as hil
+
+# Function for printing text to console (e.g printf("Hello world"))
+from typhoon.utilities.misc import printf
+#------------------------------------------------
+
+# NOTE: entered value is available through variable 'inputValue'
+hil.set_scada_input_value('Battery.V_batt', inputValue)
+]]></on_use_code>
+                <on_start_code active="True"><![CDATA[# NOTE: The code specified in this handler will be executed on simulation start.
+# HIL API
+import typhoon.api.hil as hil
+
+
+# Change widget value by setting this variable.
+# NOTE: If you not specify 'widgetValue' variable or assign 'None' to it, widget value won't be changed.
+widgetValue = None
+]]></on_start_code>
+                <on_timer_code active="False"><![CDATA[# NOTE: The code specified in this handler will be executed periodically each 1000ms.
+# NOTE: Only read functions are available from the HIL API
+# HIL API
+import typhoon.api.hil as hil
+
+
+# Change widget value by setting this variable.
+# NOTE: If you not specify 'widgetValue' variable or assign 'None' to it, widget value won't be changed.
+widgetValue = None
+]]></on_timer_code>
+                <on_start_code_source><![CDATA[Macro code]]></on_start_code_source>
+                <inputValue><![CDATA[400.0]]></inputValue>
+                <inputValueType>float</inputValueType>
+                <unit><![CDATA[]]></unit>
+                <hierarchy_position>1</hierarchy_position>
+                <widget_settings>
+                    <x>824.0</x>
+                    <y>120.0</y>
+                    <width>176</width>
+                    <height>32</height>
+                    <inputWidgetWidth>80</inputWidgetWidth>
+                    <appearance><![CDATA[Flat]]></appearance>
+                </widget_settings>
+            </component_data>
+        <component_data>
+                <id>8b5082cf4c5511e7bb108ca982b03a50</id>
+                <name><![CDATA[Load profile]]></name>
+                <type>Macro</type>
+                <description><![CDATA[None]]></description>
+                <on_click_code active="False"><![CDATA[# NOTE: The code specified in this handler will be executed on button click.
+
+# HIL Control Panel API
+from typhoon.api import hil_control_panel as hil
+
+hil.wait_msec(5000)]]></on_click_code>
+                <on_start_code active="True"><![CDATA[# NOTE: The code specified in this handler will be executed on simulation start.
+# NOTE: Variables specified here will be available in other two handlers
+# HIL Control Panel API
+from typhoon.api import hil_control_panel as hil
+import numpy as np
+
+counter = 0
+
+hil.set_scada_input_value('Reference', CYCL_ECE[0])
+
+]]></on_start_code>
+                <on_timer_code active="True"><![CDATA[# NOTE: The code specified in this handler will be executed on timer event.
+
+# HIL Control Panel API
+from typhoon.api import hil_control_panel as hil
+
+counter += 1
+if counter == len(CYCL_ECE):
+    counter = 0
+    
+    
+hil.set_scada_input_value('Reference', CYCL_ECE[counter])]]></on_timer_code>
+                <run_each>1000</run_each>
+                <hierarchy_position>1</hierarchy_position>
+                <widget_settings>
+                    <x>872</x>
+                    <y>192</y>
+                    <width>128</width>
+                    <height>40</height>
+                    <appearance><![CDATA[Flat]]></appearance>
+                </widget_settings>
+            </component_data>
+        </components>
+</ui_settings>

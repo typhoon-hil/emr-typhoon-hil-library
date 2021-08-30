@@ -1,0 +1,368 @@
+<ui_settings>
+    <version>2.0</version>
+    <mode>2</mode>
+    <canvas_bg_color>#ffffff</canvas_bg_color>
+    <initialization_code><![CDATA[# NOTE: Variables and functions defined here will be
+# available for use in all Macro and Expression scripts.
+# This code is always executed after Custom UI is loaded and prior simulation start.
+
+# HIL Control Panel API
+from typhoon.api import hil_control_panel as hil
+
+# Variable 'SETTINGS_DIR' holds directory where loaded settings .cus file is located.
+# Also you can call 'get_settings_dir_path()' function in any
+# Macro and Expression scripts to get the same directory.
+SETTINGS_DIR = get_settings_dir_path()
+
+steering = 'Straight'
+radius = 5.0]]></initialization_code>
+    <components>
+        <component_data>
+                <id>ceb32fc06fcc11e690ba101f740f3fa4</id>
+                <name><![CDATA[Converter]]></name>
+                <type>Group</type>
+                <description><![CDATA[None]]></description>
+                <components_ids><![CDATA[[u'e30f96c06fcc11e6a48b101f740f3fa4']]]></components_ids>
+                <hierarchy_position>1</hierarchy_position>
+                <canvas_bg_color>#ffffff</canvas_bg_color>
+                <widget_settings>
+                    <x>0</x>
+                    <y>0</y>
+                    <width>184</width>
+                    <height>304</height>
+                    <appearance><![CDATA[Flat]]></appearance>
+                    <collapsed>False</collapsed>
+                </widget_settings>
+            </component_data>
+        <component_data>
+                <id>e30f96c06fcc11e6a48b101f740f3fa4</id>
+                <name><![CDATA[Duty Cycle]]></name>
+                <type>KnobMacro</type>
+                <description><![CDATA[None]]></description>
+                <code><![CDATA[#------------- MANDATORY IMPORTS ---------------
+# HIL Control Panel API
+from typhoon.api import hil_control_panel as hil
+
+# Function for printing text to console (e.g printf("Hello world"))
+from typhoon.utilities.misc import printf
+#------------------------------------------------
+
+# NOTE: entered value is available through variable 'inputValue'
+hil.set_cp_input_value('User defined', 'EV', 'Duty Cycle', inputValue)
+]]></code>
+                <inputValue><![CDATA[0.7]]></inputValue>
+                <min>0.0</min>
+                <max>1.0</max>
+                <step>0.01</step>
+                <execute_on_load>False</execute_on_load>
+                <hierarchy_position>2</hierarchy_position>
+                <widget_settings>
+                    <x>24</x>
+                    <y>56</y>
+                    <width>112</width>
+                    <height>144</height>
+                    <appearance><![CDATA[Flat]]></appearance>
+                </widget_settings>
+            </component_data>
+        <component_data>
+                <id>f8f07ae16fcc11e6a5e0101f740f3fa4</id>
+                <name><![CDATA[Vehcile]]></name>
+                <type>Group</type>
+                <description><![CDATA[None]]></description>
+                <components_ids><![CDATA[[u'10de6d0f6fcd11e69b3c101f740f3fa4', u'10e0de0f6fcd11e6850b101f740f3fa4', u'10e328006fcd11e6b9e2101f740f3fa4', u'10e328016fcd11e68e74101f740f3fa4', u'326980a1c85111e6969b8ca982b03a50']]]></components_ids>
+                <hierarchy_position>1</hierarchy_position>
+                <canvas_bg_color>#ffffff</canvas_bg_color>
+                <widget_settings>
+                    <x>192</x>
+                    <y>0</y>
+                    <width>952</width>
+                    <height>304</height>
+                    <appearance><![CDATA[Flat]]></appearance>
+                    <collapsed>False</collapsed>
+                </widget_settings>
+            </component_data>
+        <component_data>
+                <id>10de6d0f6fcd11e69b3c101f740f3fa4</id>
+                <name><![CDATA[Steer]]></name>
+                <type>ComboBoxMacro</type>
+                <description><![CDATA[None]]></description>
+                <code><![CDATA[#------------- MANDATORY IMPORTS ---------------
+# HIL Control Panel API
+from typhoon.api import hil_control_panel as hil
+
+# Function for printing text to console (e.g printf("Hello world"))
+from typhoon.utilities.misc import printf
+#------------------------------------------------
+
+# NOTE: entered value is available through variable 'inputValue'
+global steering
+global radius
+
+steering = inputValue
+
+if steering == 'Straight':
+    hil.set_cp_input_value('User defined', 'Example', 'Coupling.lwh_ref', 1.0)
+    hil.set_cp_input_value('User defined', 'Example', 'Coupling.rwh_ref', 1.0)
+elif steering == 'Turn Left':
+    kr_turning=(radius+1.6/2)/radius
+    kl_turning=(radius-1.6/2)/radius
+    hil.set_cp_input_value('User defined', 'Example', 'Coupling.lwh_ref', kl_turning)
+    hil.set_cp_input_value('User defined', 'Example', 'Coupling.rwh_ref', kr_turning)
+elif steering == 'Turn Right':
+    kr_turning=(radius-1.6/2)/radius
+    kl_turning=(radius+1.6/2)/radius
+    hil.set_cp_input_value('User defined', 'Example', 'Coupling.lwh_ref', kl_turning)
+    hil.set_cp_input_value('User defined', 'Example', 'Coupling.rwh_ref', kr_turning)]]></code>
+                <inputValue><![CDATA[Straight]]></inputValue>
+                <availableValues>[u'Straight', u'Turn Left', u'Turn Right']</availableValues>
+                <unit><![CDATA[]]></unit>
+                <execute_on_load>True</execute_on_load>
+                <hierarchy_position>2</hierarchy_position>
+                <widget_settings>
+                    <x>208</x>
+                    <y>176</y>
+                    <width>136</width>
+                    <height>32</height>
+                    <appearance><![CDATA[Flat]]></appearance>
+                </widget_settings>
+            </component_data>
+        <component_data>
+                <id>10e0de0f6fcd11e6850b101f740f3fa4</id>
+                <name><![CDATA[Left Wheel Angular Speed]]></name>
+                <type>Gauge</type>
+                <description><![CDATA[None]]></description>
+                <data_type>Analog signal</data_type>
+                <code><![CDATA[#----------------------- MANDATORY IMPORT --------------------------
+# HIL Control Panel API
+from typhoon.api import hil_control_panel as hil
+# NOTE: Only read functions are available from HIL Control Panel API
+#-------------------------------------------------------------------
+
+# mandatory variable used for storing value
+# that will be displayed
+displayValue = 0.0
+
+]]></code>
+                <signal_name><![CDATA[Left Wheel.Speed]]></signal_name>
+                <unit><![CDATA[rad/s]]></unit>
+                <automatic_unit>True</automatic_unit>
+                <updateRate>500</updateRate>
+                <hierarchy_position>2</hierarchy_position>
+                <widget_settings>
+                    <x>8</x>
+                    <y>0</y>
+                    <width>248</width>
+                    <height>144</height>
+                    <appearance><![CDATA[Flat]]></appearance>
+                </widget_settings>
+                <advance_widget_settings>
+                    <color_range>False</color_range>
+                    <min>0.0</min>
+                    <max>100.0</max>
+                    <warning_range>(0, 0, 0, 0)</warning_range>
+                    <critical_range>(0, 0, 0, 0)</critical_range>
+                </advance_widget_settings>
+            </component_data>
+        <component_data>
+                <id>10e328006fcd11e6b9e2101f740f3fa4</id>
+                <name><![CDATA[Steering Radius]]></name>
+                <type>SliderMacro</type>
+                <description><![CDATA[None]]></description>
+                <code><![CDATA[#------------- MANDATORY IMPORTS ---------------
+# HIL Control Panel API
+from typhoon.api import hil_control_panel as hil
+
+# Function for printing text to console (e.g printf("Hello world"))
+from typhoon.utilities.misc import printf
+#------------------------------------------------
+
+# NOTE: entered value is available through variable 'inputValue'
+global steering
+global radius
+
+radius = inputValue
+
+if steering == 'Straight':
+    hil.set_cp_input_value('User defined', 'Example', 'Coupling.lwh_ref', 1.0)
+    hil.set_cp_input_value('User defined', 'Example', 'Coupling.rwh_ref', 1.0)
+elif steering == 'Turn Left':
+    kr_turning=(radius+1.6/2)/radius
+    kl_turning=(radius-1.6/2)/radius
+    hil.set_cp_input_value('User defined', 'Example', 'Coupling.lwh_ref', kl_turning)
+    hil.set_cp_input_value('User defined', 'Example', 'Coupling.rwh_ref', kr_turning)
+elif steering == 'Turn Right':
+    kr_turning=(radius-1.6/2)/radius
+    kl_turning=(radius+1.6/2)/radius
+    hil.set_cp_input_value('User defined', 'Example', 'Coupling.lwh_ref', kl_turning)
+    hil.set_cp_input_value('User defined', 'Example', 'Coupling.rwh_ref', kr_turning)]]></code>
+                <inputValue><![CDATA[29.6]]></inputValue>
+                <min>0.8</min>
+                <max>50.0</max>
+                <step>0.1</step>
+                <execute_on_load>True</execute_on_load>
+                <hierarchy_position>2</hierarchy_position>
+                <widget_settings>
+                    <x>96</x>
+                    <y>216</y>
+                    <width>408</width>
+                    <height>48</height>
+                    <appearance><![CDATA[Flat]]></appearance>
+                </widget_settings>
+            </component_data>
+        <component_data>
+                <id>10e328016fcd11e68e74101f740f3fa4</id>
+                <name><![CDATA[Right Wheel Angular Speed]]></name>
+                <type>Gauge</type>
+                <description><![CDATA[None]]></description>
+                <data_type>Analog signal</data_type>
+                <code><![CDATA[#----------------------- MANDATORY IMPORT --------------------------
+# HIL Control Panel API
+from typhoon.api import hil_control_panel as hil
+# NOTE: Only read functions are available from HIL Control Panel API
+#-------------------------------------------------------------------
+
+# mandatory variable used for storing value
+# that will be displayed
+displayValue = 0.0
+
+]]></code>
+                <signal_name><![CDATA[Right Wheel.Speed]]></signal_name>
+                <unit><![CDATA[rad/s]]></unit>
+                <automatic_unit>True</automatic_unit>
+                <updateRate>500</updateRate>
+                <hierarchy_position>2</hierarchy_position>
+                <widget_settings>
+                    <x>312</x>
+                    <y>0</y>
+                    <width>248</width>
+                    <height>144</height>
+                    <appearance><![CDATA[Flat]]></appearance>
+                </widget_settings>
+                <advance_widget_settings>
+                    <color_range>False</color_range>
+                    <min>0.0</min>
+                    <max>100.0</max>
+                    <warning_range>(0, 0, 0, 0)</warning_range>
+                    <critical_range>(0, 0, 0, 0)</critical_range>
+                </advance_widget_settings>
+            </component_data>
+        <component_data>
+                <id>9f538a8fc85011e698e68ca982b03a50</id>
+                <name><![CDATA[Vehicle Speed]]></name>
+                <type>TraceDisplay</type>
+                <description><![CDATA[None]]></description>
+                <data_type>Analog signal</data_type>
+                <code><![CDATA[#----------------------- MANDATORY IMPORT --------------------------
+# HIL Control Panel API
+from typhoon.api import hil_control_panel as hil
+# NOTE: Only read functions are available from HIL Control Panel API
+#-------------------------------------------------------------------
+
+# mandatory variable used for storing value
+# that will be displayed
+displayValue = 0.0
+
+]]></code>
+                <signal_name><![CDATA[Chassis.V_speed]]></signal_name>
+                <updateRate>250</updateRate>
+                <background_color>#ffffff</background_color>
+                <hierarchy_position>1</hierarchy_position>
+                <widget_settings>
+                    <x>704</x>
+                    <y>320</y>
+                    <width>400</width>
+                    <height>200</height>
+                    <appearance><![CDATA[Flat]]></appearance>
+                </widget_settings>
+                <advance_widget_settings>
+                    <x_title><![CDATA[x axes]]></x_title>
+                    <y_title><![CDATA[y axes]]></y_title>
+                    <y_range_min>0.0</y_range_min>
+                    <y_range_max>50.0</y_range_max>
+                    <time_window>60</time_window>
+                    <auto_scale_enabled>False</auto_scale_enabled>
+                    <legend_enabled>False</legend_enabled>
+                    <x_axis_title_enabled>False</x_axis_title_enabled>
+                    <y_axis_title_enabled>False</y_axis_title_enabled>
+                </advance_widget_settings>
+            </component_data>
+        <component_data>
+                <id>a4d59b1ec85011e6ba198ca982b03a50</id>
+                <name><![CDATA[Wheels Angluar Speeds]]></name>
+                <type>MultiTraceDisplay</type>
+                <description><![CDATA[None]]></description>
+                <data_type>Analog signal</data_type>
+                <code><![CDATA[#----------------------- MANDATORY IMPORT --------------------------
+# HIL Control Panel API
+from typhoon.api import hil_control_panel as hil
+# NOTE: Only read functions are available from HIL Control Panel API
+#-------------------------------------------------------------------
+
+# mandatory variable used for storing values
+# that will be displayed
+# e.g displayValue = [ [sigVal1,sigVal2,sigVal3], ["Signal 1 name","Signal 2 name","Signal 3 name"] ]
+displayValue = []
+
+]]></code>
+                <signals><![CDATA[[u'Left Wheel.Speed', u'Right Wheel.Speed']]]></signals>
+                <updateRate>250</updateRate>
+                <background_color>#ffffff</background_color>
+                <hierarchy_position>1</hierarchy_position>
+                <widget_settings>
+                    <x>232</x>
+                    <y>320</y>
+                    <width>400</width>
+                    <height>200</height>
+                    <appearance><![CDATA[Flat]]></appearance>
+                </widget_settings>
+                <advance_widget_settings>
+                    <x_title><![CDATA[x axes]]></x_title>
+                    <y_title><![CDATA[y axes]]></y_title>
+                    <y_range_min>-5.0</y_range_min>
+                    <y_range_max>100.0</y_range_max>
+                    <time_window>60</time_window>
+                    <auto_scale_enabled>False</auto_scale_enabled>
+                    <legend_enabled>False</legend_enabled>
+                    <x_axis_title_enabled>False</x_axis_title_enabled>
+                    <y_axis_title_enabled>False</y_axis_title_enabled>
+                </advance_widget_settings>
+            </component_data>
+        <component_data>
+                <id>326980a1c85111e6969b8ca982b03a50</id>
+                <name><![CDATA[Vehicle Speed]]></name>
+                <type>Gauge</type>
+                <description><![CDATA[None]]></description>
+                <data_type>Analog signal</data_type>
+                <code><![CDATA[#----------------------- MANDATORY IMPORT --------------------------
+# HIL Control Panel API
+from typhoon.api import hil_control_panel as hil
+# NOTE: Only read functions are available from HIL Control Panel API
+#-------------------------------------------------------------------
+
+# mandatory variable used for storing value
+# that will be displayed
+displayValue = 0.0
+
+]]></code>
+                <signal_name><![CDATA[Chassis.V_speed]]></signal_name>
+                <unit><![CDATA[km/h]]></unit>
+                <automatic_unit>True</automatic_unit>
+                <updateRate>500</updateRate>
+                <hierarchy_position>2</hierarchy_position>
+                <widget_settings>
+                    <x>624</x>
+                    <y>32</y>
+                    <width>288</width>
+                    <height>216</height>
+                    <appearance><![CDATA[Flat]]></appearance>
+                </widget_settings>
+                <advance_widget_settings>
+                    <color_range>False</color_range>
+                    <min>0.0</min>
+                    <max>50.0</max>
+                    <warning_range>(0, 0, 0, 0)</warning_range>
+                    <critical_range>(0, 0, 0, 0)</critical_range>
+                </advance_widget_settings>
+            </component_data>
+        </components>
+</ui_settings>

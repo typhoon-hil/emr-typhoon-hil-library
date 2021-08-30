@@ -1,0 +1,2077 @@
+version = 4.2
+
+
+//
+// Model name: EMR_electric_vehicle
+// Saved by sw version: 2016.2 EMR Demo
+// Save timestamp: 29-Aug-2016 @ 11:18:42 PM
+//
+
+
+model "EMR_electric_vehicle" {
+
+    configuration {
+        
+        hil_device = "HIL 402"
+        hil_configuration_id = 1
+        simulation_method = exact
+        simulation_time_step = auto
+        dsp_timer_periods = 100e-6, 50e-3
+        ss_calc_method = "systematic elimination"
+        enb_pole_shift = True
+        enb_gds_oversampling = True
+        show_modes = False
+        cpl_stb = False
+        enb_dep_sw_detect = False
+        code_section = "internal memory"
+        data_section = "internal memory"
+        heap_size = 1024
+        stack_size = 1024
+        sys_sp_rate_1 = 0.0001
+        sys_sp_rate_2 = 0.05
+
+    }
+
+    
+
+    component Subsystem "Root" {
+
+        
+        component src_cp_input "Duty Cycle" {
+            
+            /*
+                Properties
+            */
+            def_value = "0.5"
+            execution_rate = "Ts"
+            group = "EV"
+            max = "1.0"
+            min = "0.0"
+            unit = ""
+            widget_label = "Duty Cycle"
+        }
+        [
+            position = 7720, 8208
+        ]
+        
+        component Subsystem "Battery" {
+            layout = static
+    
+            
+            component gen_probe "U" {
+                
+            }
+            [
+                position = 7936, 7928
+                rotation = left
+            ]
+            
+            component gen_probe "I" {
+                
+            }
+            [
+                position = 7992, 7928
+                rotation = left
+            ]
+            
+            component src_constant "Battery Voltage" {
+                
+                /*
+                    Properties
+                */
+                execution_rate = "Ts"
+                value = "V_batt"
+            }
+            [
+                position = 7888, 8000
+            ]
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            port "P1" {
+                
+                position = 40.0, -16.0
+                kind = sp
+                direction = in
+                sp_type {
+                    default = inherit
+                }
+            }
+            [
+                position = 8040, 8000
+                hide_name = True
+                size = 25, 25
+            ]
+            port "P2" {
+                
+                position = 40.0, 16.0
+                kind = sp
+                direction = out
+                sp_type {
+                    default = auto
+                }
+            }
+            [
+                position = 8040, 8064
+                hide_name = True
+                scale = -1, 1
+                size = 25, 25
+            ]
+            
+            junction "Junction1" sp
+            [
+                position = 7936, 8000
+            ]
+            
+            connect "Battery Voltage.out" Junction1 as Connection3
+            
+            
+            connect "I.in" P2 as Connection2
+            
+            
+            connect Junction1 P1 as Connection4
+            
+            
+            connect "U.in" Junction1 as Connection5
+            
+            
+    
+            
+            /*
+                Masks
+            */
+            mask {
+                icon = "image(\'emr_images/emr_energy_source.svg')"
+                
+            }
+        }
+        [
+            position = 7648, 8104
+            size = 80, 64
+        ]
+        
+        component Subsystem "Inverter" {
+            layout = static
+    
+            
+            component gen_product "Product1" {
+                
+            }
+            [
+                position = 7608, 7976
+            ]
+            
+            component gen_product "Product2" {
+                
+            }
+            [
+                position = 7608, 8056
+                scale = -1, 1
+            ]
+            
+            component gen_probe "V_out" {
+                
+            }
+            [
+                position = 7840, 7920
+                rotation = left
+            ]
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            port "P1" {
+                
+                position = -40.0, -16.0
+                kind = sp
+                direction = out
+                sp_type {
+                    default = auto
+                }
+            }
+            [
+                position = 7280, 7968
+                hide_name = True
+                size = 25, 25
+            ]
+            port "P2" {
+                
+                position = -40.0, 16.0
+                kind = sp
+                direction = in
+                sp_type {
+                    default = inherit
+                }
+            }
+            [
+                position = 7280, 8056
+                hide_name = True
+                scale = -1, 1
+                size = 25, 25
+            ]
+            port "P3" {
+                
+                position = 40.0, -16.0
+                kind = sp
+                direction = in
+                sp_type {
+                    default = inherit
+                }
+            }
+            [
+                position = 8040, 7976
+                hide_name = True
+                size = 25, 25
+            ]
+            port "P4" {
+                
+                position = 40.0, 16.0
+                kind = sp
+                direction = out
+                sp_type {
+                    default = auto
+                }
+            }
+            [
+                position = 8040, 8048
+                hide_name = True
+                scale = -1, 1
+                size = 25, 25
+            ]
+            port "P5" {
+                
+                position = 0.0, 32.0
+                kind = sp
+                direction = out
+                sp_type {
+                    default = auto
+                }
+            }
+            [
+                position = 7544, 8208
+                rotation = right
+                hide_name = True
+                scale = -1, -1
+                size = 25, 25
+            ]
+            
+            junction "Junction1" sp
+            [
+                position = 7544, 8152
+            ]
+            
+            junction "Junction2" sp
+            [
+                position = 7840, 7976
+            ]
+            
+            connect Junction1 "Product1.in1" as Connection6
+            [
+                breakpoints =7544, 8152;7544, 7984
+            ]
+            
+            connect Junction2 P3 as Connection10
+            
+            
+            connect P1 "Product1.in" as Connection1
+            
+            
+            connect P2 "Product2.out" as Connection8
+            
+            
+            connect P5 Junction1 as Connection5
+            
+            
+            connect "Product1.out" Junction2 as Connection9
+            
+            
+            connect "Product2.in1" Junction1 as Connection7
+            [
+                breakpoints =7672, 8064;7672, 8152
+            ]
+            
+            connect "Product2.in" P4 as Connection3
+            
+            
+            connect "V_out.in" Junction2 as Connection11
+            
+            
+    
+            
+            /*
+                Masks
+            */
+            mask {
+                icon = "image(\'emr_images/emr_mono_physical_converter_ctrl.svg')"
+                
+            }
+        }
+        [
+            position = 7768, 8104
+            size = 80, 64
+        ]
+        
+        component Subsystem "DC Machine" {
+            layout = static
+    
+            
+            component gen_gain "Gain1" {
+                
+                /*
+                    Properties
+                */
+                gain = "Kcfiexc_dcm"
+            }
+            [
+                position = 7560, 8000
+            ]
+            
+            component gen_gain "Gain2" {
+                
+                /*
+                    Properties
+                */
+                gain = "Kcfiexc_dcm"
+            }
+            [
+                position = 7560, 8064
+                scale = -1, 1
+            ]
+            
+            component gen_probe "Torque" {
+                
+            }
+            [
+                position = 7728, 7944
+                rotation = left
+            ]
+            
+            component gen_probe "Speed" {
+                
+            }
+            [
+                position = 7816, 7944
+                rotation = left
+            ]
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            port "P1" {
+                
+                position = -40.0, -16.0
+                kind = sp
+                direction = out
+                sp_type {
+                    default = auto
+                }
+            }
+            [
+                position = 7256, 8000
+                hide_name = True
+                size = 25, 25
+            ]
+            port "P2" {
+                
+                position = -40.0, 16.0
+                kind = sp
+                direction = in
+                sp_type {
+                    default = inherit
+                }
+            }
+            [
+                position = 7256, 8064
+                hide_name = True
+                scale = -1, 1
+                size = 25, 25
+            ]
+            port "P3" {
+                
+                position = 40.0, -16.0
+                kind = sp
+                direction = in
+                sp_type {
+                    default = inherit
+                }
+            }
+            [
+                position = 8040, 8000
+                hide_name = True
+                size = 25, 25
+            ]
+            port "P4" {
+                
+                position = 40.0, 16.0
+                kind = sp
+                direction = out
+                sp_type {
+                    default = auto
+                }
+            }
+            [
+                position = 8040, 8064
+                hide_name = True
+                scale = -1, 1
+                size = 25, 25
+            ]
+            
+            junction "Junction1" sp
+            [
+                position = 7816, 8064
+            ]
+            
+            junction "Junction2" sp
+            [
+                position = 7728, 8000
+            ]
+            
+            connect "Gain1.out" Junction2 as Connection8
+            
+            
+            connect "Gain1.in" P1 as Connection1
+            
+            
+            connect "Gain2.in" Junction1 as Connection5
+            
+            
+            connect Junction1 P4 as Connection6
+            
+            
+            connect Junction2 P3 as Connection9
+            
+            
+            connect P2 "Gain2.out" as Connection3
+            
+            
+            connect "Speed.in" Junction1 as Connection7
+            
+            
+            connect "Torque.in" Junction2 as Connection10
+            
+            
+    
+            
+            /*
+                Masks
+            */
+            mask {
+                icon = "image(\'emr_images/emr_multi_physical_converter.svg')"
+                
+            }
+        }
+        [
+            position = 8008, 8104
+            size = 80, 64
+        ]
+        
+        component Subsystem "Gearbox" {
+            layout = static
+    
+            
+            component gen_gain "Gain1" {
+                
+                /*
+                    Properties
+                */
+                gain = "red*eff_gear_diff"
+            }
+            [
+                position = 7600, 8000
+            ]
+            
+            component gen_gain "Gain2" {
+                
+                /*
+                    Properties
+                */
+                gain = "red"
+            }
+            [
+                position = 7600, 8064
+                scale = -1, 1
+            ]
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            port "P1" {
+                
+                position = -40.0, -16.0
+                kind = sp
+                direction = out
+                sp_type {
+                    default = auto
+                }
+            }
+            [
+                position = 7256, 8000
+                hide_name = True
+                size = 25, 25
+            ]
+            port "P2" {
+                
+                position = -40.0, 16.0
+                kind = sp
+                direction = in
+                sp_type {
+                    default = inherit
+                }
+            }
+            [
+                position = 7256, 8064
+                hide_name = True
+                scale = -1, 1
+                size = 25, 25
+            ]
+            port "P3" {
+                
+                position = 40.0, -16.0
+                kind = sp
+                direction = in
+                sp_type {
+                    default = inherit
+                }
+            }
+            [
+                position = 8040, 8000
+                hide_name = True
+                size = 25, 25
+            ]
+            port "P4" {
+                
+                position = 40.0, 16.0
+                kind = sp
+                direction = out
+                sp_type {
+                    default = auto
+                }
+            }
+            [
+                position = 8040, 8064
+                hide_name = True
+                scale = -1, 1
+                size = 25, 25
+            ]
+            
+            connect "Gain1.out" P3 as Connection3
+            
+            
+            connect "Gain2.out" P2 as Connection1
+            
+            
+            connect P1 "Gain1.in" as Connection2
+            
+            
+            connect P4 "Gain2.in" as Connection4
+            
+            
+    
+            
+            /*
+                Masks
+            */
+            mask {
+                icon = "image(\'emr_images/emr_mono_physical_converter.svg')"
+                
+            }
+        }
+        [
+            position = 8128, 8104
+            size = 80, 64
+        ]
+        
+        component Subsystem "Differential" {
+            layout = static
+    
+            
+            component gen_gain "Gain1" {
+                
+                /*
+                    Properties
+                */
+                gain = "1.0/2.0"
+            }
+            [
+                position = 7392, 8000
+            ]
+            
+            component gen_gain "Gain2" {
+                
+                /*
+                    Properties
+                */
+                gain = "1.0/2.0"
+            }
+            [
+                position = 7392, 8064
+                scale = -1, 1
+            ]
+            
+            component gen_sum "Sum1" {
+                
+            }
+            [
+                position = 7496, 8064
+                scale = -1, 1
+            ]
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            port "P1" {
+                
+                position = -48.0, -16.0
+                kind = sp
+                direction = out
+                sp_type {
+                    default = auto
+                }
+            }
+            [
+                position = 7256, 8000
+                hide_name = True
+                size = 25, 25
+            ]
+            port "P2" {
+                
+                position = -48.0, 16.0
+                kind = sp
+                direction = in
+                sp_type {
+                    default = inherit
+                }
+            }
+            [
+                position = 7256, 8064
+                hide_name = True
+                scale = -1, 1
+                size = 25, 25
+            ]
+            port "P3" {
+                
+                position = 48.0, -64.0
+                kind = sp
+                direction = in
+                sp_type {
+                    default = inherit
+                }
+            }
+            [
+                position = 8040, 7904
+                hide_name = True
+                size = 25, 25
+            ]
+            port "P4" {
+                
+                position = 48.0, -32.0
+                kind = sp
+                direction = out
+                sp_type {
+                    default = auto
+                }
+            }
+            [
+                position = 8040, 7968
+                hide_name = True
+                scale = -1, 1
+                size = 25, 25
+            ]
+            port "P5" {
+                
+                position = 48.0, 32.0
+                kind = sp
+                direction = in
+                sp_type {
+                    default = inherit
+                }
+            }
+            [
+                position = 8040, 8096
+                hide_name = True
+                size = 25, 25
+            ]
+            port "P6" {
+                
+                position = 48.0, 64.0
+                kind = sp
+                direction = out
+                sp_type {
+                    default = auto
+                }
+            }
+            [
+                position = 8040, 8160
+                hide_name = True
+                scale = -1, 1
+                size = 25, 25
+            ]
+            
+            junction "Junction1" sp
+            [
+                position = 7944, 8000
+            ]
+            
+            connect "Gain1.out" Junction1 as Connection6
+            
+            
+            connect "Gain1.in" P1 as Connection2
+            
+            
+            connect "Gain2.out" P2 as Connection1
+            
+            
+            connect "Gain2.in" "Sum1.out" as Connection7
+            
+            
+            connect Junction1 P5 as Connection5
+            [
+                breakpoints =7944, 8096
+            ]
+            
+            connect P3 Junction1 as Connection4
+            [
+                breakpoints =7944, 7904
+            ]
+            
+            connect "Sum1.in" P4 as Connection8
+            
+            
+            connect "Sum1.in1" P6 as Connection9
+            
+            
+    
+            
+            /*
+                Masks
+            */
+            mask {
+                icon = "image(\'emr_images/emr_mono_physical_coupling.svg')"
+                
+            }
+        }
+        [
+            position = 8256, 8104
+            size = 96, 160
+        ]
+        
+        component Subsystem "Left Wheel" {
+            layout = static
+    
+            
+            component gen_gain "Gain1" {
+                
+                /*
+                    Properties
+                */
+                gain = "1/Rwheel"
+            }
+            [
+                position = 7560, 8000
+            ]
+            
+            component gen_gain "Gain2" {
+                
+                /*
+                    Properties
+                */
+                gain = "1/Rwheel"
+            }
+            [
+                position = 7560, 8064
+                scale = -1, 1
+            ]
+            
+            component gen_probe "Speed" {
+                
+            }
+            [
+                position = 7376, 7944
+                rotation = left
+            ]
+            
+            component gen_probe "Torque" {
+                
+            }
+            [
+                position = 7448, 7944
+                rotation = left
+            ]
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            port "P1" {
+                
+                position = -40.0, -16.0
+                kind = sp
+                direction = out
+                sp_type {
+                    default = auto
+                }
+            }
+            [
+                position = 7256, 8000
+                hide_name = True
+                size = 25, 25
+            ]
+            port "P2" {
+                
+                position = -40.0, 16.0
+                kind = sp
+                direction = in
+                sp_type {
+                    default = inherit
+                }
+            }
+            [
+                position = 7256, 8064
+                hide_name = True
+                scale = -1, 1
+                size = 25, 25
+            ]
+            port "P3" {
+                
+                position = 40.0, -16.0
+                kind = sp
+                direction = in
+                sp_type {
+                    default = inherit
+                }
+            }
+            [
+                position = 8040, 8000
+                hide_name = True
+                size = 25, 25
+            ]
+            port "P4" {
+                
+                position = 40.0, 16.0
+                kind = sp
+                direction = out
+                sp_type {
+                    default = auto
+                }
+            }
+            [
+                position = 8040, 8064
+                hide_name = True
+                scale = -1, 1
+                size = 25, 25
+            ]
+            
+            junction "Junction1" sp
+            [
+                position = 7376, 8064
+            ]
+            
+            junction "Junction2" sp
+            [
+                position = 7448, 8000
+            ]
+            
+            connect "Gain1.out" P3 as Connection21
+            
+            
+            connect "Gain2.out" Junction1 as Connection15
+            
+            
+            connect "Gain2.in" P4 as Connection13
+            [
+                breakpoints =7816, 8064
+            ]
+            
+            connect Junction1 P2 as Connection16
+            
+            
+            connect Junction2 "Gain1.in" as Connection19
+            
+            
+            connect P1 Junction2 as Connection18
+            
+            
+            connect "Speed.in" Junction1 as Connection17
+            
+            
+            connect "Torque.in" Junction2 as Connection20
+            
+            
+    
+            
+            /*
+                Masks
+            */
+            mask {
+                icon = "image(\'emr_images/emr_mono_physical_converter.svg')"
+                
+            }
+        }
+        [
+            position = 8384, 8056
+            size = 80, 64
+        ]
+        
+        component Subsystem "Right Wheel" {
+            layout = static
+    
+            
+            component gen_gain "Gain1" {
+                
+                /*
+                    Properties
+                */
+                gain = "1/Rwheel"
+            }
+            [
+                position = 7600, 8000
+            ]
+            
+            component gen_gain "Gain2" {
+                
+                /*
+                    Properties
+                */
+                gain = "1/Rwheel"
+            }
+            [
+                position = 7600, 8064
+                scale = -1, 1
+            ]
+            
+            component gen_probe "Speed" {
+                
+            }
+            [
+                position = 7400, 7944
+                rotation = left
+            ]
+            
+            component gen_probe "Torque" {
+                
+            }
+            [
+                position = 7472, 7944
+                rotation = left
+            ]
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            port "P1" {
+                
+                position = -40.0, -16.0
+                kind = sp
+                direction = out
+                sp_type {
+                    default = auto
+                }
+            }
+            [
+                position = 7256, 8000
+                hide_name = True
+                size = 25, 25
+            ]
+            port "P2" {
+                
+                position = -40.0, 16.0
+                kind = sp
+                direction = in
+                sp_type {
+                    default = inherit
+                }
+            }
+            [
+                position = 7256, 8064
+                hide_name = True
+                scale = -1, 1
+                size = 25, 25
+            ]
+            port "P3" {
+                
+                position = 40.0, -16.0
+                kind = sp
+                direction = in
+                sp_type {
+                    default = inherit
+                }
+            }
+            [
+                position = 8040, 8000
+                hide_name = True
+                size = 25, 25
+            ]
+            port "P4" {
+                
+                position = 40.0, 16.0
+                kind = sp
+                direction = out
+                sp_type {
+                    default = auto
+                }
+            }
+            [
+                position = 8040, 8064
+                hide_name = True
+                scale = -1, 1
+                size = 25, 25
+            ]
+            
+            junction "Junction1" sp
+            [
+                position = 7400, 8064
+            ]
+            
+            junction "Junction2" sp
+            [
+                position = 7472, 8000
+            ]
+            
+            connect "Gain1.in" Junction2 as Connection17
+            
+            
+            connect "Gain1.out" P3 as Connection20
+            
+            
+            connect Junction1 "Gain2.out" as Connection15
+            
+            
+            connect Junction2 P1 as Connection18
+            
+            
+            connect P2 Junction1 as Connection14
+            
+            
+            connect P4 "Gain2.in" as Connection12
+            [
+                breakpoints =7832, 8064
+            ]
+            
+            connect "Speed.in" Junction1 as Connection16
+            
+            
+            connect "Torque.in" Junction2 as Connection19
+            
+            
+    
+            
+            /*
+                Masks
+            */
+            mask {
+                icon = "image(\'emr_images/emr_mono_physical_converter.svg')"
+                
+            }
+        }
+        [
+            position = 8384, 8152
+            size = 80, 64
+        ]
+        
+        component Subsystem "Coupling" {
+            layout = static
+    
+            
+            component gen_sum "Sum1" {
+                
+            }
+            [
+                position = 7560, 7944
+            ]
+            
+            component gen_product "Product1" {
+                
+            }
+            [
+                position = 7560, 8008
+                scale = -1, 1
+            ]
+            
+            component gen_product "Product2" {
+                
+            }
+            [
+                position = 7576, 8168
+                scale = -1, 1
+            ]
+            
+            component src_cp_input "lwh_ref" {
+                
+                /*
+                    Properties
+                */
+                def_value = "1.0"
+                execution_rate = "Ts"
+                max = "2.0"
+                min = "0"
+                unit = ""
+                widget_label = "lwh_ref"
+            }
+            [
+                position = 7600, 8088
+            ]
+            
+            component src_cp_input "rwh_ref" {
+                
+                /*
+                    Properties
+                */
+                def_value = "1.0"
+                execution_rate = "Ts"
+                max = "2.0"
+                min = "0"
+                unit = ""
+                widget_label = "rwh_ref"
+            }
+            [
+                position = 7584, 8264
+            ]
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            port "P1" {
+                
+                position = -48.0, -16.0
+                kind = sp
+                direction = out
+                sp_type {
+                    default = auto
+                }
+            }
+            [
+                position = 7840, 8048
+                hide_name = True
+                scale = -1, 1
+                size = 25, 25
+            ]
+            port "P2" {
+                
+                position = -48.0, 16.0
+                kind = sp
+                direction = in
+                sp_type {
+                    default = inherit
+                }
+            }
+            [
+                position = 7840, 7944
+                hide_name = True
+                size = 25, 25
+            ]
+            port "P3" {
+                
+                position = 48.0, -64.0
+                kind = sp
+                direction = in
+                sp_type {
+                    default = inherit
+                }
+            }
+            [
+                position = 7376, 8168
+                hide_name = True
+                scale = -1, 1
+                size = 25, 25
+            ]
+            port "P4" {
+                
+                position = 48.0, -32.0
+                kind = sp
+                direction = out
+                sp_type {
+                    default = auto
+                }
+            }
+            [
+                position = 7376, 8104
+                hide_name = True
+                size = 25, 25
+            ]
+            port "P5" {
+                
+                position = 48.0, 32.0
+                kind = sp
+                direction = in
+                sp_type {
+                    default = inherit
+                }
+            }
+            [
+                position = 7376, 8008
+                hide_name = True
+                scale = -1, 1
+                size = 25, 25
+            ]
+            port "P6" {
+                
+                position = 48.0, 64.0
+                kind = sp
+                direction = out
+                sp_type {
+                    default = auto
+                }
+            }
+            [
+                position = 7376, 7912
+                hide_name = True
+                size = 25, 25
+            ]
+            
+            junction "Junction1" sp
+            [
+                position = 7752, 8048
+            ]
+            
+            connect Junction1 "Product1.in" as Connection8
+            [
+                breakpoints =7752, 8048;7752, 8000
+            ]
+            
+            connect P1 Junction1 as Connection7
+            
+            
+            connect P4 "Sum1.in1" as Connection2
+            
+            
+            connect P5 "Product1.out" as Connection4
+            
+            
+            connect P6 "Sum1.in" as Connection1
+            
+            
+            connect "Product2.in" Junction1 as Connection9
+            
+            
+            connect "Product2.out" P3 as Connection5
+            
+            
+            connect "Sum1.out" P2 as Connection3
+            
+            
+            connect "lwh_ref.out" "Product1.in1" as Connection10
+            
+            
+            connect "rwh_ref.out" "Product2.in1" as Connection11
+            
+            
+    
+            
+            /*
+                Masks
+            */
+            mask {
+                icon = "image(\'emr_images/emr_mono_physical_coupling.svg')"
+                
+            }
+        }
+        [
+            position = 8512, 8104
+            scale = -1, -1
+            size = 96, 160
+        ]
+        
+        component Subsystem "Enviroment" {
+            layout = static
+    
+            
+            component gen_product "Product1" {
+                
+            }
+            [
+                position = 7872, 8008
+            ]
+            
+            component gen_gain "Gain1" {
+                
+                /*
+                    Properties
+                */
+                gain = "Kaero"
+            }
+            [
+                position = 7960, 8008
+            ]
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            port "P1" {
+                
+                position = 40.0, -16.0
+                kind = sp
+                direction = in
+                sp_type {
+                    default = inherit
+                }
+            }
+            [
+                position = 7760, 8080
+                hide_name = True
+                scale = -1, 1
+                size = 25, 25
+            ]
+            port "P2" {
+                
+                position = 40.0, 16.0
+                kind = sp
+                direction = out
+                sp_type {
+                    default = auto
+                }
+            }
+            [
+                position = 7760, 8000
+                hide_name = True
+                size = 25, 25
+            ]
+            
+            junction "Junction1" sp
+            [
+                position = 7808, 8000
+            ]
+            
+            connect "Gain1.out" P1 as Connection6
+            
+            
+            connect "Gain1.in" "Product1.out" as Connection5
+            
+            
+            connect Junction1 P2 as Connection3
+            
+            
+            connect "Product1.in" Junction1 as Connection2
+            
+            
+            connect "Product1.in1" Junction1 as Connection4
+            [
+                breakpoints =7808, 8000
+            ]
+            
+    
+            
+            /*
+                Masks
+            */
+            mask {
+                icon = "image(\'emr_images/emr_energy_source.svg')"
+                
+            }
+        }
+        [
+            position = 8760, 8104
+            scale = -1, -1
+            size = 80, 64
+        ]
+        
+        component Subsystem "Chassis" {
+            layout = static
+    
+            
+            component gen_sum "Sum1" {
+                
+                /*
+                    Properties
+                */
+                signs = "+-"
+            }
+            [
+                position = 7544, 8008
+            ]
+            
+            component gen_z_domain_transfer "TF" {
+                
+                /*
+                    Properties
+                */
+                a_coeff = "[1, -1]"
+                b_coeff = "[5e-8, 5e-8]"
+            }
+            [
+                position = 7648, 8008
+            ]
+            
+            component gen_probe "V_speed" {
+                
+            }
+            [
+                position = 8032, 7920
+            ]
+            
+            component gen_gain "Gain1" {
+                
+                /*
+                    Properties
+                */
+                gain = "[3.6]"
+            }
+            [
+                position = 7952, 7920
+            ]
+            
+            component tm_delay "Unit Delay1" {
+                
+            }
+            [
+                position = 7784, 8008
+            ]
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            port "P1" {
+                
+                position = -40.0, -16.0
+                kind = sp
+                direction = out
+                sp_type {
+                    default = auto
+                }
+            }
+            [
+                position = 7256, 8000
+                hide_name = True
+                size = 25, 25
+            ]
+            port "P2" {
+                
+                position = -40.0, 16.0
+                kind = sp
+                direction = in
+                sp_type {
+                    default = inherit
+                }
+            }
+            [
+                position = 7256, 8064
+                hide_name = True
+                scale = -1, 1
+                size = 25, 25
+            ]
+            port "P3" {
+                
+                position = 40.0, -16.0
+                kind = sp
+                direction = in
+                sp_type {
+                    default = inherit
+                }
+            }
+            [
+                position = 8040, 8008
+                hide_name = True
+                size = 25, 25
+            ]
+            port "P4" {
+                
+                position = 40.0, 16.0
+                kind = sp
+                direction = out
+                sp_type {
+                    default = auto
+                }
+            }
+            [
+                position = 8040, 8072
+                hide_name = True
+                scale = -1, 1
+                size = 25, 25
+            ]
+            
+            junction "Junction1" sp
+            [
+                position = 7712, 8008
+            ]
+            
+            junction "Junction2" sp
+            [
+                position = 7864, 8008
+            ]
+            
+            connect "Gain1.in" Junction2 as Connection68
+            
+            
+            connect Junction1 "Unit Delay1.in" as Connection69
+            
+            
+            connect Junction2 P3 as Connection67
+            
+            
+            connect P1 "Sum1.in" as Connection3
+            
+            
+            connect P2 Junction1 as Connection8
+            
+            
+            connect P4 "Sum1.in1" as Connection5
+            
+            
+            connect "TF.out" Junction1 as Connection6
+            
+            
+            connect "TF.in" "Sum1.out" as Connection2
+            
+            
+            connect "Unit Delay1.out" Junction2 as Connection70
+            
+            
+            connect "V_speed.in" "Gain1.out" as Connection65
+            
+            
+    
+            
+            /*
+                Masks
+            */
+            mask {
+                icon = "image(\'emr_images/emr_energy_accumulation.svg')"
+                
+            }
+        }
+        [
+            position = 8640, 8104
+            size = 80, 64
+        ]
+        
+        component Subsystem "Machine Inductance" {
+            layout = static
+    
+            
+            component gen_z_domain_transfer "TF" {
+                
+                /*
+                    Properties
+                */
+                a_coeff = "[1, -0.9946]"
+                b_coeff = "[0.007679, 0.007665]"
+            }
+            [
+                position = 7608, 8008
+            ]
+            
+            component gen_sum "Sum1" {
+                
+                /*
+                    Properties
+                */
+                signs = "+-"
+            }
+            [
+                position = 7504, 8008
+            ]
+            
+            component tm_delay "Unit Delay1" {
+                
+            }
+            [
+                position = 7776, 8008
+            ]
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            port "P1" {
+                
+                position = -40.0, -16.0
+                kind = sp
+                direction = out
+                sp_type {
+                    default = auto
+                }
+            }
+            [
+                position = 7256, 8000
+                hide_name = True
+                size = 25, 25
+            ]
+            port "P2" {
+                
+                position = -40.0, 16.0
+                kind = sp
+                direction = in
+                sp_type {
+                    default = inherit
+                }
+            }
+            [
+                position = 7256, 8064
+                hide_name = True
+                scale = -1, 1
+                size = 25, 25
+            ]
+            port "P3" {
+                
+                position = 40.0, -16.0
+                kind = sp
+                direction = in
+                sp_type {
+                    default = inherit
+                }
+            }
+            [
+                position = 8040, 8008
+                hide_name = True
+                size = 25, 25
+            ]
+            port "P4" {
+                
+                position = 40.0, 16.0
+                kind = sp
+                direction = out
+                sp_type {
+                    default = auto
+                }
+            }
+            [
+                position = 8040, 8072
+                hide_name = True
+                scale = -1, 1
+                size = 25, 25
+            ]
+            
+            junction "Junction1" sp
+            [
+                position = 7688, 8008
+            ]
+            
+            connect Junction1 "Unit Delay1.in" as Connection8
+            
+            
+            connect P2 Junction1 as Connection7
+            
+            
+            connect P4 "Sum1.in1" as Connection4
+            
+            
+            connect "Sum1.in" P1 as Connection1
+            
+            
+            connect "TF.out" Junction1 as Connection5
+            
+            
+            connect "TF.in" "Sum1.out" as Connection2
+            
+            
+            connect "Unit Delay1.out" P3 as Connection9
+            
+            
+    
+            
+            /*
+                Masks
+            */
+            mask {
+                icon = "image(\'emr_images/emr_energy_accumulation.svg')"
+                
+            }
+        }
+        [
+            position = 7888, 8104
+            size = 80, 64
+        ]
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        connect "Battery.P2" "Inverter.P2" as Connection31
+        
+        
+        connect "Chassis.P1" "Coupling.P2" as Connection81
+        [
+            breakpoints =8576, 8088
+        ]
+        
+        connect "Chassis.P3" "Enviroment.P2" as Connection82
+        [
+            breakpoints =8696, 8088
+        ]
+        
+        connect "Coupling.P1" "Chassis.P2" as Connection64
+        
+        
+        connect "Coupling.P5" "Left Wheel.P4" as Connection59
+        
+        
+        connect "Coupling.P3" "Right Wheel.P4" as Connection57
+        
+        
+        connect "DC Machine.P3" "Gearbox.P1" as Connection94
+        [
+            breakpoints =8064, 8088
+        ]
+        
+        connect "DC Machine.P1" "Machine Inductance.P3" as Connection95
+        [
+            breakpoints =7936, 8088
+        ]
+        
+        connect "Differential.P1" "Gearbox.P3" as Connection96
+        [
+            breakpoints =8184, 8088
+        ]
+        
+        connect "Differential.P3" "Left Wheel.P1" as Connection84
+        [
+            breakpoints =8320, 8040
+        ]
+        
+        connect "Differential.P6" "Right Wheel.P2" as Connection54
+        
+        
+        connect "Enviroment.P1" "Chassis.P4" as Connection61
+        
+        
+        connect "Gearbox.P2" "DC Machine.P4" as Connection41
+        
+        
+        connect "Gearbox.P4" "Differential.P2" as Connection43
+        
+        
+        connect "Inverter.P1" "Battery.P1" as Connection30
+        
+        
+        connect "Inverter.P5" "Duty Cycle.out" as Connection34
+        
+        
+        connect "Inverter.P4" "Machine Inductance.P2" as Connection66
+        
+        
+        connect "Left Wheel.P3" "Coupling.P6" as Connection83
+        [
+            breakpoints =8440, 8040
+        ]
+        
+        connect "Left Wheel.P2" "Differential.P4" as Connection51
+        
+        
+        connect "Machine Inductance.P4" "DC Machine.P2" as Connection67
+        
+        
+        connect "Machine Inductance.P1" "Inverter.P3" as Connection65
+        
+        
+        connect "Right Wheel.P3" "Coupling.P4" as Connection58
+        
+        
+        connect "Right Wheel.P1" "Differential.P5" as Connection53
+        
+        
+
+        
+    }
+
+    
+
+    
+    default {
+            
+        gen_gain {
+            gain = "1"
+            multiplication = "Element-wise(K.*u)"
+            execution_rate = "inherit"
+        }
+            
+        gen_probe {
+            addr = "0"
+            signal_type = "generic"
+            execution_rate = "inherit"
+        }
+            
+        gen_product {
+            signs = "2"
+            execution_rate = "inherit"
+        }
+            
+        gen_sum {
+            signs = "2"
+            execution_rate = "inherit"
+        }
+            
+        gen_z_domain_transfer {
+            b_coeff = "[1]"
+            a_coeff = "[1,-1]"
+            init_states = "0"
+            signal_out_type = "inherit"
+            execution_rate = "inherit"
+        }
+            
+        src_constant {
+            value = "1"
+            signal_type = "real"
+            execution_rate = "100e-6"
+        }
+            
+        src_cp_input {
+            addr = "0"
+            category = "User defined"
+            group = "Example"
+            format = "real"
+            signal_type = "real"
+            widget_type = "real"
+            widget_label = "CP_in"
+            min = "-1e6"
+            max = "1e6"
+            def_value = "0"
+            unit = " "
+            execution_rate = "100e-6"
+        }
+            
+        tm_delay {
+            init_value = "0"
+            signal_out_type = "inherit"
+            execution_rate = "inherit"
+        }
+    }
+
+    // Handlers
+    CODE model_init
+        # Numpy module is imported as 'np'
+        # Scipy module is imported as 'sp'
+        
+        
+        # *****************************************************************
+        #                           Battery
+        # *****************************************************************
+        V_batt = 300.0            # Battery Voltage considered constant
+        duty = 0.5
+            
+        # *****************************************************************
+        #         Principal characteristics of the traction machine
+        # *****************************************************************
+        
+        # --- DCM Parameters ---
+        # --- DCM by separately excited of 32 kW ---
+            
+        U_arm_nom = 400.0                       # Nominal voltage of the armature (V)
+        I_arm_nom = 89.5                      # Nominal Current of the armature (A)
+        N_nom = 2840.0                          # Nominal speed (tr/min)
+        N_max = 6000.0                          # Maximal speed (tr/min)
+        W_nom = 2.0*np.pi/60.0*N_nom                 # Nominal speed (rad/s)
+        P_arm_nom = U_arm_nom*I_arm_nom       # Nominal electrical power of the armature (W)
+        P_util_nom = 32e3                     # Nominal useful power (W)
+        J = 0.12                              # Rotor Inertia (kg.m^2)
+        M = 155                               # Machine mass
+        
+        # --- Armature winding ---
+        R_arm = 0.35          # Armature resistance (Ohm)
+        L_arm = 6.5e-3        # Armature inductance (H)
+        
+        K_arm = 1.0/R_arm       # Gain of the armature transfer function
+        T_arm = L_arm/R_arm   # Time constant of the armature transfer function (s)
+        
+        # --- Electromechanical conversion ---
+                
+        Kcfiexc_dcm = (U_arm_nom-R_arm*I_arm_nom)/(W_nom)            # Torque Coefficient via the excitation Flux
+        
+        # *****************************************************************
+        #                      Kinematic chain
+        # *****************************************************************
+        
+        Dwheel = 0.52                            # Wheel diameter (m)
+        Rwheel = Dwheel/2.0                      # Wheel radius (m)
+        Jwheel = 4.3                             # Wheel inertia (kg.m^2)
+        red = 5.0                                # Reduction ratio of the gearbox
+        eff_gear_diff = 0.8                      # Efficiency of the gearbox and the differential
+        
+        Meq = 1.0e3                              # Equivalent mass (shaft + chassis)
+        K_chas = 1.0/Meq                         # Velocity gain
+        
+        # --- Mechanical source parameters ---  
+        
+        wheelbase = 2.4                          # Wheelbase
+        w_ev = 1.6                               # EV width (m)
+        g = 9.81                                 # gravity (m/s^2)
+        A = 2.0                                  # Frontal aera (m^2)
+        Cx = 0.35                                # Drag coefficient
+        ro = 1.223                               # Density of the air with 20 C under 1013 mbar (kg/m^3)
+        Kaero = ro*Cx*A/2.0                      # Constant for the resistance force to aerodynamics
+        
+        # *****************************************************************
+        #                       Control parameters
+        # *****************************************************************
+        
+        
+        # *****************************************************************
+        #                            Turning
+        # *****************************************************************
+        # --- Trajectory of the turning radius ---
+        
+        rwh_ref= 1.0
+        lwh_ref= 1.0
+        
+        # *****************************************************************
+        #                    Simulation parameters
+        # *****************************************************************
+        
+        # --- Global simulation ---
+        Ts = 100e-6
+    ENDCODE
+    
+}

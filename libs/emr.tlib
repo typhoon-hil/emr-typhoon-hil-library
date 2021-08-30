@@ -1,0 +1,1140 @@
+//
+// Saved by sw version: 2016.4 Dev
+// Save timestamp: 28-Dec-2016 @ 04:11:05 PM
+//
+
+library "EMR Library" {
+    configuration {
+        hil_device = "HIL402"
+        hil_configuration_id = 1
+        simulation_method = exact
+        simulation_time_step = auto
+        dsp_timer_periods = 100e-6, 50e-3
+        ss_calc_method = "systematic elimination"
+        enb_pole_shift = True
+        enb_gds_oversampling = True
+        show_modes = False
+        cpl_stb = False
+        enb_dep_sw_detect = False
+        code_section = "internal memory"
+        data_section = "internal memory"
+        sys_sp_rate_1 = 0.0001
+        sys_sp_rate_2 = 0.05
+        sys_real_type_precision = "default"
+        user_real_type_precision = "default"
+        sys_cpu_optimization = "high"
+        user_cpu_optimization = "high"
+    }
+    
+    component Subsystem "Root" {
+        
+        component Category "EMR and IBC" {
+
+            component Subsystem "Multi-Physical Coupling" {
+                layout = static
+
+                port "P1" {
+                    position = -48, -16
+                    kind = sp
+                    direction = out
+                }
+                [
+                    position = 7256, 8000
+                    hide_terminal_label = True
+                ]
+                port "P2" {
+                    position = -48, 16
+                    kind = sp
+                    direction = in
+                }
+                [
+                    position = 7256, 8064
+                    scale = -1, 1
+                    hide_terminal_label = True
+                ]
+                port "P3" {
+                    position = 48, -64
+                    kind = sp
+                    direction = in
+                }
+                [
+                    position = 8040, 7904
+                    hide_terminal_label = True
+                ]
+                port "P4" {
+                    position = 48, -32
+                    kind = sp
+                    direction = out
+                }
+                [
+                    position = 8040, 7968
+                    scale = -1, 1
+                    hide_terminal_label = True
+                ]
+                port "P5" {
+                    position = 48, 32
+                    kind = sp
+                    direction = in
+                }
+                [
+                    position = 8040, 8096
+                    hide_terminal_label = True
+                ]
+                port "P6" {
+                    position = 48, 64
+                    kind = sp
+                    direction = out
+                }
+                [
+                    position = 8040, 8160
+                    scale = -1, 1
+                    hide_terminal_label = True
+                ]
+
+                mask {
+                    icon = "image('emr_images/emr_muliti_physical_coupling.svg')"
+
+                    block_type {
+                        label = "Block type"
+                        widget = combo
+                        combo_values = "Simulation", "Estimation"
+                        type = string
+                        default_value = "Simulation"
+
+                        CODE property_value_changed
+                            mdl.refresh_icon(container_handle)
+                        ENDCODE
+                    }
+
+                    CODE define_icon
+                        images = {"Simulation": "emr_images/emr_muliti_physical_coupling.svg",
+                                  "Estimation": "emr_images/emr_muliti_physical_coupling_estimation.svg"}
+
+                        block_type = mdl.get_property_value(mdl.prop(item_handle, "block_type"))
+                        mdl.set_component_icon_image(item_handle, images[block_type])
+                    ENDCODE
+                }
+
+                CODE component_init
+                    component.unlink()
+                ENDCODE
+            }
+
+            component Subsystem "Mono-Physical Coupling" {
+                layout = static
+
+                port "P1" {
+                    position = -48, -16
+                    kind = sp
+                    direction = out
+                }
+                [
+                    position = 7256, 8000
+                    hide_terminal_label = True
+                ]
+                port "P2" {
+                    position = -48, 16
+                    kind = sp
+                    direction = in
+                }
+                [
+                    position = 7256, 8064
+                    scale = -1, 1
+                    hide_terminal_label = True
+                ]
+                port "P3" {
+                    position = 48, -64
+                    kind = sp
+                    direction = in
+                }
+                [
+                    position = 8040, 7904
+                    hide_terminal_label = True
+                ]
+                port "P4" {
+                    position = 48, -32
+                    kind = sp
+                    direction = out
+                }
+                [
+                    position = 8040, 7968
+                    scale = -1, 1
+                    hide_terminal_label = True
+                ]
+                port "P5" {
+                    position = 48, 32
+                    kind = sp
+                    direction = in
+                }
+                [
+                    position = 8040, 8096
+                    hide_terminal_label = True
+                ]
+                port "P6" {
+                    position = 48, 64
+                    kind = sp
+                    direction = out
+                }
+                [
+                    position = 8040, 8160
+                    scale = -1, 1
+                    hide_terminal_label = True
+                ]
+
+                mask {
+                    icon = "image('emr_images/emr_mono_physical_coupling.svg')"
+
+                    block_type {
+                        label = "Block type"
+                        widget = combo
+                        combo_values = "Simulation", "Estimation"
+                        type = string
+                        default_value = "Simulation"
+
+                        CODE property_value_changed
+                            mdl.refresh_icon(container_handle)
+                        ENDCODE
+                    }
+
+                    CODE define_icon
+                        images = {"Simulation": "emr_images/emr_mono_physical_coupling.svg",
+                                  "Estimation": "emr_images/emr_mono_physical_coupling_estimation.svg"}
+
+                        block_type = mdl.get_property_value(mdl.prop(item_handle, "block_type"))
+                        mdl.set_component_icon_image(item_handle, images[block_type])
+                    ENDCODE
+                }
+
+                CODE component_init
+                    component.unlink()
+                ENDCODE
+
+            }
+
+            component Subsystem "Multi-Physical Converter" {
+                layout = static
+
+                port "P1" {
+                    position = -40, -16
+                    kind = sp
+                    direction = out
+                }
+                [
+                    position = 7256, 8000
+                    hide_terminal_label = True
+                ]
+                port "P2" {
+                    position = -40, 16
+                    kind = sp
+                    direction = in
+                }
+                [
+                    position = 7256, 8064
+                    scale = -1, 1
+                    hide_terminal_label = True
+                ]
+                port "P3" {
+                    position = 40, -16
+                    kind = sp
+                    direction = in
+                }
+                [
+                    position = 8040, 8000
+                    hide_terminal_label = True
+                ]
+                port "P4" {
+                    position = 40, 16
+                    kind = sp
+                    direction = out
+                }
+                [
+                    position = 8040, 8064
+                    scale = -1, 1
+                    hide_terminal_label = True
+                ]
+
+                mask {
+                    icon = "image('emr_images/emr_multi_physical_converter.svg')"
+                    description = "Multi-physical converter block for Energetic Macroscopic Representation of models."
+
+                    block_type {
+                        label = "Block type"
+                        widget = combo
+                        combo_values = "Simulation", "Estimation"
+                        type = string
+                        default_value = "Simulation"
+
+                        CODE property_value_changed
+                            mdl.refresh_icon(container_handle)
+                        ENDCODE
+                    }
+
+                    CODE define_icon
+                        images = {"Simulation": "emr_images/emr_multi_physical_converter.svg",
+                                  "Estimation": "emr_images/emr_multi_physical_converter_estimation.svg"}
+
+                        block_type = mdl.get_property_value(mdl.prop(item_handle, "block_type"))
+                        mdl.set_component_icon_image(item_handle, images[block_type])
+                    ENDCODE
+                }
+
+                CODE component_init
+                    component.unlink()
+                ENDCODE
+            }
+            
+            component Subsystem "Multi-Physical Converter with Control" {
+                layout = static
+
+                port "P1" {
+                    position = -40, -16
+                    kind = sp
+                    direction = out
+                }
+                [
+                    position = 7256, 8000
+                    hide_terminal_label = True
+                ]
+                port "P2" {
+                    position = -40, 16
+                    kind = sp
+                    direction = in
+                }
+                [
+                    position = 7256, 8064
+                    scale = -1, 1
+                    hide_terminal_label = True
+                ]
+                port "P3" {
+                    position = 40, -16
+                    kind = sp
+                    direction = in
+                }
+                [
+                    position = 8040, 8000
+                    hide_terminal_label = True
+                ]
+                port "P4" {
+                    position = 40, 16
+                    kind = sp
+                    direction = out
+                }
+                [
+                    position = 8040, 8064
+                    scale = -1, 1
+                    hide_terminal_label = True
+                ]
+                port "P5" {
+                    position = 0, 32
+                    kind = sp
+                    direction = out
+                }
+                [
+                    position = 7648, 8096
+                    scale = -1, 1
+                    hide_terminal_label = True
+                ]
+
+                mask {
+                    icon = "image('emr_images/emr_multi_physical_converter_ctrl.svg')"
+                    description = "Multi-physical converter with control block for Energetic Macroscopic Representation of models."
+
+                    block_type {
+                        label = "Block type"
+                        widget = combo
+                        combo_values = "Simulation", "Estimation"
+                        type = string
+                        default_value = "Simulation"
+
+                        CODE property_value_changed
+                            mdl.refresh_icon(container_handle)
+                        ENDCODE
+                    }
+
+                    CODE define_icon
+                        images = {"Simulation": "emr_images/emr_multi_physical_converter_ctrl.svg",
+                                  "Estimation": "emr_images/emr_multi_physical_converter_ctrl_estimation.svg"}
+
+                        block_type = mdl.get_property_value(mdl.prop(item_handle, "block_type"))
+                        mdl.set_component_icon_image(item_handle, images[block_type])
+                    ENDCODE
+                }
+
+                CODE component_init
+                    component.unlink()
+                ENDCODE
+            }
+
+            component Subsystem "Mono-Physical Converter" {
+                layout = static
+
+                port "P1" {
+                    position = -40, -16
+                    kind = sp
+                    direction = out
+                }
+                [
+                    position = 7256, 8000
+                    hide_terminal_label = True
+                ]
+                port "P2" {
+                    position = -40, 16
+                    kind = sp
+                    direction = in
+                }
+                [
+                    position = 7256, 8064
+                    scale = -1, 1
+                    hide_terminal_label = True
+                ]
+                port "P3" {
+                    position = 40, -16
+                    kind = sp
+                    direction = in
+                }
+                [
+                    position = 8040, 8000
+                    hide_terminal_label = True
+                ]
+                port "P4" {
+                    position = 40, 16
+                    kind = sp
+                    direction = out
+                }
+                [
+                    position = 8040, 8064
+                    scale = -1, 1
+                    hide_terminal_label = True
+                ]
+
+                mask {
+                    icon = "image('emr_images/emr_mono_physical_converter.svg')"
+                    description = "Mono-physical converter block for Energetic Macroscopic Representation of models."
+
+                    block_type {
+                        label = "Block type"
+                        widget = combo
+                        combo_values = "Simulation", "Estimation"
+                        type = string
+                        default_value = "Simulation"
+
+                        CODE property_value_changed
+                            mdl.refresh_icon(container_handle)
+                        ENDCODE
+                    }
+
+                    CODE define_icon
+                        images = {"Simulation": "emr_images/emr_mono_physical_converter.svg",
+                                  "Estimation": "emr_images/emr_mono_physical_converter_estimation.svg"}
+
+                        block_type = mdl.get_property_value(mdl.prop(item_handle, "block_type"))
+                        mdl.set_component_icon_image(item_handle, images[block_type])
+                    ENDCODE
+                }
+
+                CODE component_init
+                    component.unlink()
+                ENDCODE
+            }
+            
+            component Subsystem "Mono-Physical Converter with Control" {
+                layout = static
+
+                port "P1" {
+                    position = -40, -16
+                    kind = sp
+                    direction = out
+                }
+                [
+                    position = 7256, 8000
+                    hide_terminal_label = True
+                ]
+                port "P2" {
+                    position = -40, 16
+                    kind = sp
+                    direction = in
+                }
+                [
+                    position = 7256, 8064
+                    scale = -1, 1
+                    hide_terminal_label = True
+                ]
+                port "P3" {
+                    position = 40, -16
+                    kind = sp
+                    direction = in
+                }
+                [
+                    position = 8040, 8000
+                    hide_terminal_label = True
+                ]
+                port "P4" {
+                    position = 40, 16
+                    kind = sp
+                    direction = out
+                }
+                [
+                    position = 8040, 8064
+                    scale = -1, 1
+                    hide_terminal_label = True
+                ]
+                port "P5" {
+                    position = 0, 32
+                    kind = sp
+                    direction = out
+                }
+                [
+                    position = 7648, 8096
+                    scale = -1, 1
+                    hide_terminal_label = True
+                ]
+
+                mask {
+                    icon = "image('emr_images/emr_mono_physical_converter_ctrl.svg')"
+                    description = "Mono-physical converter block with control for Energetic Macroscopic Representation of models."
+
+                    block_type {
+                        label = "Block type"
+                        widget = combo
+                        combo_values = "Simulation", "Estimation"
+                        type = string
+                        default_value = "Simulation"
+
+                        CODE property_value_changed
+                            mdl.refresh_icon(container_handle)
+                        ENDCODE
+                    }
+
+                    CODE define_icon
+                        images = {"Simulation": "emr_images/emr_mono_physical_converter_ctrl.svg",
+                                  "Estimation": "emr_images/emr_mono_physical_converter_ctrl_estimation.svg"}
+
+                        block_type = mdl.get_property_value(mdl.prop(item_handle, "block_type"))
+                        mdl.set_component_icon_image(item_handle, images[block_type])
+                    ENDCODE
+                }
+
+                CODE component_init
+                    component.unlink()
+                ENDCODE
+            }
+
+            component Subsystem "Energy Accumulation" {
+                layout = static
+
+                port "P1" {
+                    position = -40, -16
+                    kind = sp
+                    direction = out
+                }
+                [
+                    position = 7256, 8000
+                    hide_terminal_label = True
+                ]
+                port "P2" {
+                    position = -40, 16
+                    kind = sp
+                    direction = in
+                }
+                [
+                    position = 7256, 8064
+                    scale = -1, 1
+                    hide_terminal_label = True
+                ]
+                port "P3" {
+                    position = 40, -16
+                    kind = sp
+                    direction = in
+                }
+                [
+                    position = 8040, 8000
+                    hide_terminal_label = True
+                ]
+                port "P4" {
+                    position = 40, 16
+                    kind = sp
+                    direction = out
+                }
+                [
+                    position = 8040, 8064
+                    scale = -1, 1
+                    hide_terminal_label = True
+                ]
+
+                mask {
+                    icon = "image('emr_images/emr_energy_accumulation.svg')"
+
+                    block_type {
+                        label = "Block type"
+                        widget = combo
+                        combo_values = "Simulation", "Estimation"
+                        type = string
+                        default_value = "Simulation"
+
+                        CODE property_value_changed
+                            mdl.refresh_icon(container_handle)
+                        ENDCODE
+                    }
+
+                    CODE define_icon
+                        images = {"Simulation": "emr_images/emr_energy_accumulation.svg",
+                                  "Estimation": "emr_images/emr_energy_accumulation_estimation.svg"}
+
+                        block_type = mdl.get_property_value(mdl.prop(item_handle, "block_type"))
+                        mdl.set_component_icon_image(item_handle, images[block_type])
+                    ENDCODE
+                }
+
+                CODE component_init
+                    component.unlink()
+                ENDCODE
+
+            }
+
+            component Subsystem "Energy Source" {
+                layout = static
+
+                port "P1" {
+                    position = 40, -16
+                    kind = sp
+                    direction = in
+                }
+                [
+                    position = 8040, 8000
+                    hide_terminal_label = True
+                ]
+                port "P2" {
+                    position = 40, 16
+                    kind = sp
+                    direction = out
+                }
+                [
+                    position = 8040, 8064
+                    scale = -1, 1
+                    hide_terminal_label = True
+                ]
+
+                mask {
+                    icon = "image('emr_images/emr_energy_source.svg')"
+
+                    block_type {
+                        label = "Block type"
+                        widget = combo
+                        combo_values = "Simulation", "Estimation"
+                        type = string
+                        default_value = "Simulation"
+
+                        CODE property_value_changed
+                            mdl.refresh_icon(container_handle)
+                        ENDCODE
+                    }
+
+                    CODE define_icon
+                        images = {"Simulation": "emr_images/emr_energy_source.svg",
+                                  "Estimation": "emr_images/emr_estimation_source.svg"}
+
+                        block_type = mdl.get_property_value(mdl.prop(item_handle, "block_type"))
+                        mdl.set_component_icon_image(item_handle, images[block_type])
+                    ENDCODE
+                }
+
+                CODE component_init
+                    component.unlink()
+                ENDCODE
+
+            }
+
+            component Subsystem "Coupling Inversion Weighting" {
+                layout = static
+
+                port "P1" {
+                    position = -40, 0
+                    kind = sp
+                    direction = in
+                }
+                [
+                    position = 7256, 8000
+                    scale = -1, 1
+                    hide_terminal_label = True
+                ]
+                port "P2" {
+                    position = 40, -16
+                    kind = sp
+                    direction = out
+                }
+                [
+                    position = 8040, 7904
+                    scale = -1, 1
+                    hide_terminal_label = True
+                ]
+                port "P3" {
+                    position = 40, 16
+                    kind = sp
+                    direction = out
+                }
+                [
+                    position = 8040, 8096
+                    scale = -1, 1
+                    hide_terminal_label = True
+                ]
+
+                mask {
+                    icon = "image('emr_images/emr_coupling_inversion_w.svg')"
+                    description = "Weighting coupling inversion. Control input can be enabled."
+                }
+
+                CODE component_init
+                    component.unlink()
+                ENDCODE
+
+            }
+            
+            component Subsystem "Coupling Inversion Weighting with Control" {
+                layout = static
+
+                port "P1" {
+                    position = -40, 0
+                    kind = sp
+                    direction = in
+                }
+                [
+                    position = 7256, 8000
+                    scale = -1, 1
+                    hide_terminal_label = True
+                ]
+                port "P2" {
+                    position = 40, -16
+                    kind = sp
+                    direction = out
+                }
+                [
+                    position = 8040, 7904
+                    scale = -1, 1
+                    hide_terminal_label = True
+                ]
+                port "P3" {
+                    position = 40, 16
+                    kind = sp
+                    direction = out
+                }
+                [
+                    position = 8040, 8096
+                    scale = -1, 1
+                    hide_terminal_label = True
+                ]
+                port "P4" {
+                    position = 8, 40
+                    kind = sp
+                    direction = out
+                }
+                [
+                    position = 7648, 8192
+                    scale = -1, 1
+                    hide_terminal_label = True
+                ]
+
+                mask {
+                    icon = "image('emr_images/emr_coupling_inversion_w_ctrl.svg')"
+                    description = "Weighting coupling inversion with control." 
+                }
+
+                CODE component_init
+                    component.unlink()
+                ENDCODE
+
+            }
+
+            component Subsystem "Coupling Inversion Distribution" {
+                layout = static
+
+                port "P1" {
+                    position = -40, -16
+                    kind = sp
+                    direction = in
+                }
+                [
+                    position = 7256, 7904
+                    scale = -1, 1
+                    hide_terminal_label = True
+                ]
+                port "P2" {
+                    position = -40, 16
+                    kind = sp
+                    direction = in
+                }
+                [
+                    position = 7256, 8096
+                    scale = -1, 1
+                    hide_terminal_label = True
+                ]
+                port "P3" {
+                    position = 40, 0
+                    kind = sp
+                    direction = out
+                }
+                [
+                    position = 8040, 8000
+                    scale = -1, 1
+                    hide_terminal_label = True
+                ]
+
+                mask {
+                    icon = "image('emr_images/emr_coupling_inversion_d.svg')"
+                    description = "Distribution coupling inversion."
+                }
+
+                CODE component_init
+                    component.unlink()
+                ENDCODE
+            }
+            
+            component Subsystem "Coupling Inversion Distribution with Control" {
+                layout = static
+
+                port "P1" {
+                    position = -40, -16
+                    kind = sp
+                    direction = in
+                }
+                [
+                    position = 7256, 7904
+                    scale = -1, 1
+                    hide_terminal_label = True
+                ]
+                port "P2" {
+                    position = -40, 16
+                    kind = sp
+                    direction = in
+                }
+                [
+                    position = 7256, 8096
+                    scale = -1, 1
+                    hide_terminal_label = True
+                ]
+                port "P3" {
+                    position = 40, 0
+                    kind = sp
+                    direction = out
+                }
+                [
+                    position = 8040, 8000
+                    scale = -1, 1
+                    hide_terminal_label = True
+                ]
+                port "P4" {
+                    position = 8, 40
+                    kind = sp
+                    direction = out
+                }
+                [
+                    position = 7648, 8192
+                    scale = -1, 1
+                    hide_terminal_label = True
+                ]
+
+                mask {
+                    icon = "image('emr_images/emr_coupling_inversion_d_ctrl.svg')"
+                    description = "Distribution coupling inversion with control"
+                }
+
+                CODE component_init
+                    component.unlink()
+                ENDCODE
+            }
+
+            component Subsystem "Indirect Inversion" {
+                layout = static
+
+                port "P1" {
+                    position = -40, 0
+                    kind = sp
+                    direction = in
+                }
+                [
+                    position = 7256, 8000
+                    scale = -1, 1
+                    hide_terminal_label = True
+                ]
+                port "P2" {
+                    position = 40, -16
+                    kind = sp
+                    direction = out
+                }
+                [
+                    position = 8040, 7904
+                    scale = -1, 1
+                    hide_terminal_label = True
+                ]
+                port "P3" {
+                    position = 40, 0
+                    kind = sp
+                    direction = out
+                }
+                [
+                    position = 8040, 8000
+                    scale = -1, 1
+                    hide_terminal_label = True
+                ]
+                port "P4" {
+                    position = 40, 16
+                    kind = sp
+                    direction = out
+                }
+                [
+                    position = 8040, 8096
+                    scale = -1, 1
+                    hide_terminal_label = True
+                ]
+                mask {
+                    icon = "image('emr_images/emr_indirect_inversion.svg')"
+                }
+
+                CODE component_init
+                    component.unlink()
+                ENDCODE
+
+            }
+
+            component Subsystem "Direct Inversion" {
+                layout = static
+
+                port "P1" {
+                    position = -40, 0
+                    kind = sp
+                    direction = in
+                }
+                [
+                    position = 7256, 8000
+                    scale = -1, 1
+                    hide_terminal_label = True
+                ]
+                port "P2" {
+                    position = 40, 0
+                    kind = sp
+                    direction = out
+                }
+                [
+                    position = 8040, 8000
+                    scale = -1, 1
+                    hide_terminal_label = True
+                ]
+
+                mask {
+                    icon = "image('emr_images/emr_direct_inversion.svg')"
+                    description = "Direct Inversion with or without disturbance rejection. Disturbance rejection can be enabled."
+                }
+
+                CODE component_init
+                    component.unlink()
+                ENDCODE
+
+            }
+            
+            component Subsystem "Direct Inversion with Disturbance Rejection" {
+                layout = static
+
+                port "P1" {
+                    position = -40, 0
+                    kind = sp
+                    direction = in
+                }
+                [
+                    position = 7256, 8000
+                    scale = -1, 1
+                    hide_terminal_label = True
+                ]
+                port "P2" {
+                    position = 40, 0
+                    kind = sp
+                    direction = out
+                }
+                [
+                    position = 8040, 8000
+                    scale = -1, 1
+                    hide_terminal_label = True
+                ]
+                port "P3" {
+                    position = 0, -32
+                    kind = sp
+                    direction = out
+                }
+                [
+                    position = 7648, 7904
+                    scale = -1, 1
+                    hide_terminal_label = True
+                ]
+
+                mask {
+                    icon = "image('emr_images/emr_direct_inversion_dist_rej.svg')"
+                    description = "Direct Inversion with or with disturbance rejection."
+                }
+
+                CODE component_init
+                    component.unlink()
+                ENDCODE
+
+            }
+
+            component Subsystem "Power Adaptation" {
+                layout = static
+
+                port "P1" {
+                    position = -40, -16
+                    kind = sp
+                    direction = out
+                }
+                [
+                    position = 7256, 8000
+                    hide_terminal_label = True
+                ]
+                port "P2" {
+                    position = -40, 16
+                    kind = sp
+                    direction = in
+                }
+                [
+                    position = 7256, 8064
+                    scale = -1, 1
+                    hide_terminal_label = True
+                ]
+                port "P3" {
+                    position = 40, -16
+                    kind = sp
+                    direction = in
+                }
+                [
+                    position = 8040, 8000
+                    hide_terminal_label = True
+                ]
+                port "P4" {
+                    position = 40, 16
+                    kind = sp
+                    direction = out
+                }
+                [
+                    position = 8040, 8064
+                    scale = -1, 1
+                    hide_terminal_label = True
+                ]
+
+                mask {
+                    icon = "image('emr_images/emr_power_adaptation.svg')"
+                    description = "Power Adaptation block for Energetic Macroscopic Representation of models."
+                }
+
+                CODE component_init
+                    component.unlink()
+                ENDCODE
+            }
+
+            component Subsystem "Estimation Square" {
+                layout = static
+
+                port "P1" {
+                    position = -40, 16
+                    kind = sp
+                    direction = in
+                }
+                [
+                    position = 7256, 8064
+                    scale = -1, 1
+                    hide_terminal_label = True
+                ]
+                port "P2" {
+                    position = 40, -16
+                    kind = sp
+                    direction = out
+                }
+                [
+                    position = 8040, 8000
+                    hide_terminal_label = True
+                ]
+                port "P3" {
+                    position = 40, 16
+                    kind = sp
+                    direction = out
+                }
+                [
+                    position = 8040, 8064
+                    scale = -1, 1
+                    hide_terminal_label = True
+                ]
+
+                mask {
+                    icon = "image('emr_images/emr_estimation_square.svg')"
+                    description = "Estimation block for Energetic Macroscopic Representation of models."
+                }
+
+                CODE component_init
+                    component.unlink()
+                ENDCODE
+            }
+
+            component Subsystem "Estimation Oval" {
+                layout = static
+
+                port "P1" {
+                    position = 40, -16
+                    kind = sp
+                    direction = in
+                }
+                [
+                    position = 8040, 8000
+                    hide_terminal_label = True
+                ]
+                port "P2" {
+                    position = 40, 16
+                    kind = sp
+                    direction = out
+                }
+                [
+                    position = 8040, 8064
+                    scale = -1, 1
+                    hide_terminal_label = True
+                ]
+
+                mask {
+                    icon = "image('emr_images/emr_estimation_source.svg')"
+                }
+
+                CODE component_init
+                    component.unlink()
+                ENDCODE
+
+            }
+
+            component Subsystem "Strategy" {
+                layout = static
+
+                port "P1" {
+                    position = -16, -24
+                    kind = sp
+                    direction = in
+                }
+                [
+                    position = 8040, 8000
+                    hide_terminal_label = True
+                ]
+                port "P2" {
+                    position = 16, -24
+                    kind = sp
+                    direction = out
+                }
+                [
+                    position = 8040, 8064
+                    scale = -1, 1
+                    hide_terminal_label = True
+                ]
+
+                mask {
+                    icon = "image('emr_images/emr_strategy.svg')"
+                }
+
+                CODE component_init
+                    component.unlink()
+                ENDCODE
+
+            }
+        }
+    }
+}

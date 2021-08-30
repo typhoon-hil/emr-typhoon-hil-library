@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   id="Layer_1"
+   x="0px"
+   y="0px"
+   width="112"
+   height="48"
+   viewBox="0 0 112 48"
+   enable-background="new 0 0 80 64"
+   xml:space="preserve"
+   sodipodi:docname="emr_strategy.svg"
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)"><metadata
+   id="metadata5996"><rdf:RDF><cc:Work
+       rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata><defs
+   id="defs5994">
+	
+	
+</defs><sodipodi:namedview
+   pagecolor="#ffffff"
+   bordercolor="#666666"
+   borderopacity="1"
+   objecttolerance="10"
+   gridtolerance="10"
+   guidetolerance="10"
+   inkscape:pageopacity="0"
+   inkscape:pageshadow="2"
+   inkscape:window-width="1920"
+   inkscape:window-height="1027"
+   id="namedview5992"
+   showgrid="false"
+   inkscape:zoom="5.2149125"
+   inkscape:cx="68.225873"
+   inkscape:cy="0.45856327"
+   inkscape:window-x="-8"
+   inkscape:window-y="-8"
+   inkscape:window-maximized="1"
+   inkscape:current-layer="Layer_1" />
+<polygon
+   style="fill:#006aff;fill-opacity:1;stroke:#006aff;stroke-miterlimit:10"
+   id="polygon5987"
+   points="52.001,12.002 59.999,51.998 28.002,51.998 20.002,12.002 "
+   stroke-miterlimit="10"
+   transform="matrix(2.7156543,4.9596554e-4,-1.3773507e-4,1.1666205,-52.577319,-13.135623)" />
+<text
+   xml:space="preserve"
+   style="font-style:normal;font-weight:normal;font-size:13.10490608px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#f9f9f9;fill-opacity:1;stroke:none;stroke-width:1.22858489"
+   x="34.58625"
+   y="26.695589"
+   id="text6545"
+   transform="scale(0.93319264,1.0715901)"><tspan
+     sodipodi:role="line"
+     id="tspan6543"
+     x="34.58625"
+     y="26.695589"
+     style="stroke-width:1.22858489">strategy</tspan></text>
+
+</svg>
