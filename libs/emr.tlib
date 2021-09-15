@@ -93,6 +93,7 @@ library "EMR Library" {
 
                 mask {
                     icon = "image('emr_images/emr_muliti_physical_coupling.svg')"
+                    description = "Multi-physical coupling block for Energetic Macroscopic Representation of models."
 
                     block_type {
                         label = "Block type"
@@ -183,6 +184,7 @@ library "EMR Library" {
 
                 mask {
                     icon = "image('emr_images/emr_mono_physical_coupling.svg')"
+                    description = "Mono-physical coupling block for Energetic Macroscopic Representation of models."
 
                     block_type {
                         label = "Block type"
@@ -563,6 +565,7 @@ library "EMR Library" {
 
                 mask {
                     icon = "image('emr_images/emr_energy_accumulation.svg')"
+                    description = "Energy accumulation block for Energetic Macroscopic Representation of models."
 
                     block_type {
                         label = "Block type"
@@ -616,6 +619,7 @@ library "EMR Library" {
 
                 mask {
                     icon = "image('emr_images/emr_energy_source.svg')"
+                    description = "Energy source block for Energetic Macroscopic Representation of models."
 
                     block_type {
                         label = "Block type"
@@ -680,7 +684,7 @@ library "EMR Library" {
 
                 mask {
                     icon = "image('emr_images/emr_coupling_inversion_w.svg')"
-                    description = "Weighting coupling inversion. Control input can be enabled."
+                    description = "Weighting coupling inversion."
                 }
 
                 CODE component_init
@@ -735,7 +739,7 @@ library "EMR Library" {
 
                 mask {
                     icon = "image('emr_images/emr_coupling_inversion_w_ctrl.svg')"
-                    description = "Weighting coupling inversion with control." 
+                    description = "Weighting coupling inversion with control."
                 }
 
                 CODE component_init
@@ -887,6 +891,7 @@ library "EMR Library" {
                 ]
                 mask {
                     icon = "image('emr_images/emr_indirect_inversion.svg')"
+                    description = "Indirect inversion."
                 }
 
                 CODE component_init
@@ -921,7 +926,7 @@ library "EMR Library" {
 
                 mask {
                     icon = "image('emr_images/emr_direct_inversion.svg')"
-                    description = "Direct Inversion with or without disturbance rejection. Disturbance rejection can be enabled."
+                    description = "Direct inversion."
                 }
 
                 CODE component_init
@@ -966,7 +971,7 @@ library "EMR Library" {
 
                 mask {
                     icon = "image('emr_images/emr_direct_inversion_dist_rej.svg')"
-                    description = "Direct Inversion with or with disturbance rejection."
+                    description = "Direct inversion with disturbance rejection."
                 }
 
                 CODE component_init
@@ -1095,6 +1100,7 @@ library "EMR Library" {
 
                 mask {
                     icon = "image('emr_images/emr_estimation_source.svg')"
+                    description = "Estimation source block for Energetic Macroscopic Representation of models."
                 }
 
                 CODE component_init
@@ -1128,6 +1134,7 @@ library "EMR Library" {
 
                 mask {
                     icon = "image('emr_images/emr_strategy.svg')"
+                    description = "Control strategy block for Energetic Macroscopic Representation of models."
                 }
 
                 CODE component_init

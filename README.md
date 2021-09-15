@@ -12,6 +12,7 @@
     - [Port definition](#port-definition)
     - [Mask definition](#mask-definition)
     - [Adding component image](#adding-component-image)
+    - [License](#license)
 - [Useful links](#useful-links)
 
 ## Getting started
@@ -113,13 +114,9 @@ It contains several attributes:
 
 |Attribute|Description
 |---------|------------
-|position |Specifies the ports x and y coordinate relative to the center of the component's mask.
-|         |**Note**: The direction of the x coordinate is from left to right, and the direction of the y coordinate is from top to bottom.
-|kind     | *sp*, *pe*
-|         |The *sp* keyword signifies that the port's type is signal processing, while *pe* indicates power electronic ports.
-|direction|*in*, *out*
-|         |Specifies the direction of the port side which is used in the internal component structure.
-|         |The complementary port side, used to connect the component with other components, is automatically deduced from this.
+|position |Specifies the ports x and y coordinate relative to the center of the component's mask. <br/> **Note**: The direction of the x coordinate is from left to right, and the direction of the y coordinate is from top to bottom.
+|kind     | *sp*, *pe* <br/> The *sp* keyword signifies that the port's type is signal processing, while *pe* indicates power electronic ports.
+|direction|*in*, *out* <br/> Specifies the direction of the port side which is used in the internal component structure. <br/> The complementary port side, used to connect the component with other components, is automatically deduced from this.
 
 **Note**: The described constants which indicate port's kind and direction correspond to the constants given in the [Typhoon API documentation](https://www.typhoon-hil.com/documentation/typhoon-hil-api-documentation/schematic_api.html#schematic-api-constants).
 
@@ -129,12 +126,9 @@ It contains several attributes:
 
 |Attribute          |Description
 |-------------------|------------
-|position           |Specifies the ports x and y coordinate relative to the center of the top left corner of the whole scene.
-|                   |Schematic scene size is 16k pixels (16384), so scheme scene center point is (8192, 8192).
-|scale              |Scales the two sides of the port.
-|                   |For example: `scale = -1, 1`. In this example, the port is fliped around the horizontal axis (left-right).
-|hide_terminal_label|*True*, *False*
-|                   |If set to True, it hides the terminal label.
+|position           |Specifies the ports x and y coordinate relative to the center of the top left corner of the whole scene. <br/> Schematic scene size is 16k pixels (16384), so scheme scene center point is (8192, 8192).
+|scale              |Scales the two sides of the port. <br/> For example: `scale = -1, 1`. In this example, the port is fliped around the horizontal axis (left-right).
+|hide_terminal_label|*True*, *False* <br/> If set to True, it hides the terminal label.
 
 #### Mask definition
 Mask definition specifies the attributes of the mask and the customized properties (widgets).  
@@ -179,11 +173,9 @@ Properties have the following attributes:
 |Attribute    |Description                                                                     |Necessity
 |-------------|--------------------------------------------------------------------------------|---------
 |label        |Label on the property dialog indicating which widget represents which property. |Optional
-|widget       |*edit*, *combo*, *checkbox*, *togglebutton*                                     |Mandatory
-|             |Defines the representation of the property on the property dialog.              |
+|widget       |*edit*, *combo*, *checkbox*, *togglebutton* <br/> Defines the representation of the property on the property dialog.|Mandatory
 |combo_values |Contains the list of values that will be shown in the combo widget.             |Used only if widget is set to *combo*.
-|type         |*int*, *uint*, *real*, *string*, *bool*, *generic*                              |Mandatory
-|             |**Note**: When setting widget to *combo*, the *type* attribute must be set to *string*.|
+|type         |*int*, *uint*, *real*, *string*, *bool*, *generic* <br/> **Note**: When setting widget to *combo*, the *type* attribute must be set to *string*.|Mandatory
 |default_value|Sets the property's value when the component is added to the schematic model.   |Mandatory
 
 #### Adding component image
@@ -192,6 +184,12 @@ The *icon* property contains the path to the component's image relative to the l
 
 Images should be saved in .svg format.
 A new component image should be located in the *libs/emr_images* directory of this project.
+
+#### License
+Any contributions you make will be under the MIT Software License.
+
+In short, when you submit code changes, your submissions are understood to be under the same [MIT License](https://choosealicense.com/licenses/mit/) 
+that covers the project. Feel free to contact the maintainers if that's a concern.
 
 ## Useful links
 [1] [EMR website](http://www.emrwebsite.org/) (hosted by the University of Lille)
