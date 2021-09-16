@@ -1,12 +1,12 @@
 <ui_settings>
-    <version>2.1</version>
+    <version>2.6</version>
     <model_locked>True</model_locked>
     <canvas_bg_color>#ffffff</canvas_bg_color>
     <initialization_code><![CDATA[# NOTE: Variables and functions defined here will be
 # available for use in all Macro and Expression scripts.
 # This code is always executed prior simulation start.
 # HIL API
-import typhoon.api.hil as hil
+
 
 # Variable 'SETTINGS_DIR' holds directory where loaded Panel .cus file is located.
 # Also you can call 'get_settings_dir_path()' function in any
@@ -15,6 +15,7 @@ SETTINGS_DIR = get_settings_dir_path()
 
 # Numpy module is imported as 'np'
 # Scipy module is imported as 'sp'
+PROFILE_ENABLE = 0
 
 CYCL_ECE = [0.00,
      0.00,
@@ -216,13 +217,13 @@ CYCL_ECE = [0.00,
     <components>
         <component_data>
                 <id>643bd31e3a2611e787c28ca982b03a50</id>
-                <name><![CDATA[Velocity]]></name>
+                <name><![CDATA[Velocity1]]></name>
                 <type>TraceDisplay</type>
                 <description><![CDATA[]]></description>
-                <data_type>Analog signal</data_type>
+                <data_type>Signals</data_type>
                 <code><![CDATA[#----------------------- MANDATORY IMPORT --------------------------
 # HIL API
-import typhoon.api.hil as hil
+
 
 # NOTE: Only read functions are available from the HIL API
 #-------------------------------------------------------------------
@@ -232,16 +233,23 @@ import typhoon.api.hil as hil
 displayValue = 0.0
 
 ]]></code>
-                <signal_name><![CDATA[Mechanical Variables.Velocity]]></signal_name>
-                <updateRate>250</updateRate>
-                <background_color>#ffffff</background_color>
-                <hierarchy_position>1</hierarchy_position>
+                <analog_signals><![CDATA[['Mechanical Variables.Velocity']]]></analog_signals>
+                <digital_signals><![CDATA[[]]]></digital_signals>
+                <streaming_analog_signals><![CDATA[[]]]></streaming_analog_signals>
+                <streaming_digital_signals><![CDATA[[]]]></streaming_digital_signals>
+                <update_rate>250</update_rate>
+                <execution_rate>None</execution_rate>
+                <background_color>white</background_color>
                 <widget_settings>
-                    <x>312</x>
-                    <y>8</y>
+                    <x>312.0</x>
+                    <y>8.0</y>
                     <width>400</width>
                     <height>200</height>
                     <appearance><![CDATA[Flat]]></appearance>
+                    <hierarchy_position><![CDATA[1]]></hierarchy_position>
+                    <is_background><![CDATA[False]]></is_background>
+                    <label><![CDATA[Velocity]]></label>
+                    <use_label>True</use_label>
                 </widget_settings>
                 <advance_widget_settings>
                     <x_title><![CDATA[x axes]]></x_title>
@@ -290,33 +298,40 @@ referenceCurves = [refCurveData1]
             </component_data>
         <component_data>
                 <id>85ff788f3a2611e7b4fb8ca982b03a50</id>
-                <name><![CDATA[Vehicle Speed [km/h]]]></name>
+                <name><![CDATA[Vehicle Speed [km_h]]]></name>
                 <type>SliderMacro</type>
                 <description><![CDATA[]]></description>
                 <on_use_code active="True"><![CDATA[#------------- MANDATORY IMPORTS ---------------
 # HIL API
-import typhoon.api.hil as hil
 
-# Function for printing text to console (e.g printf("Hello world"))
-from typhoon.utilities.misc import printf
-#------------------------------------------------
 
 # NOTE: entered value is available through variable 'inputValue'
 hil.set_scada_input_value('Reference', inputValue/3.6)
 ]]></on_use_code>
                 <on_start_code active="True"><![CDATA[# NOTE: The code specified in this handler will be executed on simulation start.
 # HIL API
-import typhoon.api.hil as hil
+
 
 
 # Change widget value by setting this variable.
 # NOTE: If you not specify 'widgetValue' variable or assign 'None' to it, widget value won't be changed.
 widgetValue = None
 ]]></on_start_code>
+                <on_stop_code active="False"><![CDATA[# NOTE: The code specified in this handler will be executed after simulation is stopped.
+# HIL API is imported as 'hil'
+# SCADA API is imported as 'panel'
+# SCADA API constants are imported as 'api_const'
+# 'WIDGET_HANDLE' constant holds the WidgetHandle object of this widget.
+# This object can be used as an argument in SCADA API functions.
+
+# Change widget value by setting this variable.
+# NOTE: If you not specify 'widgetValue' variable or assign 'None' to it, widget value won't be changed.
+widgetValue = None
+]]></on_stop_code>
                 <on_timer_code active="True"><![CDATA[# NOTE: The code specified in this handler will be executed periodically each 1000ms.
 # NOTE: Only read functions are available from the HIL API
 # HIL API
-import typhoon.api.hil as hil
+
 
 
 # Change widget value by setting this variable.
@@ -330,125 +345,21 @@ widgetValue = scada_input_settings["input_value"]*3.6
 
 ]]></on_timer_code>
                 <on_start_code_source><![CDATA[Macro code]]></on_start_code_source>
-                <inputValue><![CDATA[34.992]]></inputValue>
+                <inputValue><![CDATA[0.0]]></inputValue>
                 <min>0.0</min>
                 <max>100.0</max>
                 <step>1.0</step>
-                <hierarchy_position>1</hierarchy_position>
                 <widget_settings>
                     <x>360</x>
                     <y>216</y>
                     <width>288</width>
                     <height>48</height>
                     <appearance><![CDATA[Flat]]></appearance>
+                    <hierarchy_position><![CDATA[1]]></hierarchy_position>
+                    <is_background><![CDATA[False]]></is_background>
+                    <label><![CDATA[]]></label>
+                    <use_label>False</use_label>
                 </widget_settings>
-            </component_data>
-        <component_data>
-                <id>ecfd64803a3011e7b62e8ca982b03a50</id>
-                <name><![CDATA[Capture/Scope]]></name>
-                <type>Capture/Scope</type>
-                <description><![CDATA[]]></description>
-                <hierarchy_position>1</hierarchy_position>
-                <working_mode>embedded</working_mode>
-                <widget_settings>
-                    <x>16.0</x>
-                    <y>312.0</y>
-                    <width>680</width>
-                    <height>320</height>
-                    <appearance><![CDATA[Flat]]></appearance>
-                    <state>Scope</state>
-                    <layout>None</layout>
-
-                    <capture>
-                        <time_interval>60.0</time_interval>
-                        <sample_rate>50000.0</sample_rate>
-                        <background_color>False</background_color>
-                        <layout>Vertical</layout>
-                        <legend>True</legend>
-                        <trigger>
-                            <type>Analog</type>
-                            <source>Mechanical Variables.Velocity</source>
-                            <edge>Rising edge</edge>
-                            <treshold>60.0</treshold>
-                            <offset>0.0</offset>
-                        </trigger>
-
-                        <analog_signals>
-                            <analog>
-                            <chanel>0</chanel>
-                            <name>Mechanical Variables.Velocity</name>
-                            <vertical_scale>Auto</vertical_scale>
-                            <vertical_offset>0</vertical_offset>
-                            <coupling>False</coupling>
-                            <viewports>
-                                
-                                <num_viewport>1</num_viewport>
-                                
-                           </viewports>
-                        </analog>
-                            <analog>
-                            <chanel>1</chanel>
-                            <name>Mechanical Variables.Distance</name>
-                            <vertical_scale>Auto</vertical_scale>
-                            <vertical_offset>0</vertical_offset>
-                            <coupling>False</coupling>
-                            <viewports>
-                                
-                           </viewports>
-                        </analog>
-                            </analog_signals>
-
-                         <digital_signals>
-                            </digital_signals>
-
-                    </capture>
-
-                    <scope>
-                        <time_base>0.005 </time_base>
-                        <background_color>False</background_color>
-                        <layout>Vertical</layout>
-                        <legend>True</legend>
-                        <trigger>
-                            <mode>Auto</mode>
-                            <type>Analog</type>
-                            <source>Mechanical Variables.Velocity</source>
-                            <edge>Rising edge</edge>
-                            <treshold>60.0</treshold>
-                            <offset>0.0</offset>
-                        </trigger>
-
-                         <analog_signals>
-                            <analog>
-                            <chanel>0</chanel>
-                            <name>Mechanical Variables.Velocity</name>
-                            <vertical_scale>Auto</vertical_scale>
-                            <vertical_offset>0.0</vertical_offset>
-                            <coupling>False</coupling>
-                            <viewports>
-                                
-                                <num_viewport>1</num_viewport>
-                                
-                           </viewports>
-                        </analog>
-                            <analog>
-                            <chanel>1</chanel>
-                            <name>Mechanical Variables.Distance</name>
-                            <vertical_scale>Auto</vertical_scale>
-                            <vertical_offset>0.0</vertical_offset>
-                            <coupling>False</coupling>
-                            <viewports>
-                                
-                           </viewports>
-                        </analog>
-                            </analog_signals>
-
-                        <digital_signals>
-                            </digital_signals>
-
-                    </scope>
-
-                </widget_settings>
-
             </component_data>
         <component_data>
                 <id>111cbe4f3a5f11e788bf8ca982b03a50</id>
@@ -458,7 +369,7 @@ widgetValue = scada_input_settings["input_value"]*3.6
                 <data_type>Analog signal</data_type>
                 <code><![CDATA[#----------------------- MANDATORY IMPORT --------------------------
 # HIL API
-import typhoon.api.hil as hil
+
 
 # NOTE: Only read functions are available from the HIL API
 #-------------------------------------------------------------------
@@ -469,16 +380,20 @@ displayValue = 0.0
 
 ]]></code>
                 <signal_name><![CDATA[Mechanical Variables.Velocity]]></signal_name>
-                <unit><![CDATA[km/h]]></unit>
+                <unit><![CDATA[]]></unit>
                 <automatic_unit>True</automatic_unit>
                 <updateRate>500</updateRate>
-                <hierarchy_position>1</hierarchy_position>
+                <decimals>2</decimals>
                 <widget_settings>
-                    <x>16.0</x>
-                    <y>16.0</y>
+                    <x>16</x>
+                    <y>16</y>
                     <width>248</width>
                     <height>144</height>
                     <appearance><![CDATA[Flat]]></appearance>
+                    <hierarchy_position><![CDATA[1]]></hierarchy_position>
+                    <is_background><![CDATA[False]]></is_background>
+                    <label><![CDATA[]]></label>
+                    <use_label>False</use_label>
                 </widget_settings>
                 <advance_widget_settings>
                     <color_range>False</color_range>
@@ -496,7 +411,7 @@ displayValue = 0.0
                 <data_type>Expression</data_type>
                 <code><![CDATA[#----------------------- MANDATORY IMPORT --------------------------
 # HIL API
-import typhoon.api.hil as hil
+
 
 # NOTE: Only read functions are available from the HIL API
 #-------------------------------------------------------------------
@@ -511,13 +426,16 @@ displayValue = hil.read_analog_signal('Mechanical Variables.Distance')/1000.0
                 <automatic_unit>True</automatic_unit>
                 <decimals><![CDATA[2]]></decimals>
                 <updateRate>500</updateRate>
-                <hierarchy_position>1</hierarchy_position>
                 <widget_settings>
                     <x>64.0</x>
                     <y>176.0</y>
                     <width>144</width>
                     <height>56</height>
                     <appearance><![CDATA[Flat]]></appearance>
+                    <hierarchy_position><![CDATA[1]]></hierarchy_position>
+                    <is_background><![CDATA[False]]></is_background>
+                    <label><![CDATA[]]></label>
+                    <use_label>False</use_label>
                 </widget_settings>
                 <advance_widget_settings>
                     <color_range>False</color_range>
@@ -533,7 +451,7 @@ displayValue = hil.read_analog_signal('Mechanical Variables.Distance')/1000.0
                 <description><![CDATA[]]></description>
                 <on_use_code active="True"><![CDATA[#------------- MANDATORY IMPORTS ---------------
 # HIL API
-import typhoon.api.hil as hil
+
 
 # Function for printing text to console (e.g printf("Hello world"))
 from typhoon.utilities.misc import printf
@@ -553,17 +471,28 @@ elif inputValue == 'IP':
 ]]></on_use_code>
                 <on_start_code active="False"><![CDATA[# NOTE: The code specified in this handler will be executed on simulation start.
 # HIL API
-import typhoon.api.hil as hil
+
 
 
 # Change widget value by setting this variable.
 # NOTE: If you not specify 'widgetValue' variable or assign 'None' to it, widget value won't be changed.
 widgetValue = None
 ]]></on_start_code>
+                <on_stop_code active="False"><![CDATA[# NOTE: The code specified in this handler will be executed after simulation is stopped.
+# HIL API is imported as 'hil'
+# SCADA API is imported as 'panel'
+# SCADA API constants are imported as 'api_const'
+# 'WIDGET_HANDLE' constant holds the WidgetHandle object of this widget.
+# This object can be used as an argument in SCADA API functions.
+
+# Change widget value by setting this variable.
+# NOTE: If you not specify 'widgetValue' variable or assign 'None' to it, widget value won't be changed.
+widgetValue = None
+]]></on_stop_code>
                 <on_timer_code active="False"><![CDATA[# NOTE: The code specified in this handler will be executed periodically each 1000ms.
 # NOTE: Only read functions are available from the HIL API
 # HIL API
-import typhoon.api.hil as hil
+
 
 
 # Change widget value by setting this variable.
@@ -572,15 +501,18 @@ widgetValue = None
 ]]></on_timer_code>
                 <on_start_code_source><![CDATA[Custom code]]></on_start_code_source>
                 <inputValue><![CDATA[PI pc]]></inputValue>
-                <availableValues><![CDATA[[u'P', u'PI pp', u'PI pc', u'IP']]]></availableValues>
+                <availableValues><![CDATA[['P', 'PI pp', 'PI pc', 'IP']]]></availableValues>
                 <unit><![CDATA[]]></unit>
-                <hierarchy_position>1</hierarchy_position>
                 <widget_settings>
                     <x>736.0</x>
                     <y>32.0</y>
                     <width>256</width>
                     <height>32</height>
                     <appearance><![CDATA[Flat]]></appearance>
+                    <hierarchy_position><![CDATA[1]]></hierarchy_position>
+                    <is_background><![CDATA[False]]></is_background>
+                    <label><![CDATA[]]></label>
+                    <use_label>False</use_label>
                 </widget_settings>
             </component_data>
         <component_data>
@@ -590,7 +522,7 @@ widgetValue = None
                 <description><![CDATA[]]></description>
                 <on_use_code active="True"><![CDATA[#------------- MANDATORY IMPORTS ---------------
 # HIL API
-import typhoon.api.hil as hil
+
 
 # Function for printing text to console (e.g printf("Hello world"))
 from typhoon.utilities.misc import printf
@@ -608,17 +540,28 @@ elif inputValue == 'IP':
 ]]></on_use_code>
                 <on_start_code active="False"><![CDATA[# NOTE: The code specified in this handler will be executed on simulation start.
 # HIL API
-import typhoon.api.hil as hil
+
 
 
 # Change widget value by setting this variable.
 # NOTE: If you not specify 'widgetValue' variable or assign 'None' to it, widget value won't be changed.
 widgetValue = None
 ]]></on_start_code>
+                <on_stop_code active="False"><![CDATA[# NOTE: The code specified in this handler will be executed after simulation is stopped.
+# HIL API is imported as 'hil'
+# SCADA API is imported as 'panel'
+# SCADA API constants are imported as 'api_const'
+# 'WIDGET_HANDLE' constant holds the WidgetHandle object of this widget.
+# This object can be used as an argument in SCADA API functions.
+
+# Change widget value by setting this variable.
+# NOTE: If you not specify 'widgetValue' variable or assign 'None' to it, widget value won't be changed.
+widgetValue = None
+]]></on_stop_code>
                 <on_timer_code active="False"><![CDATA[# NOTE: The code specified in this handler will be executed periodically each 1000ms.
 # NOTE: Only read functions are available from the HIL API
 # HIL API
-import typhoon.api.hil as hil
+
 
 
 # Change widget value by setting this variable.
@@ -627,15 +570,18 @@ widgetValue = None
 ]]></on_timer_code>
                 <on_start_code_source><![CDATA[Custom code]]></on_start_code_source>
                 <inputValue><![CDATA[P]]></inputValue>
-                <availableValues><![CDATA[[u'P', u'PI', u'IP']]]></availableValues>
+                <availableValues><![CDATA[['P', 'PI', 'IP']]]></availableValues>
                 <unit><![CDATA[]]></unit>
-                <hierarchy_position>1</hierarchy_position>
                 <widget_settings>
                     <x>784.0</x>
                     <y>72.0</y>
                     <width>208</width>
                     <height>32</height>
                     <appearance><![CDATA[Flat]]></appearance>
+                    <hierarchy_position><![CDATA[1]]></hierarchy_position>
+                    <is_background><![CDATA[False]]></is_background>
+                    <label><![CDATA[]]></label>
+                    <use_label>False</use_label>
                 </widget_settings>
             </component_data>
         <component_data>
@@ -645,28 +591,34 @@ widgetValue = None
                 <description><![CDATA[]]></description>
                 <on_use_code active="True"><![CDATA[#------------- MANDATORY IMPORTS ---------------
 # HIL API
-import typhoon.api.hil as hil
-
-# Function for printing text to console (e.g printf("Hello world"))
-from typhoon.utilities.misc import printf
-#------------------------------------------------
 
 # NOTE: entered value is available through variable 'inputValue'
 hil.set_scada_input_value('Battery.V_batt', inputValue)
 ]]></on_use_code>
                 <on_start_code active="True"><![CDATA[# NOTE: The code specified in this handler will be executed on simulation start.
 # HIL API
-import typhoon.api.hil as hil
+
 
 
 # Change widget value by setting this variable.
 # NOTE: If you not specify 'widgetValue' variable or assign 'None' to it, widget value won't be changed.
 widgetValue = None
 ]]></on_start_code>
+                <on_stop_code active="False"><![CDATA[# NOTE: The code specified in this handler will be executed after simulation is stopped.
+# HIL API is imported as 'hil'
+# SCADA API is imported as 'panel'
+# SCADA API constants are imported as 'api_const'
+# 'WIDGET_HANDLE' constant holds the WidgetHandle object of this widget.
+# This object can be used as an argument in SCADA API functions.
+
+# Change widget value by setting this variable.
+# NOTE: If you not specify 'widgetValue' variable or assign 'None' to it, widget value won't be changed.
+widgetValue = None
+]]></on_stop_code>
                 <on_timer_code active="False"><![CDATA[# NOTE: The code specified in this handler will be executed periodically each 1000ms.
 # NOTE: Only read functions are available from the HIL API
 # HIL API
-import typhoon.api.hil as hil
+
 
 
 # Change widget value by setting this variable.
@@ -677,14 +629,16 @@ widgetValue = None
                 <inputValue><![CDATA[400.0]]></inputValue>
                 <inputValueType>float</inputValueType>
                 <unit><![CDATA[]]></unit>
-                <hierarchy_position>1</hierarchy_position>
                 <widget_settings>
-                    <x>824.0</x>
-                    <y>120.0</y>
+                    <x>824</x>
+                    <y>120</y>
                     <width>176</width>
                     <height>32</height>
                     <inputWidgetWidth>80</inputWidgetWidth>
                     <appearance><![CDATA[Flat]]></appearance>
+                    <hierarchy_position>1</hierarchy_position>
+                    <label><![CDATA[]]></label>
+                    <use_label>False</use_label>
                 </widget_settings>
             </component_data>
         <component_data>
@@ -695,16 +649,17 @@ widgetValue = None
                 <on_click_code active="False"><![CDATA[# NOTE: The code specified in this handler will be executed on button click.
 
 # HIL Control Panel API
-from typhoon.api import hil_control_panel as hil
+
 
 hil.wait_msec(5000)]]></on_click_code>
                 <on_start_code active="True"><![CDATA[# NOTE: The code specified in this handler will be executed on simulation start.
 # NOTE: Variables specified here will be available in other two handlers
 # HIL Control Panel API
-from typhoon.api import hil_control_panel as hil
+
 import numpy as np
 
 counter = 0
+
 
 hil.set_scada_input_value('Reference', CYCL_ECE[0])
 
@@ -712,22 +667,101 @@ hil.set_scada_input_value('Reference', CYCL_ECE[0])
                 <on_timer_code active="True"><![CDATA[# NOTE: The code specified in this handler will be executed on timer event.
 
 # HIL Control Panel API
-from typhoon.api import hil_control_panel as hil
 
-counter += 1
-if counter == len(CYCL_ECE):
-    counter = 0
-    
-    
-hil.set_scada_input_value('Reference', CYCL_ECE[counter])]]></on_timer_code>
+if PROFILE_ENABLE == 1:
+    counter += 1
+    if counter == len(CYCL_ECE):
+        counter = 0
+        
+    hil.set_scada_input_value('Reference', CYCL_ECE[counter])]]></on_timer_code>
                 <run_each>1000</run_each>
-                <hierarchy_position>1</hierarchy_position>
+                <on_stop_code active="True"><![CDATA[# NOTE: The code specified in this handler will be executed after simulation is stopped.
+# HIL API is imported as 'hil'
+# SCADA API is imported as 'panel'
+# SCADA API constants are imported as 'api_const'
+# 'WIDGET_HANDLE' constant holds the WidgetHandle object of this widget.
+# This object can be used as an argument in SCADA API functions.
+
+]]></on_stop_code>
                 <widget_settings>
-                    <x>872</x>
-                    <y>192</y>
+                    <x>832</x>
+                    <y>240</y>
                     <width>128</width>
                     <height>40</height>
                     <appearance><![CDATA[Flat]]></appearance>
+                    <hierarchy_position><![CDATA[1]]></hierarchy_position>
+                    <is_background><![CDATA[False]]></is_background>
+                    <label><![CDATA[]]></label>
+                    <use_label>False</use_label>
+                </widget_settings>
+            </component_data>
+        <component_data>
+                <id>ff729f8116d311eca9778c1645329d22</id>
+                <name><![CDATA[Enable Load Profile]]></name>
+                <type>CheckBoxMacro</type>
+                <description><![CDATA[]]></description>
+                <on_use_code active="True"><![CDATA[# HIL API is imported as 'hil'
+# SCADA API is imported as 'panel'
+# SCADA API constants are imported as 'api_const'
+# 'WIDGET_HANDLE' constant holds the WidgetHandle object of this widget.
+# This object can be used as an argument in SCADA API functions.
+# NOTE: entered value is available through variable 'inputValue'
+
+global PROFILE_ENABLE
+
+if inputValue:
+    PROFILE_ENABLE = 1
+else:
+    PROFILE_ENABLE = 0
+
+]]></on_use_code>
+                <on_start_code active="True"><![CDATA[# NOTE: The code specified in this handler will be executed on simulation start.
+# NOTE: Variables specified here will be available in other handlers.
+# HIL API is imported as 'hil'
+# SCADA API is imported as 'panel'
+# SCADA API constants are imported as 'api_const'
+# 'WIDGET_HANDLE' constant holds the WidgetHandle object of this widget.
+# This object can be used as an argument in SCADA API functions.
+
+# Change widget value by setting this variable.
+# NOTE: If you not specify 'widgetValue' variable or assign 'None' to it, widget value won't be changed.
+widgetValue = None
+]]></on_start_code>
+                <on_stop_code active="False"><![CDATA[# NOTE: The code specified in this handler will be executed after simulation is stopped.
+# HIL API is imported as 'hil'
+# SCADA API is imported as 'panel'
+# SCADA API constants are imported as 'api_const'
+# 'WIDGET_HANDLE' constant holds the WidgetHandle object of this widget.
+# This object can be used as an argument in SCADA API functions.
+
+# Change widget value by setting this variable.
+# NOTE: If you not specify 'widgetValue' variable or assign 'None' to it, widget value won't be changed.
+widgetValue = None
+]]></on_stop_code>
+                <on_timer_code active="False"><![CDATA[# NOTE: The code specified in this handler will be executed periodically each 1000ms.
+# HIL API is imported as 'hil'
+# NOTE: Only read functions are available from the HIL API
+# SCADA API is imported as 'panel'
+# SCADA API constants are imported as 'api_const'
+# 'WIDGET_HANDLE' constant holds the WidgetHandle object of this widget.
+# This object can be used as an argument in SCADA API functions.
+
+# Change widget value by setting this variable.
+# NOTE: If you not specify 'widgetValue' variable or assign 'None' to it, widget value won't be changed.
+widgetValue = None
+]]></on_timer_code>
+                <on_start_code_source><![CDATA[Macro code]]></on_start_code_source>
+                <inputValue><![CDATA[False]]></inputValue>
+                <widget_settings>
+                    <x>832</x>
+                    <y>208</y>
+                    <width>128</width>
+                    <height>32</height>
+                    <appearance><![CDATA[Flat]]></appearance>
+                    <hierarchy_position><![CDATA[1]]></hierarchy_position>
+                    <is_background><![CDATA[False]]></is_background>
+                    <label><![CDATA[]]></label>
+                    <use_label>False</use_label>
                 </widget_settings>
             </component_data>
         </components>

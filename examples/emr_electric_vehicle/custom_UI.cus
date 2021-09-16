@@ -1,13 +1,13 @@
 <ui_settings>
-    <version>2.0</version>
-    <mode>2</mode>
+    <version>2.6</version>
+    <model_locked>False</model_locked>
     <canvas_bg_color>#ffffff</canvas_bg_color>
     <initialization_code><![CDATA[# NOTE: Variables and functions defined here will be
 # available for use in all Macro and Expression scripts.
 # This code is always executed after Custom UI is loaded and prior simulation start.
 
 # HIL Control Panel API
-from typhoon.api import hil_control_panel as hil
+
 
 # Variable 'SETTINGS_DIR' holds directory where loaded settings .cus file is located.
 # Also you can call 'get_settings_dir_path()' function in any
@@ -22,26 +22,44 @@ radius = 5.0]]></initialization_code>
                 <name><![CDATA[Converter]]></name>
                 <type>Group</type>
                 <description><![CDATA[None]]></description>
-                <components_ids><![CDATA[[u'e30f96c06fcc11e6a48b101f740f3fa4']]]></components_ids>
-                <hierarchy_position>1</hierarchy_position>
+                <components_ids><![CDATA[['e30f96c06fcc11e6a48b101f740f3fa4']]]></components_ids>
                 <canvas_bg_color>#ffffff</canvas_bg_color>
+                <initialization_code><![CDATA[# NOTE: Variables and functions defined here will be available for use in 
+# all Macro, Expression and handlers codes of components owned by this widget.
+# This code is always executed prior simulation start. In case this is a 
+# Library widget, this code is also executed on drag and drop, Panel load 
+# and widget paste.
+#
+# HIL API is imported as 'hil'
+# SCADA API is imported as 'panel'
+# SCADA API constants are imported as 'api_const'
+# 'WIDGET_HANDLE' constant holds the WidgetHandle object of this widget.
+# This object can be used as an argument in SCADA API functions.
+
+]]></initialization_code>
                 <widget_settings>
-                    <x>0</x>
-                    <y>0</y>
+                    <x>0.0</x>
+                    <y>0.0</y>
                     <width>184</width>
                     <height>304</height>
                     <appearance><![CDATA[Flat]]></appearance>
                     <collapsed>False</collapsed>
+                    <hierarchy_position>1</hierarchy_position>
+                    <label><![CDATA[]]></label>
+                    <use_label>False</use_label>
                 </widget_settings>
+                
+                <linked_model_components_settings>
+                    </linked_model_components_settings>
             </component_data>
         <component_data>
                 <id>e30f96c06fcc11e6a48b101f740f3fa4</id>
                 <name><![CDATA[Duty Cycle]]></name>
                 <type>KnobMacro</type>
                 <description><![CDATA[None]]></description>
-                <code><![CDATA[#------------- MANDATORY IMPORTS ---------------
+                <on_use_code active="True"><![CDATA[#------------- MANDATORY IMPORTS ---------------
 # HIL Control Panel API
-from typhoon.api import hil_control_panel as hil
+
 
 # Function for printing text to console (e.g printf("Hello world"))
 from typhoon.utilities.misc import printf
@@ -49,19 +67,57 @@ from typhoon.utilities.misc import printf
 
 # NOTE: entered value is available through variable 'inputValue'
 hil.set_cp_input_value('User defined', 'EV', 'Duty Cycle', inputValue)
-]]></code>
+]]></on_use_code>
+                <on_start_code active="False"><![CDATA[# NOTE: The code specified in this handler will be executed on simulation start.
+# NOTE: Variables specified here will be available in other handlers.
+# HIL API is imported as 'hil'
+# SCADA API is imported as 'panel'
+# SCADA API constants are imported as 'api_const'
+# 'WIDGET_HANDLE' constant holds the WidgetHandle object of this widget.
+# This object can be used as an argument in SCADA API functions.
+
+# Change widget value by setting this variable.
+# NOTE: If you not specify 'widgetValue' variable or assign 'None' to it, widget value won't be changed.
+widgetValue = None
+]]></on_start_code>
+                <on_stop_code active="False"><![CDATA[# NOTE: The code specified in this handler will be executed after simulation is stopped.
+# HIL API is imported as 'hil'
+# SCADA API is imported as 'panel'
+# SCADA API constants are imported as 'api_const'
+# 'WIDGET_HANDLE' constant holds the WidgetHandle object of this widget.
+# This object can be used as an argument in SCADA API functions.
+
+# Change widget value by setting this variable.
+# NOTE: If you not specify 'widgetValue' variable or assign 'None' to it, widget value won't be changed.
+widgetValue = None
+]]></on_stop_code>
+                <on_timer_code active="False"><![CDATA[# NOTE: The code specified in this handler will be executed periodically each 1000ms.
+# HIL API is imported as 'hil'
+# NOTE: Only read functions are available from the HIL API
+# SCADA API is imported as 'panel'
+# SCADA API constants are imported as 'api_const'
+# 'WIDGET_HANDLE' constant holds the WidgetHandle object of this widget.
+# This object can be used as an argument in SCADA API functions.
+
+# Change widget value by setting this variable.
+# NOTE: If you not specify 'widgetValue' variable or assign 'None' to it, widget value won't be changed.
+widgetValue = None
+]]></on_timer_code>
+                <on_start_code_source><![CDATA[Custom code]]></on_start_code_source>
                 <inputValue><![CDATA[0.7]]></inputValue>
                 <min>0.0</min>
                 <max>1.0</max>
                 <step>0.01</step>
-                <execute_on_load>False</execute_on_load>
-                <hierarchy_position>2</hierarchy_position>
                 <widget_settings>
-                    <x>24</x>
-                    <y>56</y>
+                    <x>24.0</x>
+                    <y>56.0</y>
                     <width>112</width>
                     <height>144</height>
                     <appearance><![CDATA[Flat]]></appearance>
+                    <hierarchy_position><![CDATA[2]]></hierarchy_position>
+                    <is_background><![CDATA[False]]></is_background>
+                    <label><![CDATA[]]></label>
+                    <use_label>False</use_label>
                 </widget_settings>
             </component_data>
         <component_data>
@@ -69,26 +125,66 @@ hil.set_cp_input_value('User defined', 'EV', 'Duty Cycle', inputValue)
                 <name><![CDATA[Vehcile]]></name>
                 <type>Group</type>
                 <description><![CDATA[None]]></description>
-                <components_ids><![CDATA[[u'10de6d0f6fcd11e69b3c101f740f3fa4', u'10e0de0f6fcd11e6850b101f740f3fa4', u'10e328006fcd11e6b9e2101f740f3fa4', u'10e328016fcd11e68e74101f740f3fa4', u'326980a1c85111e6969b8ca982b03a50']]]></components_ids>
-                <hierarchy_position>1</hierarchy_position>
+                <components_ids><![CDATA[['10de6d0f6fcd11e69b3c101f740f3fa4', '10e0de0f6fcd11e6850b101f740f3fa4', '10e328006fcd11e6b9e2101f740f3fa4', '10e328016fcd11e68e74101f740f3fa4', '326980a1c85111e6969b8ca982b03a50']]]></components_ids>
                 <canvas_bg_color>#ffffff</canvas_bg_color>
+                <initialization_code><![CDATA[# NOTE: Variables and functions defined here will be available for use in 
+# all Macro, Expression and handlers codes of components owned by this widget.
+# This code is always executed prior simulation start. In case this is a 
+# Library widget, this code is also executed on drag and drop, Panel load 
+# and widget paste.
+#
+# HIL API is imported as 'hil'
+# SCADA API is imported as 'panel'
+# SCADA API constants are imported as 'api_const'
+# 'WIDGET_HANDLE' constant holds the WidgetHandle object of this widget.
+# This object can be used as an argument in SCADA API functions.
+
+]]></initialization_code>
                 <widget_settings>
-                    <x>192</x>
-                    <y>0</y>
+                    <x>192.0</x>
+                    <y>0.0</y>
                     <width>952</width>
                     <height>304</height>
                     <appearance><![CDATA[Flat]]></appearance>
                     <collapsed>False</collapsed>
+                    <hierarchy_position>1</hierarchy_position>
+                    <label><![CDATA[]]></label>
+                    <use_label>False</use_label>
                 </widget_settings>
+                
+                <linked_model_components_settings>
+                    </linked_model_components_settings>
             </component_data>
         <component_data>
                 <id>10de6d0f6fcd11e69b3c101f740f3fa4</id>
                 <name><![CDATA[Steer]]></name>
                 <type>ComboBoxMacro</type>
                 <description><![CDATA[None]]></description>
-                <code><![CDATA[#------------- MANDATORY IMPORTS ---------------
+                <on_use_code active="True"><![CDATA[#------------- MANDATORY IMPORTS ---------------
 # HIL Control Panel API
-from typhoon.api import hil_control_panel as hil
+
+# NOTE: entered value is available through variable 'inputValue'
+global steering
+global radius
+
+steering = inputValue
+
+if steering == 'Straight':
+    hil.set_cp_input_value('User defined', 'Example', 'Coupling.lwh_ref', 1.0)
+    hil.set_cp_input_value('User defined', 'Example', 'Coupling.rwh_ref', 1.0)
+elif steering == 'Turn Left':
+    kr_turning=(radius+1.6/2)/radius
+    kl_turning=(radius-1.6/2)/radius
+    hil.set_cp_input_value('User defined', 'Example', 'Coupling.lwh_ref', kl_turning)
+    hil.set_cp_input_value('User defined', 'Example', 'Coupling.rwh_ref', kr_turning)
+elif steering == 'Turn Right':
+    kr_turning=(radius-1.6/2)/radius
+    kl_turning=(radius+1.6/2)/radius
+    hil.set_cp_input_value('User defined', 'Example', 'Coupling.lwh_ref', kl_turning)
+    hil.set_cp_input_value('User defined', 'Example', 'Coupling.rwh_ref', kr_turning)]]></on_use_code>
+                <on_start_code active="True"><![CDATA[#------------- MANDATORY IMPORTS ---------------
+# HIL Control Panel API
+
 
 # Function for printing text to console (e.g printf("Hello world"))
 from typhoon.utilities.misc import printf
@@ -112,18 +208,44 @@ elif steering == 'Turn Right':
     kr_turning=(radius-1.6/2)/radius
     kl_turning=(radius+1.6/2)/radius
     hil.set_cp_input_value('User defined', 'Example', 'Coupling.lwh_ref', kl_turning)
-    hil.set_cp_input_value('User defined', 'Example', 'Coupling.rwh_ref', kr_turning)]]></code>
+    hil.set_cp_input_value('User defined', 'Example', 'Coupling.rwh_ref', kr_turning)]]></on_start_code>
+                <on_stop_code active="False"><![CDATA[# NOTE: The code specified in this handler will be executed after simulation is stopped.
+# HIL API is imported as 'hil'
+# SCADA API is imported as 'panel'
+# SCADA API constants are imported as 'api_const'
+# 'WIDGET_HANDLE' constant holds the WidgetHandle object of this widget.
+# This object can be used as an argument in SCADA API functions.
+
+# Change widget value by setting this variable.
+# NOTE: If you not specify 'widgetValue' variable or assign 'None' to it, widget value won't be changed.
+widgetValue = None
+]]></on_stop_code>
+                <on_timer_code active="False"><![CDATA[# NOTE: The code specified in this handler will be executed periodically each 1000ms.
+# HIL API is imported as 'hil'
+# NOTE: Only read functions are available from the HIL API
+# SCADA API is imported as 'panel'
+# SCADA API constants are imported as 'api_const'
+# 'WIDGET_HANDLE' constant holds the WidgetHandle object of this widget.
+# This object can be used as an argument in SCADA API functions.
+
+# Change widget value by setting this variable.
+# NOTE: If you not specify 'widgetValue' variable or assign 'None' to it, widget value won't be changed.
+widgetValue = None
+]]></on_timer_code>
+                <on_start_code_source><![CDATA[Macro code]]></on_start_code_source>
                 <inputValue><![CDATA[Straight]]></inputValue>
-                <availableValues>[u'Straight', u'Turn Left', u'Turn Right']</availableValues>
+                <availableValues><![CDATA[['Straight', 'Turn Left', 'Turn Right']]]></availableValues>
                 <unit><![CDATA[]]></unit>
-                <execute_on_load>True</execute_on_load>
-                <hierarchy_position>2</hierarchy_position>
                 <widget_settings>
                     <x>208</x>
                     <y>176</y>
                     <width>136</width>
                     <height>32</height>
                     <appearance><![CDATA[Flat]]></appearance>
+                    <hierarchy_position><![CDATA[2]]></hierarchy_position>
+                    <is_background><![CDATA[False]]></is_background>
+                    <label><![CDATA[]]></label>
+                    <use_label>False</use_label>
                 </widget_settings>
             </component_data>
         <component_data>
@@ -134,7 +256,7 @@ elif steering == 'Turn Right':
                 <data_type>Analog signal</data_type>
                 <code><![CDATA[#----------------------- MANDATORY IMPORT --------------------------
 # HIL Control Panel API
-from typhoon.api import hil_control_panel as hil
+
 # NOTE: Only read functions are available from HIL Control Panel API
 #-------------------------------------------------------------------
 
@@ -144,16 +266,20 @@ displayValue = 0.0
 
 ]]></code>
                 <signal_name><![CDATA[Left Wheel.Speed]]></signal_name>
-                <unit><![CDATA[rad/s]]></unit>
+                <unit><![CDATA[]]></unit>
                 <automatic_unit>True</automatic_unit>
                 <updateRate>500</updateRate>
-                <hierarchy_position>2</hierarchy_position>
+                <decimals>2</decimals>
                 <widget_settings>
-                    <x>8</x>
-                    <y>0</y>
+                    <x>8.0</x>
+                    <y>0.0</y>
                     <width>248</width>
                     <height>144</height>
                     <appearance><![CDATA[Flat]]></appearance>
+                    <hierarchy_position><![CDATA[2]]></hierarchy_position>
+                    <is_background><![CDATA[False]]></is_background>
+                    <label><![CDATA[]]></label>
+                    <use_label>False</use_label>
                 </widget_settings>
                 <advance_widget_settings>
                     <color_range>False</color_range>
@@ -168,9 +294,31 @@ displayValue = 0.0
                 <name><![CDATA[Steering Radius]]></name>
                 <type>SliderMacro</type>
                 <description><![CDATA[None]]></description>
-                <code><![CDATA[#------------- MANDATORY IMPORTS ---------------
+                <on_use_code active="True"><![CDATA[#------------- MANDATORY IMPORTS ---------------
 # HIL Control Panel API
-from typhoon.api import hil_control_panel as hil
+
+# NOTE: entered value is available through variable 'inputValue'
+global steering
+global radius
+
+radius = inputValue
+
+if steering == 'Straight':
+    hil.set_cp_input_value('User defined', 'Example', 'Coupling.lwh_ref', 1.0)
+    hil.set_cp_input_value('User defined', 'Example', 'Coupling.rwh_ref', 1.0)
+elif steering == 'Turn Left':
+    kr_turning=(radius+1.6/2)/radius
+    kl_turning=(radius-1.6/2)/radius
+    hil.set_cp_input_value('User defined', 'Example', 'Coupling.lwh_ref', kl_turning)
+    hil.set_cp_input_value('User defined', 'Example', 'Coupling.rwh_ref', kr_turning)
+elif steering == 'Turn Right':
+    kr_turning=(radius-1.6/2)/radius
+    kl_turning=(radius+1.6/2)/radius
+    hil.set_cp_input_value('User defined', 'Example', 'Coupling.lwh_ref', kl_turning)
+    hil.set_cp_input_value('User defined', 'Example', 'Coupling.rwh_ref', kr_turning)]]></on_use_code>
+                <on_start_code active="True"><![CDATA[#------------- MANDATORY IMPORTS ---------------
+# HIL Control Panel API
+
 
 # Function for printing text to console (e.g printf("Hello world"))
 from typhoon.utilities.misc import printf
@@ -194,19 +342,45 @@ elif steering == 'Turn Right':
     kr_turning=(radius-1.6/2)/radius
     kl_turning=(radius+1.6/2)/radius
     hil.set_cp_input_value('User defined', 'Example', 'Coupling.lwh_ref', kl_turning)
-    hil.set_cp_input_value('User defined', 'Example', 'Coupling.rwh_ref', kr_turning)]]></code>
+    hil.set_cp_input_value('User defined', 'Example', 'Coupling.rwh_ref', kr_turning)]]></on_start_code>
+                <on_stop_code active="False"><![CDATA[# NOTE: The code specified in this handler will be executed after simulation is stopped.
+# HIL API is imported as 'hil'
+# SCADA API is imported as 'panel'
+# SCADA API constants are imported as 'api_const'
+# 'WIDGET_HANDLE' constant holds the WidgetHandle object of this widget.
+# This object can be used as an argument in SCADA API functions.
+
+# Change widget value by setting this variable.
+# NOTE: If you not specify 'widgetValue' variable or assign 'None' to it, widget value won't be changed.
+widgetValue = None
+]]></on_stop_code>
+                <on_timer_code active="False"><![CDATA[# NOTE: The code specified in this handler will be executed periodically each 1000ms.
+# HIL API is imported as 'hil'
+# NOTE: Only read functions are available from the HIL API
+# SCADA API is imported as 'panel'
+# SCADA API constants are imported as 'api_const'
+# 'WIDGET_HANDLE' constant holds the WidgetHandle object of this widget.
+# This object can be used as an argument in SCADA API functions.
+
+# Change widget value by setting this variable.
+# NOTE: If you not specify 'widgetValue' variable or assign 'None' to it, widget value won't be changed.
+widgetValue = None
+]]></on_timer_code>
+                <on_start_code_source><![CDATA[Macro code]]></on_start_code_source>
                 <inputValue><![CDATA[29.6]]></inputValue>
                 <min>0.8</min>
                 <max>50.0</max>
                 <step>0.1</step>
-                <execute_on_load>True</execute_on_load>
-                <hierarchy_position>2</hierarchy_position>
                 <widget_settings>
                     <x>96</x>
                     <y>216</y>
                     <width>408</width>
                     <height>48</height>
                     <appearance><![CDATA[Flat]]></appearance>
+                    <hierarchy_position><![CDATA[2]]></hierarchy_position>
+                    <is_background><![CDATA[False]]></is_background>
+                    <label><![CDATA[]]></label>
+                    <use_label>False</use_label>
                 </widget_settings>
             </component_data>
         <component_data>
@@ -217,7 +391,7 @@ elif steering == 'Turn Right':
                 <data_type>Analog signal</data_type>
                 <code><![CDATA[#----------------------- MANDATORY IMPORT --------------------------
 # HIL Control Panel API
-from typhoon.api import hil_control_panel as hil
+
 # NOTE: Only read functions are available from HIL Control Panel API
 #-------------------------------------------------------------------
 
@@ -227,16 +401,20 @@ displayValue = 0.0
 
 ]]></code>
                 <signal_name><![CDATA[Right Wheel.Speed]]></signal_name>
-                <unit><![CDATA[rad/s]]></unit>
+                <unit><![CDATA[]]></unit>
                 <automatic_unit>True</automatic_unit>
                 <updateRate>500</updateRate>
-                <hierarchy_position>2</hierarchy_position>
+                <decimals>2</decimals>
                 <widget_settings>
-                    <x>312</x>
-                    <y>0</y>
+                    <x>312.0</x>
+                    <y>0.0</y>
                     <width>248</width>
                     <height>144</height>
                     <appearance><![CDATA[Flat]]></appearance>
+                    <hierarchy_position><![CDATA[2]]></hierarchy_position>
+                    <is_background><![CDATA[False]]></is_background>
+                    <label><![CDATA[]]></label>
+                    <use_label>False</use_label>
                 </widget_settings>
                 <advance_widget_settings>
                     <color_range>False</color_range>
@@ -251,10 +429,10 @@ displayValue = 0.0
                 <name><![CDATA[Vehicle Speed]]></name>
                 <type>TraceDisplay</type>
                 <description><![CDATA[None]]></description>
-                <data_type>Analog signal</data_type>
+                <data_type>Signals</data_type>
                 <code><![CDATA[#----------------------- MANDATORY IMPORT --------------------------
 # HIL Control Panel API
-from typhoon.api import hil_control_panel as hil
+
 # NOTE: Only read functions are available from HIL Control Panel API
 #-------------------------------------------------------------------
 
@@ -263,16 +441,23 @@ from typhoon.api import hil_control_panel as hil
 displayValue = 0.0
 
 ]]></code>
-                <signal_name><![CDATA[Chassis.V_speed]]></signal_name>
-                <updateRate>250</updateRate>
-                <background_color>#ffffff</background_color>
-                <hierarchy_position>1</hierarchy_position>
+                <analog_signals><![CDATA[['Chassis.V_speed']]]></analog_signals>
+                <digital_signals><![CDATA[[]]]></digital_signals>
+                <streaming_analog_signals><![CDATA[[]]]></streaming_analog_signals>
+                <streaming_digital_signals><![CDATA[[]]]></streaming_digital_signals>
+                <update_rate>250</update_rate>
+                <execution_rate>None</execution_rate>
+                <background_color>white</background_color>
                 <widget_settings>
-                    <x>704</x>
-                    <y>320</y>
+                    <x>704.0</x>
+                    <y>320.0</y>
                     <width>400</width>
                     <height>200</height>
                     <appearance><![CDATA[Flat]]></appearance>
+                    <hierarchy_position><![CDATA[1]]></hierarchy_position>
+                    <is_background><![CDATA[False]]></is_background>
+                    <label><![CDATA[]]></label>
+                    <use_label>False</use_label>
                 </widget_settings>
                 <advance_widget_settings>
                     <x_title><![CDATA[x axes]]></x_title>
@@ -284,17 +469,50 @@ displayValue = 0.0
                     <legend_enabled>False</legend_enabled>
                     <x_axis_title_enabled>False</x_axis_title_enabled>
                     <y_axis_title_enabled>False</y_axis_title_enabled>
+                    <use_reference_curve>False</use_reference_curve>
+                    <reference_curve_code><![CDATA[# NOTE: Global namespace variables are available
+# Selected time window is available through variable 'timeWindow'
+# Selected update rate is available through variable 'updateRate'
+
+# reference curve data point
+curveData = 12.0
+
+# specify curve options ('data' part is mandatory)
+refCurveData1 = {
+    # reference curve data point
+    "data": curveData,
+
+    # curve line style: 'solid', 'dashed', 'dashdot', 'dotted'
+    "line_style": "dashed",
+
+    # curve line color: 'red', 'green', 'blue', 'cyan', 'magenta', 'yellow'
+    "line_color": 'red',
+
+    # curve line width: float number
+    "line_width": 2.0,
+    
+    # reference curve title
+    "title": "Reference curve",
+
+    # show a title in the legend
+    "show_in_legend": True
+}
+
+# list of reference curves data: [ref1, ref2,...refN]
+referenceCurves = [refCurveData1]
+
+]]></reference_curve_code>
                 </advance_widget_settings>
             </component_data>
         <component_data>
                 <id>a4d59b1ec85011e6ba198ca982b03a50</id>
                 <name><![CDATA[Wheels Angluar Speeds]]></name>
-                <type>MultiTraceDisplay</type>
+                <type>TraceDisplay</type>
                 <description><![CDATA[None]]></description>
-                <data_type>Analog signal</data_type>
+                <data_type>Signals</data_type>
                 <code><![CDATA[#----------------------- MANDATORY IMPORT --------------------------
 # HIL Control Panel API
-from typhoon.api import hil_control_panel as hil
+
 # NOTE: Only read functions are available from HIL Control Panel API
 #-------------------------------------------------------------------
 
@@ -304,16 +522,23 @@ from typhoon.api import hil_control_panel as hil
 displayValue = []
 
 ]]></code>
-                <signals><![CDATA[[u'Left Wheel.Speed', u'Right Wheel.Speed']]]></signals>
-                <updateRate>250</updateRate>
-                <background_color>#ffffff</background_color>
-                <hierarchy_position>1</hierarchy_position>
+                <analog_signals><![CDATA[['Left Wheel.Speed', 'Right Wheel.Speed']]]></analog_signals>
+                <digital_signals><![CDATA[[]]]></digital_signals>
+                <streaming_analog_signals><![CDATA[[]]]></streaming_analog_signals>
+                <streaming_digital_signals><![CDATA[[]]]></streaming_digital_signals>
+                <update_rate>250</update_rate>
+                <execution_rate>None</execution_rate>
+                <background_color>white</background_color>
                 <widget_settings>
-                    <x>232</x>
-                    <y>320</y>
+                    <x>232.0</x>
+                    <y>320.0</y>
                     <width>400</width>
                     <height>200</height>
                     <appearance><![CDATA[Flat]]></appearance>
+                    <hierarchy_position><![CDATA[1]]></hierarchy_position>
+                    <is_background><![CDATA[False]]></is_background>
+                    <label><![CDATA[]]></label>
+                    <use_label>False</use_label>
                 </widget_settings>
                 <advance_widget_settings>
                     <x_title><![CDATA[x axes]]></x_title>
@@ -325,6 +550,39 @@ displayValue = []
                     <legend_enabled>False</legend_enabled>
                     <x_axis_title_enabled>False</x_axis_title_enabled>
                     <y_axis_title_enabled>False</y_axis_title_enabled>
+                    <use_reference_curve>False</use_reference_curve>
+                    <reference_curve_code><![CDATA[# NOTE: Global namespace variables are available
+# Selected time window is available through variable 'timeWindow'
+# Selected update rate is available through variable 'updateRate'
+
+# reference curve data point
+curveData = 12.0
+
+# specify curve options ('data' part is mandatory)
+refCurveData1 = {
+    # reference curve data point
+    "data": curveData,
+
+    # curve line style: 'solid', 'dashed', 'dashdot', 'dotted'
+    "line_style": "dashed",
+
+    # curve line color: 'red', 'green', 'blue', 'cyan', 'magenta', 'yellow'
+    "line_color": 'red',
+
+    # curve line width: float number
+    "line_width": 2.0,
+    
+    # reference curve title
+    "title": "Reference curve",
+
+    # show a title in the legend
+    "show_in_legend": True
+}
+
+# list of reference curves data: [ref1, ref2,...refN]
+referenceCurves = [refCurveData1]
+
+]]></reference_curve_code>
                 </advance_widget_settings>
             </component_data>
         <component_data>
@@ -335,7 +593,7 @@ displayValue = []
                 <data_type>Analog signal</data_type>
                 <code><![CDATA[#----------------------- MANDATORY IMPORT --------------------------
 # HIL Control Panel API
-from typhoon.api import hil_control_panel as hil
+
 # NOTE: Only read functions are available from HIL Control Panel API
 #-------------------------------------------------------------------
 
@@ -345,16 +603,20 @@ displayValue = 0.0
 
 ]]></code>
                 <signal_name><![CDATA[Chassis.V_speed]]></signal_name>
-                <unit><![CDATA[km/h]]></unit>
+                <unit><![CDATA[]]></unit>
                 <automatic_unit>True</automatic_unit>
                 <updateRate>500</updateRate>
-                <hierarchy_position>2</hierarchy_position>
+                <decimals>2</decimals>
                 <widget_settings>
-                    <x>624</x>
-                    <y>32</y>
+                    <x>624.0</x>
+                    <y>32.0</y>
                     <width>288</width>
                     <height>216</height>
                     <appearance><![CDATA[Flat]]></appearance>
+                    <hierarchy_position><![CDATA[2]]></hierarchy_position>
+                    <is_background><![CDATA[False]]></is_background>
+                    <label><![CDATA[]]></label>
+                    <use_label>False</use_label>
                 </widget_settings>
                 <advance_widget_settings>
                     <color_range>False</color_range>

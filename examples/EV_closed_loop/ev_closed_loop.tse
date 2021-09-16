@@ -1,9 +1,8 @@
 version = 4.2
 
-
 //
-// Saved by sw version: 2017.1 SP1
-// Save timestamp: 08-Jun-2017 @ 03:50:48 PM
+// Saved by sw version: 2021.3
+// Save timestamp: 16-Sep-2021 @ 11:59:30 AM
 //
 
 model "ev_closed_loop" {
@@ -12,11 +11,15 @@ model "ev_closed_loop" {
         hil_configuration_id = 1
         simulation_method = exact
         simulation_time_step = 20e-6
+        simulation_discret_scaling = 1.0
         dsp_timer_periods = 100e-6, 50e-3
         ss_calc_method = "systematic elimination"
         enb_pole_shift = True
         enb_gds_oversampling = True
         show_modes = False
+        device_ao_limit_enable = False
+        reset_analog_outputs_on_sim_stop = True
+        reset_digital_outputs_on_sim_stop = True
         cpl_stb = False
         enb_dep_sw_detect = False
         code_section = "internal memory"
@@ -27,103 +30,118 @@ model "ev_closed_loop" {
         user_real_type_precision = "default"
         sys_cpu_optimization = "high"
         user_cpu_optimization = "high"
+        user_cpu_part_option = "default"
+        matrix_based_reduction = True
+        cpl_dynamics_analysis = False
+        export_ss_to_pickle = False
+        ground_scope_core = False
+        cce_platform = "generic"
+        cce_use_relative_names = False
+        cce_type_mapping_real = "double"
+        cce_type_mapping_uint = "unsigned int"
+        cce_type_mapping_int = "int"
+        cce_directory = ""
+        cce_custom_type_int = ""
+        cce_custom_type_uint = ""
+        cce_custom_type_real = ""
+        tunable_params = "component defined"
     }
 
-    
     component Subsystem Root {
-
-        
         component gen_gain ms_to_kmh2 {
-            
             gain = "3.6"
-	    
         }
         [
             position = 9296, 8536
         ]
-        
+
         component gen_probe ch_inv_out {
-            
-	    
         }
         [
             position = 9112, 8560
         ]
-        
+
         component gen_gain ms_to_kmh1 {
-            
             gain = "3.6"
-	    
         }
         [
             position = 9296, 8248
         ]
-        
+
         component src_scada_input Reference {
-            
             def_value = "10"
             execution_rate = "Ts"
             unit = ""
-	    
         }
         [
             position = 9312, 8448
             scale = -1, 1
         ]
-        
+
         component Subsystem Battery {
             layout = static
-    
-            
             component src_scada_input V_batt {
-                
                 def_value = "BATp_V_batt"
                 execution_rate = "Ts"
                 max = "1000.0"
                 min = "0.0"
                 unit = "V"
-    	    
             }
             [
                 position = 7696, 7904
             ]
-            
+
             component gen_probe u_bat {
-                
-    	    
             }
             [
                 position = 7912, 7960
             ]
-            
+
             component gen_probe P_bat {
-                
-    	    
             }
             [
                 position = 7912, 8024
             ]
-            
+
             component gen_probe i_ch {
-                
-    	    
             }
             [
                 position = 7912, 8088
             ]
-            
+
             component gen_product Product {
-                
-    	    
             }
             [
                 position = 7832, 8024
             ]
-            
-            
-            
-            
-            
+
+            port P1 {
+                position = 40.0, -16.0
+                kind = sp
+                direction =  in
+                sp_type {
+                    default = inherit
+                }
+            }
+            [
+                position = 8040, 7904
+                hide_name = True
+            ]
+
+            port P2 {
+                position = 40.0, 16.0
+                kind = sp
+                direction =  out
+                sp_type {
+                    default = auto
+                }
+            }
+            [
+                position = 8040, 8168
+                hide_name = True
+                scale = -1, 1
+            ]
+
             tag Goto1 {
                 value = "P_bat"
                 scope = global
@@ -133,7 +151,7 @@ model "ev_closed_loop" {
             [
                 position = 7992, 8000
             ]
-            
+
             tag Goto2 {
                 value = "i_ch"
                 scope = global
@@ -143,183 +161,95 @@ model "ev_closed_loop" {
             [
                 position = 7992, 8128
             ]
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            port P1 {
-                
-                position = 40.0, -16.0
-                kind = sp
-                direction = in
-                sp_type {
-                    default = inherit
-                }
-            }
-            [
-                position = 8040, 7904
-                hide_name = True
-                size = 0, 0
-            ]
-            
-            port P2 {
-                
-                position = 40.0, 16.0
-                kind = sp
-                direction = out
-                sp_type {
-                    default = auto
-                }
-            }
-            [
-                position = 8040, 8168
-                hide_name = True
-                scale = -1, 1
-                size = 0, 0
-            ]
-            
+
             junction Junction1 sp
             [
                 position = 7784, 7904
             ]
-            
+
             junction Junction2 sp
             [
                 position = 7784, 7960
             ]
-            
+
             junction Junction3 sp
             [
                 position = 7784, 8088
             ]
-            
+
             junction Junction4 sp
             [
                 position = 7872, 8024
             ]
-            
+
             junction Junction5 sp
             [
                 position = 7872, 8088
             ]
+
             connect Goto1 Junction4 as Connection15
-            
             connect Goto2 Junction5 as Connection18
-            
             connect Junction1 P1 as Connection3
-            
             connect Junction2 Junction1 as Connection6
-            
             connect Junction3 Product.in1 as Connection10
             [
-                breakpoints =7784, 8032
+                breakpoints = 7784, 8032
             ]
             connect Junction4 Product.out as Connection14
-            
             connect Junction5 Junction3 as Connection17
-            
             connect P2 Junction3 as Connection9
             [
-                breakpoints =7784, 8168
+                breakpoints = 7784, 8168
             ]
             connect P_bat.in Junction4 as Connection13
-            
             connect Product.in Junction2 as Connection5
-            
             connect V_batt.out Junction1 as Connection2
-            
             connect i_ch.in Junction5 as Connection16
-            
             connect u_bat.in Junction2 as Connection7
-            
-            
-    
-            
-            /*
-                Masks
-            */
+
             mask {
                 icon = "image(\'emr_images/emr_energy_source.svg\')"
+
+                CODE open
+                    from typhoon.apps.schematic_editor.dialogs.component_property_dialogs.general import RegularComponentPropertiesDialog
                 
-        	
-            CODE component_open
-                from typhoon.apps.schematic_editor.dialogs.component_property_dialogs.general import RegularComponentPropertiesDialog
-            
-                dialog = RegularComponentPropertiesDialog(
-                    component=component,
-                    property_container=component.masks[-1],
-                    current_diagram=current_diagram
-                )
-                dialog.exec_()
-                
-            ENDCODE
+                    dialog = RegularComponentPropertiesDialog(
+                        component=component,
+                        property_container=component.masks[-1],
+                        current_diagram=current_diagram
+                    )
+                    dialog.exec_()
+                    
+                ENDCODE
             }
         }
         [
             position = 8104, 8144
             size = 80, 64
         ]
-        
+
         component Subsystem "Armature Winding" {
             layout = static
-    
-            
             component gen_sum Sum1 {
-                
                 signs = "+-"
-    	    
             }
             [
                 position = 7456, 8008
             ]
-            
+
             component gen_z_domain_transfer DTF {
-                
                 a_coeff = "[EMp_T_arm, 1]"
                 b_coeff = "EMp_K_arm"
                 domain = "S-domain"
-    	    
             }
             [
                 position = 7672, 8008
             ]
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
+
             port P1 {
-                
                 position = -40.0, -16.0
                 kind = sp
-                direction = out
+                direction =  out
                 sp_type {
                     default = auto
                 }
@@ -327,14 +257,12 @@ model "ev_closed_loop" {
             [
                 position = 7256, 8000
                 hide_name = True
-                size = 0, 0
             ]
-            
+
             port P2 {
-                
                 position = -40.0, 16.0
                 kind = sp
-                direction = in
+                direction =  in
                 sp_type {
                     default = inherit
                 }
@@ -343,14 +271,12 @@ model "ev_closed_loop" {
                 position = 7256, 8064
                 hide_name = True
                 scale = -1, 1
-                size = 0, 0
             ]
-            
+
             port P3 {
-                
                 position = 40.0, -16.0
                 kind = sp
-                direction = in
+                direction =  in
                 sp_type {
                     default = inherit
                 }
@@ -358,14 +284,12 @@ model "ev_closed_loop" {
             [
                 position = 8040, 8008
                 hide_name = True
-                size = 0, 0
             ]
-            
+
             port P4 {
-                
                 position = 40.0, 16.0
                 kind = sp
-                direction = out
+                direction =  out
                 sp_type {
                     default = auto
                 }
@@ -374,130 +298,95 @@ model "ev_closed_loop" {
                 position = 8040, 8072
                 hide_name = True
                 scale = -1, 1
-                size = 0, 0
             ]
-            
+
             junction Junction1 sp
             [
                 position = 7904, 8008
             ]
+
             connect DTF.out Junction1 as Connection5
-            
             connect DTF.in Sum1.out as Connection3
-            
             connect Junction1 P3 as Connection6
-            
             connect P1 Sum1.in as Connection1
-            
             connect P2 Junction1 as Connection7
-            
             connect Sum1.in1 P4 as Connection2
             [
-                breakpoints =7416, 8072;8008, 8072
+                breakpoints = 7416, 8072; 8008, 8072
             ]
-            
-    
-            
-            /*
-                Masks
-            */
+
             mask {
                 icon = "image(\'emr_images/emr_energy_accumulation.svg\')"
+
+                CODE open
+                    from typhoon.apps.schematic_editor.dialogs.component_property_dialogs.general import RegularComponentPropertiesDialog
                 
-        	
-            CODE component_open
-                from typhoon.apps.schematic_editor.dialogs.component_property_dialogs.general import RegularComponentPropertiesDialog
-            
-                dialog = RegularComponentPropertiesDialog(
-                    component=component,
-                    property_container=component.masks[-1],
-                    current_diagram=current_diagram
-                )
-                dialog.exec_()
-                
-            ENDCODE
+                    dialog = RegularComponentPropertiesDialog(
+                        component=component,
+                        property_container=component.masks[-1],
+                        current_diagram=current_diagram
+                    )
+                    dialog.exec_()
+                    
+                ENDCODE
             }
         }
         [
             position = 8456, 8144
             size = 80, 64
         ]
-        
+
         component Subsystem "Chassis Inversion" {
             layout = static
-    
-            
             component sys_mp_signal_switch Switch {
-                
                 number_of_input_terminals = "3"
-    	    
             }
             [
                 position = 7512, 8056
                 scale = -1, 1
             ]
-            
+
             component src_scada_input "Controller Choice" {
-                
                 def_value = "1"
                 execution_rate = "Ts"
                 max = "3"
                 min = "1"
                 unit = ""
-    	    
             }
             [
                 position = 7616, 7904
                 scale = -1, 1
             ]
-            
+
             component gen_sum Sum1 {
-                
-    	    
             }
             [
                 position = 7336, 8000
                 scale = -1, 1
             ]
-            
+
             component Subsystem "P Controller" {
                 layout = dynamic
-        
-                
                 component gen_gain Gain1 {
-                    
                     gain = "CHAi_Pc_Kp"
-        	    
                 }
                 [
                     position = 7800, 8072
                     scale = -1, 1
                 ]
-                
+
                 component gen_sum Sum1 {
-                    
                     signs = "-+"
-        	    
                 }
                 [
                     position = 7888, 8072
                     scale = -1, 1
                 ]
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
+
                 port v_veh_ref {
-                    
                     position = right:2
                     kind = sp
-                    direction = out
+                    direction =  out
                     sp_type {
                         default = auto
                         readonly = True
@@ -507,12 +396,11 @@ model "ev_closed_loop" {
                     position = 8000, 8104
                     scale = -1, 1
                 ]
-                
+
                 port v_veh_meas {
-                    
                     position = right:1
                     kind = sp
-                    direction = out
+                    direction =  out
                     sp_type {
                         default = auto
                         readonly = True
@@ -522,12 +410,11 @@ model "ev_closed_loop" {
                     position = 8000, 8032
                     scale = -1, 1
                 ]
-                
+
                 port F_veh_ref {
-                    
                     position = left:auto
                     kind = sp
-                    direction = in
+                    direction =  in
                     sp_type {
                         default = inherit
                         readonly = True
@@ -537,98 +424,61 @@ model "ev_closed_loop" {
                     position = 7656, 8072
                     scale = -1, 1
                 ]
+
                 connect Gain1.out F_veh_ref as Connection1
-                
                 connect Gain1.in Sum1.out as Connection2
-                
                 connect v_veh_meas Sum1.in as Connection5
-                
                 connect v_veh_ref Sum1.in1 as Connection4
-                
-                
-        
-                
             }
             [
                 position = 7744, 7984
                 size = 112, 56
             ]
-            
+
             component Subsystem "PI Controller" {
                 layout = dynamic
-        
-                
                 component gen_gain Gain1 {
-                    
                     gain = "CHAi_PIc_Ki"
-        	    
                 }
                 [
                     position = 7832, 8072
                     scale = -1, 1
                 ]
-                
+
                 component gen_sum Sum1 {
-                    
                     signs = "-+"
-        	    
                 }
                 [
                     position = 7992, 8128
                     scale = -1, 1
                 ]
-                
+
                 component gen_sum Sum2 {
-                    
-        	    
                 }
                 [
                     position = 7600, 8120
                     scale = -1, 1
                 ]
-                
+
                 component gen_gain Gain2 {
-                    
                     gain = "CHAi_PIc_Kp"
-        	    
                 }
                 [
                     position = 7832, 8184
                     scale = -1, 1
                 ]
-                
+
                 component gen_integrator Integrator1 {
-                    
-        	    
                 }
                 [
                     position = 7736, 8072
                     scale = -1, 1
                 ]
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
+
                 port v_veh_ref {
-                    
                     position = right:2
                     kind = sp
-                    direction = out
+                    direction =  out
                     sp_type {
                         default = auto
                         readonly = True
@@ -638,12 +488,11 @@ model "ev_closed_loop" {
                     position = 8104, 8160
                     scale = -1, 1
                 ]
-                
+
                 port v_veh_meas {
-                    
                     position = right:1
                     kind = sp
-                    direction = out
+                    direction =  out
                     sp_type {
                         default = auto
                         readonly = True
@@ -653,12 +502,11 @@ model "ev_closed_loop" {
                     position = 8104, 8088
                     scale = -1, 1
                 ]
-                
+
                 port F_veh_ref {
-                    
                     position = left:auto
                     kind = sp
-                    direction = in
+                    direction =  in
                     sp_type {
                         default = inherit
                         readonly = True
@@ -668,120 +516,81 @@ model "ev_closed_loop" {
                     position = 7496, 8120
                     scale = -1, 1
                 ]
-                
+
                 junction Junction1 sp
                 [
                     position = 7896, 8128
                 ]
+
                 connect F_veh_ref Sum2.out as Connection7
-                
                 connect Gain1.out Integrator1.in as Connection6
-                
                 connect Gain1.in Junction1 as Connection10
                 [
-                    breakpoints =7896, 8072
+                    breakpoints = 7896, 8072
                 ]
                 connect Gain2.in Junction1 as Connection12
-                
                 connect Junction1 Sum1.out as Connection11
                 [
-                    breakpoints =7896, 8136
+                    breakpoints = 7896, 8136
                 ]
                 connect Sum2.in1 Gain2.out as Connection13
                 [
-                    breakpoints =7696, 8128;7696, 8184
+                    breakpoints = 7696, 8128; 7696, 8184
                 ]
                 connect Sum2.in Integrator1.out as Connection8
-                
                 connect v_veh_meas Sum1.in as Connection5
-                
                 connect v_veh_ref Sum1.in1 as Connection4
-                
-                
-        
-                
             }
             [
                 position = 7744, 8064
                 size = 112, 56
             ]
-            
+
             component Subsystem "IP Controller" {
                 layout = dynamic
-        
-                
                 component gen_sum Sum2 {
-                    
                     signs = "+-"
-        	    
                 }
                 [
                     position = 7600, 8120
                     scale = -1, 1
                 ]
-                
+
                 component gen_sum Sum1 {
-                    
                     signs = "-+"
-        	    
                 }
                 [
                     position = 7944, 8072
                     scale = -1, 1
                 ]
-                
+
                 component gen_gain Gain1 {
-                    
                     gain = "CHAi_IPc_Ki"
-        	    
                 }
                 [
                     position = 7832, 8072
                     scale = -1, 1
                 ]
-                
+
                 component gen_integrator Integrator1 {
-                    
-        	    
                 }
                 [
                     position = 7736, 8072
                     scale = -1, 1
                 ]
-                
+
                 component gen_gain Gain2 {
-                    
                     gain = "CHAi_IPc_Kp"
-        	    
                 }
                 [
                     position = 7520, 8120
                     scale = -1, 1
                 ]
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
+
                 port v_veh_ref {
-                    
                     position = right:2
                     kind = sp
-                    direction = out
+                    direction =  out
                     sp_type {
                         default = auto
                         readonly = True
@@ -791,12 +600,11 @@ model "ev_closed_loop" {
                     position = 8104, 8104
                     scale = -1, 1
                 ]
-                
+
                 port v_veh_meas {
-                    
                     position = right:1
                     kind = sp
-                    direction = out
+                    direction =  out
                     sp_type {
                         default = auto
                         readonly = True
@@ -806,12 +614,11 @@ model "ev_closed_loop" {
                     position = 8104, 8032
                     scale = -1, 1
                 ]
-                
+
                 port F_veh_ref {
-                    
                     position = left:auto
                     kind = sp
-                    direction = in
+                    direction =  in
                     sp_type {
                         default = inherit
                         readonly = True
@@ -821,74 +628,31 @@ model "ev_closed_loop" {
                     position = 7448, 8120
                     scale = -1, 1
                 ]
-                
+
                 junction Junction1 sp
                 [
                     position = 8024, 8032
                 ]
+
                 connect F_veh_ref Gain2.out as Connection13
-                
                 connect Gain1.out Integrator1.in as Connection6
-                
                 connect Gain2.in Sum2.out as Connection14
-                
                 connect Junction1 Sum1.in as Connection11
-                
                 connect Sum1.out Gain1.in as Connection9
-                
                 connect Sum2.in Integrator1.out as Connection8
-                
                 connect Sum2.in1 Junction1 as Connection12
-                
                 connect v_veh_meas Junction1 as Connection10
-                
                 connect v_veh_ref Sum1.in1 as Connection4
-                
-                
-        
-                
             }
             [
                 position = 7744, 8144
                 size = 112, 56
             ]
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
+
             port P1 {
-                
                 position = -40.0, 0.0
                 kind = sp
-                direction = in
+                direction =  in
                 sp_type {
                     default = inherit
                 }
@@ -897,14 +661,12 @@ model "ev_closed_loop" {
                 position = 7256, 8000
                 hide_name = True
                 scale = -1, 1
-                size = 0, 0
             ]
-            
+
             port P2 {
-                
                 position = 40.0, -16.0
                 kind = sp
-                direction = out
+                direction =  out
                 sp_type {
                     default = auto
                 }
@@ -913,14 +675,12 @@ model "ev_closed_loop" {
                 position = 8040, 7872
                 hide_name = True
                 scale = -1, 1
-                size = 0, 0
             ]
-            
+
             port P3 {
-                
                 position = 40.0, 0.0
                 kind = sp
-                direction = out
+                direction =  out
                 sp_type {
                     default = auto
                 }
@@ -929,14 +689,12 @@ model "ev_closed_loop" {
                 position = 8040, 7976
                 hide_name = True
                 scale = -1, 1
-                size = 0, 0
             ]
-            
+
             port P4 {
-                
                 position = 40.0, 16.0
                 kind = sp
-                direction = out
+                direction =  out
                 sp_type {
                     default = auto
                 }
@@ -945,209 +703,150 @@ model "ev_closed_loop" {
                 position = 8040, 8072
                 hide_name = True
                 scale = -1, 1
-                size = 0, 0
             ]
-            
+
             junction Junction1 sp
             [
                 position = 7904, 8072
             ]
-            
+
             junction Junction2 sp
             [
                 position = 7904, 8072
             ]
-            
+
             junction Junction3 sp
             [
                 position = 7920, 7976
             ]
-            
+
             junction Junction4 sp
             [
                 position = 7920, 8056
             ]
+
             connect "Controller Choice.out" Switch.ctrl as Connection1
-            
             connect "IP Controller.v_veh_meas" Junction4 as Connection21
-            
             connect "IP Controller.F_veh_ref" Switch.in2 as Connection7
             [
-                breakpoints =7672, 8144;7672, 8080
+                breakpoints = 7672, 8144; 7672, 8080
             ]
             connect Junction1 "IP Controller.v_veh_ref" as Connection10
             [
-                breakpoints =7904, 8096;7904, 8152
+                breakpoints = 7904, 8096; 7904, 8152
             ]
             connect Junction2 Junction1 as Connection13
-            
             connect Junction3 "P Controller.v_veh_meas" as Connection17
-            
             connect Junction4 Junction3 as Connection20
-            
             connect "P Controller.v_veh_ref" Junction2 as Connection14
-            
             connect "P Controller.F_veh_ref" Switch.in as Connection6
             [
-                breakpoints =7672, 7984;7672, 8048
+                breakpoints = 7672, 7984; 7672, 8048
             ]
             connect P2 Sum1.in as Connection3
-            
             connect P3 Junction3 as Connection16
-            
             connect P4 Junction1 as Connection9
-            
             connect "PI Controller.v_veh_ref" Junction2 as Connection12
-            
             connect "PI Controller.v_veh_meas" Junction4 as Connection19
-            
             connect Sum1.out P1 as Connection2
-            
             connect Switch.in1 "PI Controller.F_veh_ref" as Connection5
-            
             connect Switch.out Sum1.in1 as Connection4
-            
-            
-    
-            
-            /*
-                Masks
-            */
+
             mask {
                 icon = "image(\'emr_images/emr_indirect_inversion.svg\')"
+
+                CODE open
+                    from typhoon.apps.schematic_editor.dialogs.component_property_dialogs.general import RegularComponentPropertiesDialog
                 
-        	
-            CODE component_open
-                from typhoon.apps.schematic_editor.dialogs.component_property_dialogs.general import RegularComponentPropertiesDialog
-            
-                dialog = RegularComponentPropertiesDialog(
-                    component=component,
-                    property_container=component.masks[-1],
-                    current_diagram=current_diagram
-                )
-                dialog.exec_()
-                
-            ENDCODE
+                    dialog = RegularComponentPropertiesDialog(
+                        component=component,
+                        property_container=component.masks[-1],
+                        current_diagram=current_diagram
+                    )
+                    dialog.exec_()
+                    
+                ENDCODE
             }
         }
         [
             position = 9152, 8432
             size = 80, 64
         ]
-        
+
         component Subsystem "Armature Winding Inversion" {
             layout = static
-    
-            
             component gen_sum Sum1 {
-                
-    	    
             }
             [
                 position = 7336, 8000
                 scale = -1, 1
             ]
-            
+
             component sys_mp_signal_switch Switch {
-                
                 number_of_input_terminals = "4"
-    	    
             }
             [
                 position = 7512, 8064
                 scale = -1, 1
             ]
-            
+
             component src_scada_input "Controller Choice" {
-                
                 def_value = "1"
                 execution_rate = "Ts"
                 max = "4"
                 min = "1"
                 unit = ""
-    	    
             }
             [
                 position = 7616, 7904
                 scale = -1, 1
             ]
-            
+
             component Subsystem "IP Controller" {
                 layout = dynamic
-        
-                
                 component gen_sum Sum1 {
-                    
                     signs = "-+"
-        	    
                 }
                 [
                     position = 7944, 8072
                     scale = -1, 1
                 ]
-                
+
                 component gen_sum Sum2 {
-                    
                     signs = "+-"
-        	    
                 }
                 [
                     position = 7600, 8120
                     scale = -1, 1
                 ]
-                
+
                 component gen_gain Gain1 {
-                    
                     gain = "EMi_IPc_Ki"
-        	    
                 }
                 [
                     position = 7832, 8072
                     scale = -1, 1
                 ]
-                
+
                 component gen_gain Gain2 {
-                    
                     gain = "EMi_IPc_Kp"
-        	    
                 }
                 [
                     position = 7520, 8120
                     scale = -1, 1
                 ]
-                
+
                 component gen_integrator Integrator1 {
-                    
-        	    
                 }
                 [
                     position = 7736, 8072
                     scale = -1, 1
                 ]
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
+
                 port u_ch_a_ref {
-                    
                     position = left:auto
                     kind = sp
-                    direction = in
+                    direction =  in
                     sp_type {
                         default = inherit
                         readonly = True
@@ -1157,12 +856,11 @@ model "ev_closed_loop" {
                     position = 7448, 8120
                     scale = -1, 1
                 ]
-                
+
                 port i_a_meas {
-                    
                     position = right:1
                     kind = sp
-                    direction = out
+                    direction =  out
                     sp_type {
                         default = auto
                         readonly = True
@@ -1172,12 +870,11 @@ model "ev_closed_loop" {
                     position = 8104, 8032
                     scale = -1, 1
                 ]
-                
+
                 port i_a_ref {
-                    
                     position = right:2
                     kind = sp
-                    direction = out
+                    direction =  out
                     sp_type {
                         default = auto
                         readonly = True
@@ -1187,76 +884,49 @@ model "ev_closed_loop" {
                     position = 8104, 8104
                     scale = -1, 1
                 ]
-                
+
                 junction Junction1 sp
                 [
                     position = 8024, 8032
                 ]
+
                 connect Gain1.out Integrator1.in as Connection6
-                
                 connect Gain2.in Sum2.out as Connection14
-                
                 connect Junction1 Sum1.in as Connection11
-                
                 connect Sum1.out Gain1.in as Connection9
-                
                 connect Sum2.in Integrator1.out as Connection8
-                
                 connect Sum2.in1 Junction1 as Connection12
-                
                 connect i_a_meas Junction1 as Connection10
-                
                 connect i_a_ref Sum1.in1 as Connection4
-                
                 connect u_ch_a_ref Gain2.out as Connection13
-                
-                
-        
-                
             }
             [
                 position = 7744, 8224
                 size = 112, 56
             ]
-            
+
             component Subsystem "P Controller" {
                 layout = dynamic
-        
-                
                 component gen_gain Gain1 {
-                    
                     gain = "EMi_Pc_Kp"
-        	    
                 }
                 [
                     position = 7800, 8072
                     scale = -1, 1
                 ]
-                
+
                 component gen_sum Sum1 {
-                    
                     signs = "-+"
-        	    
                 }
                 [
                     position = 7888, 8072
                     scale = -1, 1
                 ]
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
+
                 port u_ch_a_ref {
-                    
                     position = left:auto
                     kind = sp
-                    direction = in
+                    direction =  in
                     sp_type {
                         default = inherit
                         readonly = True
@@ -1266,12 +936,11 @@ model "ev_closed_loop" {
                     position = 7656, 8072
                     scale = -1, 1
                 ]
-                
+
                 port i_a_meas {
-                    
                     position = right:1
                     kind = sp
-                    direction = out
+                    direction =  out
                     sp_type {
                         default = auto
                         readonly = True
@@ -1281,12 +950,11 @@ model "ev_closed_loop" {
                     position = 8000, 8032
                     scale = -1, 1
                 ]
-                
+
                 port i_a_ref {
-                    
                     position = right:2
                     kind = sp
-                    direction = out
+                    direction =  out
                     sp_type {
                         default = auto
                         readonly = True
@@ -1296,98 +964,61 @@ model "ev_closed_loop" {
                     position = 8000, 8104
                     scale = -1, 1
                 ]
+
                 connect Gain1.in Sum1.out as Connection2
-                
                 connect Gain1.out u_ch_a_ref as Connection1
-                
                 connect i_a_meas Sum1.in as Connection5
-                
                 connect i_a_ref Sum1.in1 as Connection4
-                
-                
-        
-                
             }
             [
                 position = 7744, 7984
                 size = 112, 56
             ]
-            
+
             component Subsystem "PI Controller - pp" {
                 layout = dynamic
-        
-                
                 component gen_integrator Integrator1 {
-                    
-        	    
                 }
                 [
                     position = 7736, 8072
                     scale = -1, 1
                 ]
-                
+
                 component gen_sum Sum2 {
-                    
-        	    
                 }
                 [
                     position = 7600, 8120
                     scale = -1, 1
                 ]
-                
+
                 component gen_gain Gain2 {
-                    
                     gain = "EMi_PIc_pp_Kp"
-        	    
                 }
                 [
                     position = 7832, 8184
                     scale = -1, 1
                 ]
-                
+
                 component gen_gain Gain1 {
-                    
                     gain = "EMi_PIc_pp_Ki"
-        	    
                 }
                 [
                     position = 7832, 8072
                     scale = -1, 1
                 ]
-                
+
                 component gen_sum Sum1 {
-                    
                     signs = "-+"
-        	    
                 }
                 [
                     position = 7992, 8128
                     scale = -1, 1
                 ]
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
+
                 port u_ch_a_ref {
-                    
                     position = left:auto
                     kind = sp
-                    direction = in
+                    direction =  in
                     sp_type {
                         default = inherit
                         readonly = True
@@ -1397,12 +1028,11 @@ model "ev_closed_loop" {
                     position = 7496, 8120
                     scale = -1, 1
                 ]
-                
+
                 port i_a_meas {
-                    
                     position = right:1
                     kind = sp
-                    direction = out
+                    direction =  out
                     sp_type {
                         default = auto
                         readonly = True
@@ -1412,12 +1042,11 @@ model "ev_closed_loop" {
                     position = 8104, 8088
                     scale = -1, 1
                 ]
-                
+
                 port i_a_ref {
-                    
                     position = right:2
                     kind = sp
-                    direction = out
+                    direction =  out
                     sp_type {
                         default = auto
                         readonly = True
@@ -1427,113 +1056,71 @@ model "ev_closed_loop" {
                     position = 8104, 8160
                     scale = -1, 1
                 ]
-                
+
                 junction Junction1 sp
                 [
                     position = 7896, 8128
                 ]
+
                 connect Gain1.out Integrator1.in as Connection6
-                
                 connect Gain1.in Junction1 as Connection10
-                
                 connect Gain2.in Junction1 as Connection12
-                
                 connect Junction1 Sum1.out as Connection11
-                
                 connect Sum2.in1 Gain2.out as Connection13
-                
                 connect Sum2.in Integrator1.out as Connection8
-                
                 connect i_a_meas Sum1.in as Connection5
-                
                 connect i_a_ref Sum1.in1 as Connection4
-                
                 connect u_ch_a_ref Sum2.out as Connection7
-                
-                
-        
-                
             }
             [
                 position = 7744, 8064
                 size = 112, 56
             ]
-            
+
             component Subsystem "PI Controller - pc" {
                 layout = dynamic
-        
-                
                 component gen_sum Sum2 {
-                    
-        	    
                 }
                 [
                     position = 7600, 8120
                     scale = -1, 1
                 ]
-                
+
                 component gen_integrator Integrator1 {
-                    
-        	    
                 }
                 [
                     position = 7736, 8072
                     scale = -1, 1
                 ]
-                
+
                 component gen_gain Gain1 {
-                    
                     gain = "EMi_PIc_pc_Ki"
-        	    
                 }
                 [
                     position = 7832, 8072
                     scale = -1, 1
                 ]
-                
+
                 component gen_sum Sum1 {
-                    
                     signs = "-+"
-        	    
                 }
                 [
                     position = 7992, 8128
                     scale = -1, 1
                 ]
-                
+
                 component gen_gain Gain2 {
-                    
                     gain = "EMi_PIc_pc_Kp"
-        	    
                 }
                 [
                     position = 7832, 8184
                     scale = -1, 1
                 ]
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
+
                 port u_ch_a_ref {
-                    
                     position = left:auto
                     kind = sp
-                    direction = in
+                    direction =  in
                     sp_type {
                         default = inherit
                         readonly = True
@@ -1543,12 +1130,11 @@ model "ev_closed_loop" {
                     position = 7496, 8120
                     scale = -1, 1
                 ]
-                
+
                 port i_a_meas {
-                    
                     position = right:1
                     kind = sp
-                    direction = out
+                    direction =  out
                     sp_type {
                         default = auto
                         readonly = True
@@ -1558,12 +1144,11 @@ model "ev_closed_loop" {
                     position = 8104, 8088
                     scale = -1, 1
                 ]
-                
+
                 port i_a_ref {
-                    
                     position = right:2
                     kind = sp
-                    direction = out
+                    direction =  out
                     sp_type {
                         default = auto
                         readonly = True
@@ -1573,82 +1158,31 @@ model "ev_closed_loop" {
                     position = 8104, 8160
                     scale = -1, 1
                 ]
-                
+
                 junction Junction1 sp
                 [
                     position = 7896, 8128
                 ]
+
                 connect Gain1.out Integrator1.in as Connection6
-                
                 connect Gain1.in Junction1 as Connection10
-                
                 connect Gain2.in Junction1 as Connection12
-                
                 connect Junction1 Sum1.out as Connection11
-                
                 connect Sum2.in1 Gain2.out as Connection13
-                
                 connect Sum2.in Integrator1.out as Connection8
-                
                 connect i_a_meas Sum1.in as Connection5
-                
                 connect i_a_ref Sum1.in1 as Connection4
-                
                 connect u_ch_a_ref Sum2.out as Connection7
-                
-                
-        
-                
             }
             [
                 position = 7744, 8144
                 size = 112, 56
             ]
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
+
             port P1 {
-                
                 position = -40.0, 0.0
                 kind = sp
-                direction = in
+                direction =  in
                 sp_type {
                     default = inherit
                 }
@@ -1657,14 +1191,12 @@ model "ev_closed_loop" {
                 position = 7256, 8000
                 hide_name = True
                 scale = -1, 1
-                size = 0, 0
             ]
-            
+
             port P2 {
-                
                 position = 40.0, -16.0
                 kind = sp
-                direction = out
+                direction =  out
                 sp_type {
                     default = auto
                 }
@@ -1673,14 +1205,12 @@ model "ev_closed_loop" {
                 position = 8040, 7856
                 hide_name = True
                 scale = -1, 1
-                size = 0, 0
             ]
-            
+
             port P3 {
-                
                 position = 40.0, 0.0
                 kind = sp
-                direction = out
+                direction =  out
                 sp_type {
                     default = auto
                 }
@@ -1689,14 +1219,12 @@ model "ev_closed_loop" {
                 position = 8040, 8056
                 hide_name = True
                 scale = -1, 1
-                size = 0, 0
             ]
-            
+
             port P4 {
-                
                 position = 40.0, 16.0
                 kind = sp
-                direction = out
+                direction =  out
                 sp_type {
                     default = auto
                 }
@@ -1705,229 +1233,196 @@ model "ev_closed_loop" {
                 position = 8040, 8232
                 hide_name = True
                 scale = -1, 1
-                size = 0, 0
             ]
-            
+
             junction Junction1 sp
             [
                 position = 7816, 8056
             ]
-            
+
             junction Junction2 sp
             [
                 position = 7816, 8136
             ]
-            
+
             junction Junction3 sp
             [
                 position = 7840, 8232
             ]
-            
+
             junction Junction4 sp
             [
                 position = 7840, 8152
             ]
-            
+
             junction Junction5 sp
             [
                 position = 7840, 8072
             ]
-            
+
             junction Junction6 sp
             [
                 position = 7816, 8056
             ]
+
             connect "Controller Choice.out" Switch.ctrl as Connection1
-            
             connect "IP Controller.i_a_meas" Junction2 as Connection15
-            
             connect "IP Controller.u_ch_a_ref" Switch.in3 as Connection8
-            
             connect Junction1 "P Controller.i_a_meas" as Connection11
-            
             connect Junction2 Junction1 as Connection14
-            
             connect Junction3 "IP Controller.i_a_ref" as Connection18
-            
             connect Junction4 Junction3 as Connection21
-            
             connect Junction5 Junction4 as Connection24
-            
             connect Junction6 Junction1 as Connection29
-            
             connect "P Controller.i_a_ref" Junction5 as Connection23
-            
             connect "P Controller.u_ch_a_ref" Switch.in as Connection5
             [
-                breakpoints =7600, 7984;7600, 8040
+                breakpoints = 7600, 7984; 7600, 8040
             ]
             connect P2 Sum1.in as Connection26
-            
             connect P3 Junction6 as Connection28
-            
             connect P4 Junction3 as Connection17
-            
             connect "PI Controller - pc.i_a_meas" Junction2 as Connection13
-            
             connect "PI Controller - pc.i_a_ref" Junction4 as Connection22
-            
             connect "PI Controller - pc.u_ch_a_ref" Switch.in2 as Connection7
             [
-                breakpoints =7600, 8144;7600, 8080
+                breakpoints = 7600, 8144; 7600, 8080
             ]
             connect "PI Controller - pp.i_a_ref" Junction5 as Connection25
-            
             connect "PI Controller - pp.i_a_meas" Junction6 as Connection30
-            
             connect "PI Controller - pp.u_ch_a_ref" Switch.in1 as Connection6
-            
             connect Sum1.out P1 as Connection27
-            
             connect Switch.out Sum1.in1 as Connection4
-            
-            
-    
-            
-            /*
-                Masks
-            */
+
             mask {
                 icon = "image(\'emr_images/emr_indirect_inversion.svg\')"
+
+                CODE open
+                    from typhoon.apps.schematic_editor.dialogs.component_property_dialogs.general import RegularComponentPropertiesDialog
                 
-        	
-            CODE component_open
-                from typhoon.apps.schematic_editor.dialogs.component_property_dialogs.general import RegularComponentPropertiesDialog
-            
-                dialog = RegularComponentPropertiesDialog(
-                    component=component,
-                    property_container=component.masks[-1],
-                    current_diagram=current_diagram
-                )
-                dialog.exec_()
-                
-            ENDCODE
+                    dialog = RegularComponentPropertiesDialog(
+                        component=component,
+                        property_container=component.masks[-1],
+                        current_diagram=current_diagram
+                    )
+                    dialog.exec_()
+                    
+                ENDCODE
             }
         }
         [
             position = 8456, 8416
             size = 80, 64
         ]
-        
+
         component Subsystem Enviroment {
             layout = static
-    
-            
             component gen_product Product1 {
-                
-    	    
             }
             [
                 position = 7832, 7864
                 rotation = right
             ]
-            
+
             component sys_signal_switch "Signal switch1" {
-                
-    	    
             }
             [
                 position = 7920, 8144
                 scale = -1, 1
             ]
-            
+
             component gen_sum Sum1 {
-                
-    	    
             }
             [
                 position = 7792, 8136
                 scale = -1, 1
             ]
-            
+
             component gen_product Product2 {
-                
-    	    
             }
             [
                 position = 7536, 7920
             ]
-            
+
             component gen_gain Gain_aero {
-                
                 gain = "RDp_Kaero"
-    	    
             }
             [
                 position = 7832, 7936
                 rotation = right
             ]
-            
+
             component src_constant zero {
-                
                 execution_rate = "Ts"
                 value = "0"
-    	    
             }
             [
                 position = 8032, 8184
                 scale = -1, 1
             ]
-            
+
             component src_constant Const_F_sec {
-                
                 execution_rate = "Ts"
                 value = "RDp_F_sec"
-    	    
             }
             [
                 position = 8032, 8104
                 scale = -1, 1
             ]
-            
+
             component gen_probe P_env {
-                
-    	    
             }
             [
                 position = 7632, 7920
             ]
-            
+
             component gen_probe F_res {
-                
-    	    
             }
             [
                 position = 7632, 8040
             ]
-            
+
             component tm_delay "Unit Delay1" {
-                
-    	    
             }
             [
                 position = 7920, 8024
                 rotation = right
             ]
-            
+
             component tm_delay "Unit Delay2" {
-                
-    	    
             }
             [
                 position = 7832, 8056
                 rotation = right
             ]
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
+
+            port P1 {
+                position = 40.0, -16.0
+                kind = sp
+                direction =  in
+                sp_type {
+                    default = inherit
+                }
+            }
+            [
+                position = 7408, 8136
+                hide_name = True
+                scale = -1, 1
+            ]
+
+            port P2 {
+                position = 40.0, 16.0
+                kind = sp
+                direction =  out
+                sp_type {
+                    default = auto
+                }
+            }
+            [
+                position = 7408, 7792
+                hide_name = True
+            ]
+
             tag Goto1 {
                 value = "F_res"
                 scope = global
@@ -1937,167 +1432,80 @@ model "ev_closed_loop" {
             [
                 position = 7632, 8104
             ]
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            port P1 {
-                
-                position = 40.0, -16.0
-                kind = sp
-                direction = in
-                sp_type {
-                    default = inherit
-                }
-            }
-            [
-                position = 7408, 8136
-                hide_name = True
-                scale = -1, 1
-                size = 0, 0
-            ]
-            
-            port P2 {
-                
-                position = 40.0, 16.0
-                kind = sp
-                direction = out
-                sp_type {
-                    default = auto
-                }
-            }
-            [
-                position = 7408, 7792
-                hide_name = True
-                size = 0, 0
-            ]
-            
+
             junction Junction1 sp
             [
                 position = 7824, 7792
             ]
-            
+
             junction Junction2 sp
             [
                 position = 7840, 7792
             ]
-            
+
             junction Junction3 sp
             [
                 position = 7472, 7792
             ]
-            
+
             junction Junction4 sp
             [
                 position = 7472, 8136
             ]
-            
+
             junction Junction5 sp
             [
                 position = 7472, 8040
             ]
-            
+
             junction Junction6 sp
             [
                 position = 7552, 8040
             ]
+
             connect Const_F_sec.out "Signal switch1.in" as Connection12
             [
-                breakpoints =7984, 8104;7984, 8128
+                breakpoints = 7984, 8104; 7984, 8128
             ]
             connect F_res.in Junction6 as Connection28
-            
             connect Gain_aero.in Product1.out as Connection1
-            
             connect Goto1 Junction6 as Connection30
-            
             connect Junction1 Junction2 as Connection8
-            
             connect Junction2 "Unit Delay1.in" as Connection24
-            
             connect Junction3 Junction1 as Connection15
-            
             connect Junction4 P1 as Connection18
-            
             connect Junction5 Junction4 as Connection22
-            
             connect Junction6 Junction5 as Connection29
-            
             connect P2 Junction3 as Connection14
-            
             connect P_env.in Product2.out as Connection20
-            
             connect Product1.in1 Junction1 as Connection7
-            
             connect Product1.in Junction2 as Connection10
-            
             connect Product2.in Junction3 as Connection16
-            
             connect Product2.in1 Junction5 as Connection21
-            
             connect "Signal switch1.in1" zero.out as Connection11
             [
-                breakpoints =7952, 8160;7984, 8160;7984, 8184
+                breakpoints = 7952, 8160; 7984, 8160; 7984, 8184
             ]
             connect Sum1.out Junction4 as Connection17
-            
             connect Sum1.in1 "Signal switch1.out" as Connection3
-            
             connect Sum1.in "Unit Delay2.out" as Connection26
-            
             connect "Unit Delay1.out" "Signal switch1.in2" as Connection25
-            
             connect "Unit Delay2.in" Gain_aero.out as Connection27
-            
-            
-    
-            
-            /*
-                Masks
-            */
+
             mask {
                 icon = "image(\'emr_images/emr_energy_source.svg\')"
+
+                CODE open
+                    from typhoon.apps.schematic_editor.dialogs.component_property_dialogs.general import RegularComponentPropertiesDialog
                 
-        	
-            CODE component_open
-                from typhoon.apps.schematic_editor.dialogs.component_property_dialogs.general import RegularComponentPropertiesDialog
-            
-                dialog = RegularComponentPropertiesDialog(
-                    component=component,
-                    property_container=component.masks[-1],
-                    current_diagram=current_diagram
-                )
-                dialog.exec_()
-                
-            ENDCODE
+                    dialog = RegularComponentPropertiesDialog(
+                        component=component,
+                        property_container=component.masks[-1],
+                        current_diagram=current_diagram
+                    )
+                    dialog.exec_()
+                    
+                ENDCODE
             }
         }
         [
@@ -2105,49 +1513,29 @@ model "ev_closed_loop" {
             scale = -1, -1
             size = 80, 64
         ]
-        
+
         component Subsystem Chassis {
             layout = static
-    
-            
             component gen_z_domain_transfer DTF {
-                
                 a_coeff = "[1, 0]"
                 b_coeff = "[CHAp_K_eq]"
                 domain = "S-domain"
-    	    
             }
             [
                 position = 7688, 8000
             ]
-            
+
             component gen_sum Sum1 {
-                
                 signs = "+-"
-    	    
             }
             [
                 position = 7472, 8000
             ]
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
+
             port P1 {
-                
                 position = -40.0, -16.0
                 kind = sp
-                direction = out
+                direction =  out
                 sp_type {
                     default = auto
                 }
@@ -2155,14 +1543,12 @@ model "ev_closed_loop" {
             [
                 position = 7256, 7992
                 hide_name = True
-                size = 0, 0
             ]
-            
+
             port P2 {
-                
                 position = -40.0, 16.0
                 kind = sp
-                direction = in
+                direction =  in
                 sp_type {
                     default = inherit
                 }
@@ -2171,14 +1557,12 @@ model "ev_closed_loop" {
                 position = 7256, 8064
                 hide_name = True
                 scale = -1, 1
-                size = 0, 0
             ]
-            
+
             port P3 {
-                
                 position = 40.0, -16.0
                 kind = sp
-                direction = in
+                direction =  in
                 sp_type {
                     default = inherit
                 }
@@ -2186,14 +1570,12 @@ model "ev_closed_loop" {
             [
                 position = 8040, 8000
                 hide_name = True
-                size = 0, 0
             ]
-            
+
             port P4 {
-                
                 position = 40.0, 16.0
                 kind = sp
-                direction = out
+                direction =  out
                 sp_type {
                     default = auto
                 }
@@ -2202,171 +1584,112 @@ model "ev_closed_loop" {
                 position = 8040, 8072
                 hide_name = True
                 scale = -1, 1
-                size = 0, 0
             ]
-            
+
             junction Junction1 sp
             [
                 position = 7848, 8000
             ]
+
             connect DTF.out Junction1 as Connection6
-            
             connect DTF.in Sum1.out as Connection3
-            
             connect Junction1 P3 as Connection7
-            
             connect P2 Junction1 as Connection8
-            
             connect P4 Sum1.in1 as Connection9
-            
             connect Sum1.in P1 as Connection4
-            
-            
-    
-            
-            /*
-                Masks
-            */
+
             mask {
                 icon = "image(\'emr_images/emr_energy_accumulation.svg\')"
+
+                CODE open
+                    from typhoon.apps.schematic_editor.dialogs.component_property_dialogs.general import RegularComponentPropertiesDialog
                 
-        	
-            CODE component_open
-                from typhoon.apps.schematic_editor.dialogs.component_property_dialogs.general import RegularComponentPropertiesDialog
-            
-                dialog = RegularComponentPropertiesDialog(
-                    component=component,
-                    property_container=component.masks[-1],
-                    current_diagram=current_diagram
-                )
-                dialog.exec_()
-                
-            ENDCODE
+                    dialog = RegularComponentPropertiesDialog(
+                        component=component,
+                        property_container=component.masks[-1],
+                        current_diagram=current_diagram
+                    )
+                    dialog.exec_()
+                    
+                ENDCODE
             }
         }
         [
             position = 9152, 8144
             size = 80, 64
         ]
-        
+
         component Subsystem Chopper {
             layout = static
-    
-            
             component gen_product Product2 {
-                
-    	    
             }
             [
                 position = 7736, 8104
                 scale = -1, 1
             ]
-            
+
             component gen_probe u_ch {
-                
-    	    
             }
             [
                 position = 7936, 7952
             ]
-            
+
             component gen_product Product1 {
-                
-    	    
             }
             [
                 position = 7728, 7888
             ]
-            
+
             component gen_probe m_ch {
-                
-    	    
             }
             [
                 position = 7936, 8160
             ]
-            
+
             component Subsystem Efficiency {
                 layout = dynamic
-        
-                
                 component gen_product Product1 {
-                    
-        	    
                 }
                 [
                     position = 7880, 8168
                     scale = -1, 1
                 ]
-                
+
                 component gen_product Divider {
-                    
                     signs = "/*"
-        	    
                 }
                 [
                     position = 7880, 8088
                     scale = -1, 1
                 ]
-                
+
                 component sys_signal_switch Switch {
-                    
-        	    
                 }
                 [
                     position = 7744, 8232
                     scale = -1, 1
                 ]
-                
+
                 component gen_product Product2 {
-                    
-        	    
                 }
                 [
                     position = 7880, 8248
                     scale = -1, 1
                 ]
-                
+
                 component src_constant Efficiency {
-                    
                     execution_rate = "Ts"
                     value = "CHp_eff"
-        	    
                 }
                 [
                     position = 8064, 8080
                     scale = -1, 1
                 ]
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
+
                 port u_bat {
-                    
                     position = right:1
                     kind = sp
-                    direction = out
+                    direction =  out
                     sp_type {
                         default = auto
                         readonly = True
@@ -2376,12 +1699,11 @@ model "ev_closed_loop" {
                     position = 8104, 8160
                     scale = -1, 1
                 ]
-                
+
                 port i_a_in {
-                    
                     position = right:2
                     kind = sp
-                    direction = out
+                    direction =  out
                     sp_type {
                         default = auto
                         readonly = True
@@ -2391,12 +1713,11 @@ model "ev_closed_loop" {
                     position = 8104, 8224
                     scale = -1, 1
                 ]
-                
+
                 port i_a {
-                    
                     position = left:auto
                     kind = sp
-                    direction = in
+                    direction =  in
                     sp_type {
                         default = inherit
                         readonly = True
@@ -2406,60 +1727,109 @@ model "ev_closed_loop" {
                     position = 7624, 8232
                     scale = -1, 1
                 ]
-                
+
                 junction Junction1 sp
                 [
                     position = 7992, 8224
                 ]
-                
+
                 junction Junction2 sp
                 [
                     position = 7992, 8176
                 ]
-                
+
                 junction Junction3 sp
                 [
                     position = 8024, 8080
                 ]
+
                 connect Divider.in1 Junction2 as Connection6
-                
                 connect Efficiency.out Junction3 as Connection10
-                
                 connect Junction1 i_a_in as Connection4
-                
                 connect Junction2 Junction1 as Connection7
-                
                 connect Junction3 Divider.in as Connection11
-                
                 connect Product1.in1 Junction2 as Connection8
-                
                 connect Product2.in Junction1 as Connection5
-                
                 connect Product2.in1 Junction3 as Connection12
-                
                 connect Switch.in Divider.out as Connection14
-                
                 connect Switch.in2 Product1.out as Connection13
-                
                 connect Switch.in1 Product2.out as Connection15
-                
                 connect i_a Switch.out as Connection16
-                
                 connect u_bat Product1.in as Connection1
-                
-                
-        
-                
             }
             [
                 position = 7408, 8080
                 size = 160, 88
             ]
-            
-            
-            
-            
-            
+
+            port P1 {
+                position = -40.0, -16.0
+                kind = sp
+                direction =  out
+                sp_type {
+                    default = auto
+                }
+            }
+            [
+                position = 7256, 7880
+                hide_name = True
+            ]
+
+            port P2 {
+                position = -40.0, 16.0
+                kind = sp
+                direction =  in
+                sp_type {
+                    default = inherit
+                }
+            }
+            [
+                position = 7256, 8080
+                hide_name = True
+                scale = -1, 1
+            ]
+
+            port P3 {
+                position = 40.0, -16.0
+                kind = sp
+                direction =  in
+                sp_type {
+                    default = inherit
+                }
+            }
+            [
+                position = 8032, 7888
+                hide_name = True
+            ]
+
+            port P4 {
+                position = 40.0, 16.0
+                kind = sp
+                direction =  out
+                sp_type {
+                    default = auto
+                }
+            }
+            [
+                position = 8032, 8112
+                hide_name = True
+                scale = -1, 1
+            ]
+
+            port P5 {
+                position = 0.0, 32.0
+                kind = sp
+                direction =  out
+                sp_type {
+                    default = auto
+                }
+            }
+            [
+                position = 7544, 8192
+                hide_name = True
+                scale = 1, -1
+            ]
+
             tag Goto1 {
                 value = "m_ch"
                 scope = global
@@ -2469,7 +1839,7 @@ model "ev_closed_loop" {
             [
                 position = 7976, 8128
             ]
-            
+
             tag Goto2 {
                 value = "u_ch"
                 scope = global
@@ -2479,291 +1849,129 @@ model "ev_closed_loop" {
             [
                 position = 7944, 8008
             ]
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            port P1 {
-                
-                position = -40.0, -16.0
-                kind = sp
-                direction = out
-                sp_type {
-                    default = auto
-                }
-            }
-            [
-                position = 7256, 7880
-                hide_name = True
-                size = 0, 0
-            ]
-            
-            port P2 {
-                
-                position = -40.0, 16.0
-                kind = sp
-                direction = in
-                sp_type {
-                    default = inherit
-                }
-            }
-            [
-                position = 7256, 8080
-                hide_name = True
-                scale = -1, 1
-                size = 0, 0
-            ]
-            
-            port P3 {
-                
-                position = 40.0, -16.0
-                kind = sp
-                direction = in
-                sp_type {
-                    default = inherit
-                }
-            }
-            [
-                position = 8032, 7888
-                hide_name = True
-                size = 0, 0
-            ]
-            
-            port P4 {
-                
-                position = 40.0, 16.0
-                kind = sp
-                direction = out
-                sp_type {
-                    default = auto
-                }
-            }
-            [
-                position = 8032, 8112
-                hide_name = True
-                scale = -1, 1
-                size = 0, 0
-            ]
-            
-            port P5 {
-                
-                position = 0.0, 32.0
-                kind = sp
-                direction = out
-                sp_type {
-                    default = auto
-                }
-            }
-            [
-                position = 7544, 8192
-                hide_name = True
-                scale = 1, -1
-                size = 0, 0
-            ]
-            
+
             junction Junction2 sp
             [
                 position = 7616, 8160
             ]
-            
+
             junction Junction3 sp
             [
                 position = 7616, 8024
             ]
-            
+
             junction Junction4 sp
             [
                 position = 7896, 7888
             ]
-            
+
             junction Junction5 sp
             [
                 position = 7528, 7880
             ]
-            
+
             junction Junction6 sp
             [
                 position = 7616, 8160
             ]
-            
+
             junction Junction7 sp
             [
                 position = 7896, 7888
             ]
-            
+
             junction Junction8 sp
             [
                 position = 7528, 7880
             ]
-            
+
             junction Junction9 sp
             [
                 position = 7856, 8160
             ]
-            
+
             junction Junction10 sp
             [
                 position = 7896, 7952
             ]
+
             connect Efficiency.u_bat Junction8 as Connection38
-            
             connect Efficiency.i_a_in Product2.out as Connection9
-            
             connect Goto1 Junction9 as Connection44
-            
             connect Goto2 Junction10 as Connection47
-            
             connect Junction10 Junction4 as Connection46
-            
             connect Junction3 Junction2 as Connection20
             [
-                breakpoints =7616, 8024
+                breakpoints = 7616, 8024
             ]
             connect Junction4 Junction7 as Connection34
-            
             connect Junction6 Junction2 as Connection32
-            
             connect Junction7 Product1.out as Connection35
-            
             connect Junction8 Junction5 as Connection39
-            
             connect Junction9 Junction6 as Connection43
-            
             connect P1 Junction8 as Connection40
-            
             connect P2 Efficiency.i_a as Connection41
-            
             connect P3 Junction7 as Connection36
-            
             connect P4 Product2.in1 as Connection37
-            
             connect P5 Junction6 as Connection33
-            
             connect Product1.in1 Junction3 as Connection21
-            
             connect Product1.in Junction5 as Connection28
-            
             connect Product2.in Junction3 as Connection19
-            
             connect m_ch.in Junction9 as Connection42
-            
             connect u_ch.in Junction10 as Connection45
-            
-            
-    
-            
-            /*
-                Masks
-            */
+
             mask {
                 icon = "image(\'emr_images/emr_mono_physical_converter_ctrl.svg\')"
-                
                 description = "Mono-physical converter with control block for Energetic Macroscopic Representation of models."
+
+                CODE open
+                    from typhoon.apps.schematic_editor.dialogs.component_property_dialogs.general import RegularComponentPropertiesDialog
                 
-        	
-            CODE component_open
-                from typhoon.apps.schematic_editor.dialogs.component_property_dialogs.general import RegularComponentPropertiesDialog
-            
-                dialog = RegularComponentPropertiesDialog(
-                    component=component,
-                    property_container=component.masks[-1],
-                    current_diagram=current_diagram
-                )
-                dialog.exec_()
-                
-            ENDCODE
+                    dialog = RegularComponentPropertiesDialog(
+                        component=component,
+                        property_container=component.masks[-1],
+                        current_diagram=current_diagram
+                    )
+                    dialog.exec_()
+                    
+                ENDCODE
             }
         }
         [
             position = 8272, 8144
             size = 80, 64
         ]
-        
+
         component Subsystem "Chopper Inversion" {
             layout = static
-    
-            
             component gen_limiter Limit1 {
-                
                 lower_limit = "-1.0"
                 upper_limit = "1.0"
-    	    
             }
             [
                 position = 7400, 8000
                 scale = -1, 1
             ]
-            
+
             component gen_product Product1 {
-                
                 signs = "/*"
-    	    
             }
             [
                 position = 7560, 8000
                 scale = -1, 1
             ]
-            
+
             component gen_probe Ref_pre_limit {
-                
-    	    
             }
             [
                 position = 7456, 7912
                 rotation = left
             ]
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
+
             port P1 {
-                
                 position = -40.0, 0.0
                 kind = sp
-                direction = in
+                direction =  in
                 sp_type {
                     default = inherit
                 }
@@ -2772,14 +1980,12 @@ model "ev_closed_loop" {
                 position = 7256, 8000
                 hide_name = True
                 scale = -1, 1
-                size = 0, 0
             ]
-            
+
             port P2 {
-                
                 position = 40.0, 0.0
                 kind = sp
-                direction = out
+                direction =  out
                 sp_type {
                     default = auto
                 }
@@ -2788,14 +1994,12 @@ model "ev_closed_loop" {
                 position = 8040, 8008
                 hide_name = True
                 scale = -1, 1
-                size = 0, 0
             ]
-            
+
             port P3 {
-                
                 position = 0.0, -32.0
                 kind = sp
-                direction = out
+                direction =  out
                 sp_type {
                     default = auto
                 }
@@ -2804,97 +2008,125 @@ model "ev_closed_loop" {
                 position = 7648, 7904
                 hide_name = True
                 scale = -1, 1
-                size = 0, 0
             ]
-            
+
             junction Junction1 sp
             [
                 position = 7456, 8000
             ]
+
             connect Junction1 Limit1.in as Connection8
-            
             connect Limit1.out P1 as Connection4
-            
             connect P3 Product1.in as Connection6
-            
             connect Product1.out Junction1 as Connection7
-            
             connect Product1.in1 P2 as Connection5
-            
             connect Ref_pre_limit.in Junction1 as Connection9
-            
-            
-    
-            
-            /*
-                Masks
-            */
+
             mask {
                 icon = "image(\'emr_images/emr_direct_inversion_dist_rej.svg\')"
-                
                 description = "Direct Inversion with or with disturbance rejection."
+
+                CODE open
+                    from typhoon.apps.schematic_editor.dialogs.component_property_dialogs.general import RegularComponentPropertiesDialog
                 
-        	
-            CODE component_open
-                from typhoon.apps.schematic_editor.dialogs.component_property_dialogs.general import RegularComponentPropertiesDialog
-            
-                dialog = RegularComponentPropertiesDialog(
-                    component=component,
-                    property_container=component.masks[-1],
-                    current_diagram=current_diagram
-                )
-                dialog.exec_()
-                
-            ENDCODE
+                    dialog = RegularComponentPropertiesDialog(
+                        component=component,
+                        property_container=component.masks[-1],
+                        current_diagram=current_diagram
+                    )
+                    dialog.exec_()
+                    
+                ENDCODE
             }
         }
         [
             position = 8280, 8416
             size = 80, 64
         ]
-        
+
         component Subsystem "EM Conversion" {
             layout = static
-    
-            
             component gen_gain Gain2 {
-                
                 gain = "EMp_K_em"
-    	    
             }
             [
                 position = 7544, 8064
                 scale = -1, 1
             ]
-            
+
             component gen_probe T_dcm {
-                
-    	    
             }
             [
                 position = 7744, 7960
             ]
-            
+
             component gen_gain Gain1 {
-                
                 gain = "EMp_K_em"
-    	    
             }
             [
                 position = 7544, 8000
             ]
-            
+
             component gen_probe W_gb {
-                
-    	    
             }
             [
                 position = 7744, 8096
             ]
-            
-            
-            
-            
+
+            port P1 {
+                position = -40.0, -16.0
+                kind = sp
+                direction =  out
+                sp_type {
+                    default = auto
+                }
+            }
+            [
+                position = 7256, 8000
+                hide_name = True
+            ]
+
+            port P2 {
+                position = -40.0, 16.0
+                kind = sp
+                direction =  in
+                sp_type {
+                    default = inherit
+                }
+            }
+            [
+                position = 7256, 8064
+                hide_name = True
+                scale = -1, 1
+            ]
+
+            port P3 {
+                position = 40.0, -16.0
+                kind = sp
+                direction =  in
+                sp_type {
+                    default = inherit
+                }
+            }
+            [
+                position = 8040, 8000
+                hide_name = True
+            ]
+
+            port P4 {
+                position = 40.0, 16.0
+                kind = sp
+                direction =  out
+                sp_type {
+                    default = auto
+                }
+            }
+            [
+                position = 8040, 8064
+                hide_name = True
+                scale = -1, 1
+            ]
+
             tag Goto1 {
                 value = "T_dcm"
                 scope = global
@@ -2904,7 +2136,7 @@ model "ev_closed_loop" {
             [
                 position = 7744, 7912
             ]
-            
+
             tag Goto2 {
                 value = "w_gb"
                 scope = global
@@ -2914,288 +2146,136 @@ model "ev_closed_loop" {
             [
                 position = 7744, 8152
             ]
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            port P1 {
-                
-                position = -40.0, -16.0
-                kind = sp
-                direction = out
-                sp_type {
-                    default = auto
-                }
-            }
-            [
-                position = 7256, 8000
-                hide_name = True
-                size = 0, 0
-            ]
-            
-            port P2 {
-                
-                position = -40.0, 16.0
-                kind = sp
-                direction = in
-                sp_type {
-                    default = inherit
-                }
-            }
-            [
-                position = 7256, 8064
-                hide_name = True
-                scale = -1, 1
-                size = 0, 0
-            ]
-            
-            port P3 {
-                
-                position = 40.0, -16.0
-                kind = sp
-                direction = in
-                sp_type {
-                    default = inherit
-                }
-            }
-            [
-                position = 8040, 8000
-                hide_name = True
-                size = 0, 0
-            ]
-            
-            port P4 {
-                
-                position = 40.0, 16.0
-                kind = sp
-                direction = out
-                sp_type {
-                    default = auto
-                }
-            }
-            [
-                position = 8040, 8064
-                hide_name = True
-                scale = -1, 1
-                size = 0, 0
-            ]
-            
+
             junction Junction1 sp
             [
                 position = 7664, 8000
             ]
-            
+
             junction Junction2 sp
             [
                 position = 7664, 8064
             ]
-            
+
             junction Junction3 sp
             [
                 position = 7664, 8000
             ]
-            
+
             junction Junction4 sp
             [
                 position = 7664, 8064
             ]
-            
+
             junction Junction5 sp
             [
                 position = 7664, 7960
             ]
-            
+
             junction Junction6 sp
             [
                 position = 7664, 8096
             ]
+
             connect Gain1.out Junction3 as Connection13
-            
             connect Gain1.in P1 as Connection11
-            
             connect Goto1 Junction5 as Connection21
-            
             connect Goto2 Junction6 as Connection24
-            
             connect Junction2 Gain2.in as Connection9
-            
             connect Junction3 Junction1 as Connection14
-            
             connect Junction4 Junction2 as Connection17
-            
             connect Junction5 Junction1 as Connection20
-            
             connect Junction6 Junction4 as Connection23
-            
             connect P2 Gain2.out as Connection12
-            
             connect P3 Junction3 as Connection15
-            
             connect P4 Junction4 as Connection18
-            
             connect T_dcm.in Junction5 as Connection19
-            
             connect W_gb.in Junction6 as Connection22
-            
-            
-    
-            
-            /*
-                Masks
-            */
+
             mask {
                 icon = "image(\'emr_images/emr_multi_physical_converter.svg\')"
-                
                 description = "Multi-physical converter block for Energetic Macroscopic Representation of models."
+
+                CODE open
+                    from typhoon.apps.schematic_editor.dialogs.component_property_dialogs.general import RegularComponentPropertiesDialog
                 
-        	
-            CODE component_open
-                from typhoon.apps.schematic_editor.dialogs.component_property_dialogs.general import RegularComponentPropertiesDialog
-            
-                dialog = RegularComponentPropertiesDialog(
-                    component=component,
-                    property_container=component.masks[-1],
-                    current_diagram=current_diagram
-                )
-                dialog.exec_()
-                
-            ENDCODE
+                    dialog = RegularComponentPropertiesDialog(
+                        component=component,
+                        property_container=component.masks[-1],
+                        current_diagram=current_diagram
+                    )
+                    dialog.exec_()
+                    
+                ENDCODE
             }
         }
         [
             position = 8624, 8144
             size = 80, 64
         ]
-        
+
         component Subsystem Gearbox {
             layout = static
-    
-            
             component gen_gain Gain1 {
-                
                 gain = "MTp_K_gear"
-    	    
             }
             [
                 position = 7824, 7984
             ]
-            
+
             component gen_gain Gain2 {
-                
                 gain = "MTp_K_gear"
-    	    
             }
             [
                 position = 7824, 8064
                 scale = -1, 1
             ]
-            
+
             component tm_delay "Unit Delay1" {
-                
-    	    
             }
             [
                 position = 7432, 8008
             ]
-            
+
             component Subsystem Efficiency {
                 layout = dynamic
-        
-                
                 component src_constant Efficiency {
-                    
                     execution_rate = "Ts"
                     value = "MTp_Gear_eff"
-        	    
                 }
                 [
                     position = 7680, 8256
                 ]
-                
+
                 component gen_product Product1 {
-                    
-        	    
                 }
                 [
                     position = 7880, 8168
                 ]
-                
+
                 component gen_product Product2 {
-                    
-        	    
                 }
                 [
                     position = 7880, 8088
                 ]
-                
+
                 component gen_product Divider {
-                    
                     signs = "*/"
-        	    
                 }
                 [
                     position = 7880, 8248
                 ]
-                
+
                 component sys_signal_switch Switch {
-                    
-        	    
                 }
                 [
                     position = 8088, 8232
                 ]
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
+
                 port T_em {
-                    
                     position = left:1
                     kind = sp
-                    direction = out
+                    direction =  out
                     sp_type {
                         default = auto
                         readonly = True
@@ -3204,12 +2284,11 @@ model "ev_closed_loop" {
                 [
                     position = 7680, 8112
                 ]
-                
+
                 port W_em {
-                    
                     position = left:2
                     kind = sp
-                    direction = out
+                    direction =  out
                     sp_type {
                         default = auto
                         readonly = True
@@ -3218,12 +2297,11 @@ model "ev_closed_loop" {
                 [
                     position = 7680, 8176
                 ]
-                
+
                 port T_gear {
-                    
                     position = right:auto
                     kind = sp
-                    direction = in
+                    direction =  in
                     sp_type {
                         default = inherit
                         readonly = True
@@ -3232,78 +2310,45 @@ model "ev_closed_loop" {
                 [
                     position = 8168, 8232
                 ]
-                
+
                 junction Junction1 sp
                 [
                     position = 7800, 8160
                 ]
-                
+
                 junction Junction2 sp
                 [
                     position = 7800, 8160
                 ]
-                
+
                 junction Junction3 sp
                 [
                     position = 7768, 8256
                 ]
+
                 connect Divider.in Junction2 as Connection8
-                
                 connect Divider.in1 Junction3 as Connection12
-                
                 connect Divider.out Switch.in1 as Connection14
-                
                 connect Efficiency.out Junction3 as Connection10
-                
                 connect Junction1 Product1.in as Connection4
-                
                 connect Junction2 Junction1 as Connection7
-                
                 connect Junction3 Product2.in as Connection11
-                
                 connect Product2.in1 Junction2 as Connection6
-                
                 connect Switch.in2 Product1.out as Connection13
-                
                 connect Switch.in Product2.out as Connection15
-                
                 connect T_em Junction1 as Connection3
-                
                 connect T_gear Switch.out as Connection16
-                
                 connect W_em Product1.in1 as Connection1
-                
-                
-        
-                
             }
             [
                 position = 7592, 7984
                 size = 160, 88
             ]
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
+
             port P1 {
-                
                 position = -40.0, -16.0
                 kind = sp
-                direction = out
+                direction =  out
                 sp_type {
                     default = auto
                 }
@@ -3311,14 +2356,12 @@ model "ev_closed_loop" {
             [
                 position = 7256, 7960
                 hide_name = True
-                size = 0, 0
             ]
-            
+
             port P2 {
-                
                 position = -40.0, 16.0
                 kind = sp
-                direction = in
+                direction =  in
                 sp_type {
                     default = inherit
                 }
@@ -3327,14 +2370,12 @@ model "ev_closed_loop" {
                 position = 7256, 8064
                 hide_name = True
                 scale = -1, 1
-                size = 0, 0
             ]
-            
+
             port P3 {
-                
                 position = 40.0, -16.0
                 kind = sp
-                direction = in
+                direction =  in
                 sp_type {
                     default = inherit
                 }
@@ -3342,14 +2383,12 @@ model "ev_closed_loop" {
             [
                 position = 8040, 7984
                 hide_name = True
-                size = 0, 0
             ]
-            
+
             port P4 {
-                
                 position = 40.0, 16.0
                 kind = sp
-                direction = out
+                direction =  out
                 sp_type {
                     default = auto
                 }
@@ -3358,103 +2397,130 @@ model "ev_closed_loop" {
                 position = 8040, 8064
                 hide_name = True
                 scale = -1, 1
-                size = 0, 0
             ]
-            
+
             junction Junction1 sp
             [
                 position = 7368, 8064
             ]
+
             connect Efficiency.T_em P1 as Connection14
-            
             connect Efficiency.W_em "Unit Delay1.out" as Connection18
-            
             connect Gain1.in Efficiency.T_gear as Connection2
-            
             connect Gain1.out P3 as Connection13
-            
             connect Gain2.out Junction1 as Connection16
             [
-                breakpoints =7464, 8064
+                breakpoints = 7464, 8064
             ]
             connect Junction1 P2 as Connection17
-            
             connect P4 Gain2.in as Connection12
-            
             connect "Unit Delay1.in" Junction1 as Connection19
-            
-            
-    
-            
-            /*
-                Masks
-            */
+
             mask {
                 icon = "image(\'emr_images/emr_mono_physical_converter.svg\')"
-                
                 description = "Mono-physical converter block for Energetic Macroscopic Representation of models."
+
+                CODE open
+                    from typhoon.apps.schematic_editor.dialogs.component_property_dialogs.general import RegularComponentPropertiesDialog
                 
-        	
-            CODE component_open
-                from typhoon.apps.schematic_editor.dialogs.component_property_dialogs.general import RegularComponentPropertiesDialog
-            
-                dialog = RegularComponentPropertiesDialog(
-                    component=component,
-                    property_container=component.masks[-1],
-                    current_diagram=current_diagram
-                )
-                dialog.exec_()
-                
-            ENDCODE
+                    dialog = RegularComponentPropertiesDialog(
+                        component=component,
+                        property_container=component.masks[-1],
+                        current_diagram=current_diagram
+                    )
+                    dialog.exec_()
+                    
+                ENDCODE
             }
         }
         [
             position = 8808, 8144
             size = 80, 64
         ]
-        
+
         component Subsystem Wheel {
             layout = static
-    
-            
             component gen_gain Gain1 {
-                
                 gain = "1/MTp_R_wheel"
-    	    
             }
             [
                 position = 7488, 7976
             ]
-            
+
             component gen_product Product1 {
-                
-    	    
             }
             [
                 position = 7624, 8024
             ]
-            
+
             component gen_gain Gain2 {
-                
                 gain = "1/MTp_R_wheel"
-    	    
             }
             [
                 position = 7488, 8072
                 scale = -1, 1
             ]
-            
+
             component gen_probe P_ev {
-                
-    	    
             }
             [
                 position = 7736, 8024
             ]
-            
-            
-            
-            
+
+            port P1 {
+                position = -40.0, -16.0
+                kind = sp
+                direction =  out
+                sp_type {
+                    default = auto
+                }
+            }
+            [
+                position = 7256, 7976
+                hide_name = True
+            ]
+
+            port P2 {
+                position = -40.0, 16.0
+                kind = sp
+                direction =  in
+                sp_type {
+                    default = inherit
+                }
+            }
+            [
+                position = 7256, 8072
+                hide_name = True
+                scale = -1, 1
+            ]
+
+            port P3 {
+                position = 40.0, -16.0
+                kind = sp
+                direction =  in
+                sp_type {
+                    default = inherit
+                }
+            }
+            [
+                position = 8040, 7976
+                hide_name = True
+            ]
+
+            port P4 {
+                position = 40.0, 16.0
+                kind = sp
+                direction =  out
+                sp_type {
+                    default = auto
+                }
+            }
+            [
+                position = 8040, 8072
+                hide_name = True
+                scale = -1, 1
+            ]
+
             tag Goto1 {
                 value = "P_ev"
                 scope = global
@@ -3464,196 +2530,82 @@ model "ev_closed_loop" {
             [
                 position = 7792, 7992
             ]
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            port P1 {
-                
-                position = -40.0, -16.0
-                kind = sp
-                direction = out
-                sp_type {
-                    default = auto
-                }
-            }
-            [
-                position = 7256, 7976
-                hide_name = True
-                size = 0, 0
-            ]
-            
-            port P2 {
-                
-                position = -40.0, 16.0
-                kind = sp
-                direction = in
-                sp_type {
-                    default = inherit
-                }
-            }
-            [
-                position = 7256, 8072
-                hide_name = True
-                scale = -1, 1
-                size = 0, 0
-            ]
-            
-            port P3 {
-                
-                position = 40.0, -16.0
-                kind = sp
-                direction = in
-                sp_type {
-                    default = inherit
-                }
-            }
-            [
-                position = 8040, 7976
-                hide_name = True
-                size = 0, 0
-            ]
-            
-            port P4 {
-                
-                position = 40.0, 16.0
-                kind = sp
-                direction = out
-                sp_type {
-                    default = auto
-                }
-            }
-            [
-                position = 8040, 8072
-                hide_name = True
-                scale = -1, 1
-                size = 0, 0
-            ]
-            
+
             junction Junction1 sp
             [
                 position = 7568, 7976
             ]
-            
+
             junction Junction2 sp
             [
                 position = 7568, 8072
             ]
-            
+
             junction Junction3 sp
             [
                 position = 7568, 7976
             ]
-            
+
             junction Junction4 sp
             [
                 position = 7568, 8072
             ]
-            
+
             junction Junction5 sp
             [
                 position = 7680, 8024
             ]
+
             connect Gain1.out Junction3 as Connection14
-            
             connect Gain2.in Junction4 as Connection17
-            
             connect Gain2.out P2 as Connection13
-            
             connect Goto1 Junction5 as Connection22
-            
             connect Junction3 Junction1 as Connection15
-            
             connect Junction4 Junction2 as Connection18
-            
             connect Junction5 P_ev.in as Connection21
-            
             connect P1 Gain1.in as Connection12
-            
             connect P3 Junction3 as Connection16
-            
             connect P4 Junction4 as Connection19
-            
             connect Product1.in Junction1 as Connection8
-            
             connect Product1.in1 Junction2 as Connection11
-            
             connect Product1.out Junction5 as Connection20
-            
-            
-    
-            
-            /*
-                Masks
-            */
+
             mask {
                 icon = "image(\'emr_images/emr_mono_physical_converter.svg\')"
-                
                 description = "Mono-physical converter block for Energetic Macroscopic Representation of models."
+
+                CODE open
+                    from typhoon.apps.schematic_editor.dialogs.component_property_dialogs.general import RegularComponentPropertiesDialog
                 
-        	
-            CODE component_open
-                from typhoon.apps.schematic_editor.dialogs.component_property_dialogs.general import RegularComponentPropertiesDialog
-            
-                dialog = RegularComponentPropertiesDialog(
-                    component=component,
-                    property_container=component.masks[-1],
-                    current_diagram=current_diagram
-                )
-                dialog.exec_()
-                
-            ENDCODE
+                    dialog = RegularComponentPropertiesDialog(
+                        component=component,
+                        property_container=component.masks[-1],
+                        current_diagram=current_diagram
+                    )
+                    dialog.exec_()
+                    
+                ENDCODE
             }
         }
         [
             position = 8984, 8144
             size = 80, 64
         ]
-        
+
         component Subsystem "EM Conversion Inversion" {
             layout = static
-    
-            
             component gen_gain Gain1 {
-                
                 gain = "1.0/EMp_K_em"
-    	    
             }
             [
                 position = 7648, 8000
                 scale = -1, 1
             ]
-            
-            
-            
-            
-            
-            
+
             port P1 {
-                
                 position = -40.0, 0.0
                 kind = sp
-                direction = in
+                direction =  in
                 sp_type {
                     default = inherit
                 }
@@ -3662,14 +2614,12 @@ model "ev_closed_loop" {
                 position = 7256, 8000
                 hide_name = True
                 scale = -1, 1
-                size = 0, 0
             ]
-            
+
             port P2 {
-                
                 position = 40.0, 0.0
                 kind = sp
-                direction = out
+                direction =  out
                 sp_type {
                     default = auto
                 }
@@ -3678,66 +2628,47 @@ model "ev_closed_loop" {
                 position = 8040, 8000
                 hide_name = True
                 scale = -1, 1
-                size = 0, 0
             ]
+
             connect Gain1.out P1 as Connection1
-            
             connect Gain1.in P2 as Connection2
-            
-            
-    
-            
-            /*
-                Masks
-            */
+
             mask {
                 icon = "image(\'emr_images/emr_direct_inversion.svg\')"
-                
                 description = "Direct Inversion with or without disturbance rejection. Disturbance rejection can be enabled."
+
+                CODE open
+                    from typhoon.apps.schematic_editor.dialogs.component_property_dialogs.general import RegularComponentPropertiesDialog
                 
-        	
-            CODE component_open
-                from typhoon.apps.schematic_editor.dialogs.component_property_dialogs.general import RegularComponentPropertiesDialog
-            
-                dialog = RegularComponentPropertiesDialog(
-                    component=component,
-                    property_container=component.masks[-1],
-                    current_diagram=current_diagram
-                )
-                dialog.exec_()
-                
-            ENDCODE
+                    dialog = RegularComponentPropertiesDialog(
+                        component=component,
+                        property_container=component.masks[-1],
+                        current_diagram=current_diagram
+                    )
+                    dialog.exec_()
+                    
+                ENDCODE
             }
         }
         [
             position = 8648, 8432
             size = 80, 64
         ]
-        
+
         component Subsystem "Gerbox Inversion" {
             layout = static
-    
-            
             component gen_gain Gain1 {
-                
                 gain = "1.0/MTp_K_gear"
-    	    
             }
             [
                 position = 7648, 8000
                 scale = -1, 1
             ]
-            
-            
-            
-            
-            
-            
+
             port P1 {
-                
                 position = -40.0, 0.0
                 kind = sp
-                direction = in
+                direction =  in
                 sp_type {
                     default = inherit
                 }
@@ -3746,14 +2677,12 @@ model "ev_closed_loop" {
                 position = 7256, 8000
                 hide_name = True
                 scale = -1, 1
-                size = 0, 0
             ]
-            
+
             port P2 {
-                
                 position = 40.0, 0.0
                 kind = sp
-                direction = out
+                direction =  out
                 sp_type {
                     default = auto
                 }
@@ -3762,66 +2691,47 @@ model "ev_closed_loop" {
                 position = 8040, 8000
                 hide_name = True
                 scale = -1, 1
-                size = 0, 0
             ]
+
             connect Gain1.out P1 as Connection1
-            
             connect Gain1.in P2 as Connection2
-            
-            
-    
-            
-            /*
-                Masks
-            */
+
             mask {
                 icon = "image(\'emr_images/emr_direct_inversion.svg\')"
-                
                 description = "Direct Inversion with or without disturbance rejection. Disturbance rejection can be enabled."
+
+                CODE open
+                    from typhoon.apps.schematic_editor.dialogs.component_property_dialogs.general import RegularComponentPropertiesDialog
                 
-        	
-            CODE component_open
-                from typhoon.apps.schematic_editor.dialogs.component_property_dialogs.general import RegularComponentPropertiesDialog
-            
-                dialog = RegularComponentPropertiesDialog(
-                    component=component,
-                    property_container=component.masks[-1],
-                    current_diagram=current_diagram
-                )
-                dialog.exec_()
-                
-            ENDCODE
+                    dialog = RegularComponentPropertiesDialog(
+                        component=component,
+                        property_container=component.masks[-1],
+                        current_diagram=current_diagram
+                    )
+                    dialog.exec_()
+                    
+                ENDCODE
             }
         }
         [
             position = 8816, 8432
             size = 80, 64
         ]
-        
+
         component Subsystem "Wheel Inversion" {
             layout = static
-    
-            
             component gen_gain Gain1 {
-                
                 gain = "MTp_R_wheel"
-    	    
             }
             [
                 position = 7632, 8000
                 scale = -1, 1
             ]
-            
-            
-            
-            
-            
-            
+
             port P1 {
-                
                 position = -40.0, 0.0
                 kind = sp
-                direction = in
+                direction =  in
                 sp_type {
                     default = inherit
                 }
@@ -3830,14 +2740,12 @@ model "ev_closed_loop" {
                 position = 7256, 8000
                 hide_name = True
                 scale = -1, 1
-                size = 0, 0
             ]
-            
+
             port P2 {
-                
                 position = 40.0, 0.0
                 kind = sp
-                direction = out
+                direction =  out
                 sp_type {
                     default = auto
                 }
@@ -3846,102 +2754,74 @@ model "ev_closed_loop" {
                 position = 8040, 8000
                 hide_name = True
                 scale = -1, 1
-                size = 0, 0
             ]
+
             connect Gain1.out P1 as Connection1
-            
             connect Gain1.in P2 as Connection2
-            
-            
-    
-            
-            /*
-                Masks
-            */
+
             mask {
                 icon = "image(\'emr_images/emr_direct_inversion.svg\')"
-                
                 description = "Direct Inversion with or without disturbance rejection. Disturbance rejection can be enabled."
+
+                CODE open
+                    from typhoon.apps.schematic_editor.dialogs.component_property_dialogs.general import RegularComponentPropertiesDialog
                 
-        	
-            CODE component_open
-                from typhoon.apps.schematic_editor.dialogs.component_property_dialogs.general import RegularComponentPropertiesDialog
-            
-                dialog = RegularComponentPropertiesDialog(
-                    component=component,
-                    property_container=component.masks[-1],
-                    current_diagram=current_diagram
-                )
-                dialog.exec_()
-                
-            ENDCODE
+                    dialog = RegularComponentPropertiesDialog(
+                        component=component,
+                        property_container=component.masks[-1],
+                        current_diagram=current_diagram
+                    )
+                    dialog.exec_()
+                    
+                ENDCODE
             }
         }
         [
             position = 9000, 8432
             size = 80, 64
         ]
-        
+
         component Subsystem Power_Energy {
             layout = dynamic
-    
-            
             component gen_integrator Integrator1 {
-                
-    	    
             }
             [
                 position = 7992, 7952
             ]
-            
+
             component gen_sum Sum1 {
-                
                 signs = "+-"
-    	    
             }
             [
                 position = 7928, 8096
             ]
-            
+
             component gen_abs Abs1 {
-                
-    	    
             }
             [
                 position = 8016, 8096
             ]
-            
+
             component gen_probe Energy {
-                
-    	    
             }
             [
                 position = 8128, 7952
             ]
-            
+
             component gen_probe Power {
-                
                 signal_type = "power"
-    	    
             }
             [
                 position = 8128, 8024
             ]
-            
+
             component gen_probe Losses {
-                
                 signal_type = "power"
-    	    
             }
             [
                 position = 8128, 8096
             ]
-            
-            
-            
-            
-            
-            
+
             tag From1 {
                 value = "P_bat"
                 scope = global
@@ -3951,7 +2831,7 @@ model "ev_closed_loop" {
             [
                 position = 7816, 7952
             ]
-            
+
             tag From2 {
                 value = "P_ev"
                 scope = global
@@ -3961,87 +2841,54 @@ model "ev_closed_loop" {
             [
                 position = 7816, 8104
             ]
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
+
             junction Junction1 sp
             [
                 position = 7872, 7952
             ]
-            
+
             junction Junction2 sp
             [
                 position = 7872, 8024
             ]
+
             connect Abs1.out Losses.in as Connection6
-            
             connect Abs1.in Sum1.out as Connection7
-            
             connect From1 Junction1 as Connection3
-            
             connect From2 Sum1.in1 as Connection8
-            
             connect Integrator1.out Energy.in as Connection1
-            
             connect Junction1 Integrator1.in as Connection4
-            
             connect Junction2 Junction1 as Connection10
-            
             connect Power.in Junction2 as Connection9
-            
             connect Sum1.in Junction2 as Connection11
-            
-            
-    
-            
         }
         [
             position = 9504, 8136
             size = 80, 112
         ]
-        
+
         component Subsystem "Electric Variables" {
             layout = dynamic
-    
-            
             component gen_probe "modulation ratio" {
-                
-    	    
             }
             [
                 position = 8128, 7952
             ]
-            
+
             component gen_probe "chopper voltage" {
-                
                 signal_type = "voltage"
-    	    
             }
             [
                 position = 8128, 8024
             ]
-            
+
             component gen_probe "battery current" {
-                
                 signal_type = "current"
-    	    
             }
             [
                 position = 8128, 8096
             ]
-            
-            
-            
+
             tag From2 {
                 value = "i_ch"
                 scope = global
@@ -4051,7 +2898,7 @@ model "ev_closed_loop" {
             [
                 position = 7816, 8096
             ]
-            
+
             tag From1 {
                 value = "m_ch"
                 scope = global
@@ -4061,7 +2908,7 @@ model "ev_closed_loop" {
             [
                 position = 7816, 7952
             ]
-            
+
             tag From4 {
                 value = "u_ch"
                 scope = global
@@ -4071,83 +2918,55 @@ model "ev_closed_loop" {
             [
                 position = 7816, 8024
             ]
-            
-            
-            
-            
+
             connect From1 "modulation ratio.in" as Connection15
-            
             connect From2 "battery current.in" as Connection14
-            
             connect From4 "chopper voltage.in" as Connection13
-            
-            
-    
-            
         }
         [
             position = 9504, 8288
             size = 80, 112
         ]
-        
+
         component Subsystem "Mechanical Variables" {
             layout = dynamic
-    
-            
             component gen_integrator Integrator1 {
-                
-    	    
             }
             [
                 position = 7976, 7952
             ]
-            
+
             component gen_probe Distance {
-                
-    	    
             }
             [
                 position = 8128, 7952
             ]
-            
+
             component gen_probe Velocity {
-                
-    	    
             }
             [
                 position = 8128, 8024
             ]
-            
+
             component gen_probe "Reference Velocity" {
-                
-    	    
             }
             [
                 position = 8128, 8096
             ]
-            
+
             component gen_probe Torque {
-                
                 signal_type = "torque"
-    	    
             }
             [
                 position = 8128, 8168
             ]
-            
+
             component gen_probe "Iresistive Force" {
-                
-    	    
             }
             [
                 position = 8128, 8240
             ]
-            
-            
-            
-            
-            
-            
+
             tag From1 {
                 value = "V_ev"
                 scope = global
@@ -4157,7 +2976,7 @@ model "ev_closed_loop" {
             [
                 position = 7816, 8024
             ]
-            
+
             tag From3 {
                 value = "F_res"
                 scope = global
@@ -4167,7 +2986,7 @@ model "ev_closed_loop" {
             [
                 position = 7816, 8240
             ]
-            
+
             tag From2 {
                 value = "T_dcm"
                 scope = global
@@ -4177,7 +2996,7 @@ model "ev_closed_loop" {
             [
                 position = 7816, 8168
             ]
-            
+
             tag From4 {
                 value = "V_ref"
                 scope = global
@@ -4187,7 +3006,7 @@ model "ev_closed_loop" {
             [
                 position = 7816, 8096
             ]
-            
+
             tag From5 {
                 value = "V_ev_ms"
                 scope = global
@@ -4197,54 +3016,19 @@ model "ev_closed_loop" {
             [
                 position = 7816, 7952
             ]
-            
-            
-            
-            
-            
-            
-            
+
             connect From3 "Iresistive Force.in" as Connection12
-            
             connect From4 "Reference Velocity.in" as Connection14
-            
             connect From5 Integrator1.in as Connection18
-            
             connect Integrator1.out Distance.in as Connection1
-            
             connect Torque.in From2 as Connection16
-            
             connect Velocity.in From1 as Connection17
-            
-            
-    
-            
         }
         [
             position = 9504, 8440
             size = 80, 112
         ]
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+
         tag Goto1 {
             value = "V_ev"
             scope = global
@@ -4253,8 +3037,9 @@ model "ev_closed_loop" {
         }
         [
             position = 9384, 8248
+            size = 60, 20
         ]
-        
+
         tag Goto2 {
             value = "V_ref"
             scope = global
@@ -4263,8 +3048,9 @@ model "ev_closed_loop" {
         }
         [
             position = 9392, 8536
+            size = 60, 20
         ]
-        
+
         tag Goto3 {
             value = "V_ev_ms"
             scope = global
@@ -4273,222 +3059,136 @@ model "ev_closed_loop" {
         }
         [
             position = 9384, 8304
+            size = 60, 20
         ]
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+
         junction Junction4 sp
         [
             position = 9216, 8160
         ]
-        
+
         junction Junction5 sp
         [
             position = 9224, 8128
         ]
-        
+
         junction Junction9 sp
         [
             position = 9224, 8248
         ]
-        
+
         junction Junction11 sp
         [
             position = 8528, 8160
         ]
-        
+
         junction Junction12 sp
         [
             position = 8536, 8128
         ]
-        
+
         junction Junction13 sp
         [
             position = 8208, 8128
         ]
-        
+
         junction Junction14 sp
         [
             position = 9080, 8432
         ]
-        
+
         junction Junction15 sp
         [
             position = 9240, 8448
         ]
-        
+
         junction Junction16 sp
         [
             position = 9248, 8248
         ]
+
         connect "Armature Winding.P1" Chopper.P3 as Connection71
-        
         connect "Armature Winding.P4" Junction11 as Connection81
-        
         connect "Armature Winding.P3" Junction12 as Connection84
-        
         connect Battery.P2 Chopper.P2 as Connection69
-        
         connect Chassis.P3 Junction5 as Connection36
-        
         connect Chassis.P2 Wheel.P4 as Connection92
-        
         connect "Chassis Inversion.P4" Junction15 as Connection124
-        
         connect "Chassis Inversion.P2" Junction4 as Connection121
         [
-            breakpoints =9216, 8312
+            breakpoints = 9216, 8312
         ]
         connect "Chassis Inversion.P3" Junction9 as Connection120
         [
-            breakpoints =9224, 8352
+            breakpoints = 9224, 8352
         ]
         connect Chopper.P4 "Armature Winding.P2" as Connection70
-        
         connect Chopper.P1 Junction13 as Connection98
-        
         connect "Chopper Inversion.P2" "Armature Winding Inversion.P1" as Connection72
-        
         connect "Chopper Inversion.P1" Chopper.P5 as Connection117
-        
         connect "Chopper Inversion.P3" Junction13 as Connection100
         [
-            breakpoints =8280, 8216;8208, 8216
+            breakpoints = 8280, 8216; 8208, 8216
         ]
         connect "EM Conversion.P4" Gearbox.P2 as Connection90
-        
         connect "EM Conversion.P2" Junction11 as Connection83
-        
         connect "EM Conversion.P1" Junction12 as Connection86
-        
         connect "EM Conversion Inversion.P1" "Armature Winding Inversion.P4" as Connection96
-        
         connect Enviroment.P1 Junction4 as Connection33
-        
         connect Gearbox.P1 "EM Conversion.P3" as Connection89
-        
         connect Gearbox.P3 Wheel.P1 as Connection118
         [
-            breakpoints =8888, 8128
+            breakpoints = 8888, 8128
         ]
         connect "Gerbox Inversion.P1" "EM Conversion Inversion.P2" as Connection94
-        
         connect Goto1 ms_to_kmh1.out as Connection119
-        
         connect Goto2 ms_to_kmh2.out as Connection127
-        
         connect Goto3 Junction16 as Connection130
-        
         connect Junction11 "Armature Winding Inversion.P2" as Connection82
         [
-            breakpoints =8528, 8160
+            breakpoints = 8528, 8160
         ]
         connect Junction12 "Armature Winding Inversion.P3" as Connection85
         [
-            breakpoints =8536, 8128
+            breakpoints = 8536, 8128
         ]
         connect Junction13 Battery.P1 as Connection99
         [
-            breakpoints =8208, 8128
+            breakpoints = 8208, 8128
         ]
         connect Junction14 "Chassis Inversion.P1" as Connection102
-        
         connect Junction15 Reference.out as Connection125
         [
-            breakpoints =9240, 8448
+            breakpoints = 9240, 8448
         ]
         connect Junction16 Junction9 as Connection129
-        
         connect Junction4 Chassis.P4 as Connection34
-        
         connect Junction5 Enviroment.P2 as Connection37
-        
         connect Junction9 Junction5 as Connection66
-        
         connect Wheel.P3 Chassis.P1 as Connection91
-        
         connect Wheel.P2 Gearbox.P4 as Connection88
-        
         connect "Wheel Inversion.P1" "Gerbox Inversion.P2" as Connection93
-        
         connect "Wheel Inversion.P2" Junction14 as Connection101
-        
         connect ch_inv_out.in Junction14 as Connection103
-        
         connect ms_to_kmh1.in Junction16 as Connection128
-        
         connect ms_to_kmh2.in Junction15 as Connection126
-        
-        
-
-        
     }
 
-    
-    
     default {
-        
         gen_abs {
             execution_rate = "inherit"
         }
-        
+
         gen_gain {
             gain = "1"
             multiplication = "Element-wise(K.*u)"
+            _tunable = "False"
             execution_rate = "inherit"
         }
-        
+
         gen_integrator {
             show_reset = "none"
+            reset_type = "asynchronous"
             show_init_condition = "internal"
             init_value = "0"
             limit_output = "False"
@@ -4498,47 +3198,49 @@ model "ev_closed_loop" {
             state_port_type = "inherit"
             execution_rate = "inherit"
         }
-        
+
         gen_limiter {
             upper_limit = "[\'inf\']"
             lower_limit = "[\'-inf\']"
             execution_rate = "inherit"
         }
-        
+
         gen_probe {
             addr = "0"
             override_signal_name = "False"
             signal_name = ""
             signal_type = "generic"
+            streaming_en = "False"
+            streaming_er_idx = "0"
             execution_rate = "inherit"
         }
-        
+
         gen_product {
             signs = "2"
             execution_rate = "inherit"
         }
-        
+
         gen_sum {
             signs = "2"
             execution_rate = "inherit"
         }
-        
+
         gen_z_domain_transfer {
             domain = "Z-domain"
             method = "Zero-order hold"
-            b_coeff = "[1]"
-            a_coeff = "[1,-1]"
-            init_states = "0"
+            b_coeff = "[1,1]"
+            a_coeff = "[1,1]"
             signal_out_type = "inherit"
             execution_rate = "inherit"
         }
-        
+
         src_constant {
             value = "1"
             signal_type = "real"
             execution_rate = "100e-6"
+            _tunable = "False"
         }
-        
+
         src_scada_input {
             addr = "0"
             format = "real"
@@ -4551,18 +3253,18 @@ model "ev_closed_loop" {
             unit = " "
             execution_rate = "100e-6"
         }
-        
+
         sys_mp_signal_switch {
-            number_of_input_terminals = "1"
+            number_of_input_terminals = "2"
             execution_rate = "inherit"
         }
-        
+
         sys_signal_switch {
             criterion = "ctrl >= threshold"
             threshold = "0"
             execution_rate = "inherit"
         }
-        
+
         tm_delay {
             init_value = "0"
             signal_out_type = "inherit"
