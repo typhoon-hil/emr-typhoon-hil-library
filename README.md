@@ -1,10 +1,10 @@
 # Energetic Macroscopic Representation Library for Typhoon HIL Schematic Editor
 
+- [EMR Library description](#emr-library-description)
 - [Getting Started](#getting-started)
   - [Typhoon HIL Control Center](#typhoon-hil-control-center)
   - [GitHub repository](#github-repository)
   - [EMR Library in Schematic Editor](#emr-library-in-schematic-editor)
-- [EMR Library description](#emr-library-description)
 - [Contribution guide](#contribution-guide)
   - [Reporting bugs](#reporting-bugs)
   - [Contributing examples](#contributing-examples)
@@ -14,6 +14,21 @@
     - [Adding component image](#adding-component-image)
     - [License](#license)
 - [Useful links](#useful-links)
+
+## EMR Library description
+Energetic Macroscopic Representation (EMR) is a graphical tool used to organize simulation models. 
+EMR formalism is based on action reaction principle, which organizes the system model as interconnected subsystems according to 
+the integral causality. An inversion of this description leads to macro-control blocks.
+
+EMR formalism has been introduced for research development in complex electromechanical drives (Bouscayrol et al., 2000) [1].
+Additional information about the EMR methodology and its applications can be found at the [EMR website](http://www.emrwebsite.org/), 
+hosted by the University of Lille.
+
+EMR library in Typhoon HIL Schematic Editor is comprised of components which implement EMR pictograms.
+EMR pictograms for simulation, estimation, control, and power adaptation are supported.  
+The components are implemented as empty subsystems.
+
+Examples of using EMR formalism to model an electric vehicle can be found in the *examples* directory of this repository.
 
 ## Getting started
 1. Download and install Typhoon HIL Control Center,
@@ -45,18 +60,6 @@ A quick guide for including the EMR library in the Schematic Editor is provided.
 Once the described steps have been carried out, the library will be automatically loaded the next time Schematic Editor is opened.   
 
 More detailed description of the steps for including libraries in the Schematic Editor, as well as some additonal options can be found in the [Loading libraries guide](https://www.typhoon-hil.com/documentation/typhoon-hil-software-manual/concepts/loading_a_library_in_library_browser.html). 
-
-## EMR Library description
-EMR formalism is used to organize simulation models.
-
-EMR is based on action reaction principle, which organizes the system model as interconnected subsystems according to 
-the integral causality. An inversion of this description leads to macro-control blocks. [1]
-
-EMR library in Typhoon HIL Schematic Editor is comprised of components which implement EMR pictograms.
-EMR pictograms for simulation, estimation, control, and power adaptation are supported.  
-The components are implemented as empty subsystems.
-
-Examples of using EMR formalism to model an electric vehicle can be found in the *examples* directory of this repository.
 
 ## Contribution guide
 Any contributions and suggestions for new features would be greatly appreciated!
@@ -192,7 +195,10 @@ In short, when you submit code changes, your submissions are understood to be un
 that covers the project. Feel free to contact the maintainers if that's a concern.
 
 ## Useful links
-[1] [EMR website](http://www.emrwebsite.org/) (hosted by the University of Lille)
+[1] A. Bouscayrol, B. Davat, B. de Fornel, B. François, J. P. Hautier, F. Meibody-Tabar, M. Pietrzak-David, 
+[*Multi-converter multi-machine systems: application for electromechanical drives*](https://doi.org/10.1051/epjap:2000124), 
+EPJ Applied Physics, vol. 10, no. 2, May 2000, pp. 131-147.
 
-[2] A. Genic, C. Mayet, M. Almeida, A. Bouscayrol, N. Stojkov. [*EMR-Based Signal-HIL Testing of an Electric Vehicle Control*](https://ieeexplore.ieee.org/document/8331047), 
-2017 IEEE Vehicle Power and Propulsion Conference (VPPC), Belfort, France, 2017.
+[2] A. Genic, C. Mayet, M. Almeida, A. Bouscayrol, N. Stojkov. 
+[*EMR-Based Signal-HIL Testing of an Electric Vehicle Control*](https://doi.org/10.1109/VPPC.2017.8331047), 
+2017 IEEE Vehicle Power and Propulsion Conference (VPPC), 2017, pp. 1-6
