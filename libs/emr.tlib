@@ -114,8 +114,12 @@ library "EMR Library" {
                 ENDCODE
             }
 
-            CODE component_init
-                component.unlink()
+            CODE init
+                try:
+                    comp_handle = mdl.get_sub_level_handle(item_handle)
+                    mdl.unlink_component(comp_handle)
+                except:
+                    pass
             ENDCODE
         }
 
@@ -205,8 +209,12 @@ library "EMR Library" {
                 ENDCODE
             }
 
-            CODE component_init
-                component.unlink()
+            CODE init
+                try:
+                    comp_handle = mdl.get_sub_level_handle(item_handle)
+                    mdl.unlink_component(comp_handle)
+                except:
+                    pass
             ENDCODE
 
         }
@@ -278,8 +286,12 @@ library "EMR Library" {
                 ENDCODE
             }
 
-            CODE component_init
-                component.unlink()
+            CODE init
+                try:
+                    comp_handle = mdl.get_sub_level_handle(item_handle)
+                    mdl.unlink_component(comp_handle)
+                except:
+                    pass
             ENDCODE
         }
         
@@ -360,8 +372,12 @@ library "EMR Library" {
                 ENDCODE
             }
 
-            CODE component_init
-                component.unlink()
+            CODE init
+                try:
+                    comp_handle = mdl.get_sub_level_handle(item_handle)
+                    mdl.unlink_component(comp_handle)
+                except:
+                    pass
             ENDCODE
         }
 
@@ -432,8 +448,12 @@ library "EMR Library" {
                 ENDCODE
             }
 
-            CODE component_init
-                component.unlink()
+            CODE init
+                try:
+                    comp_handle = mdl.get_sub_level_handle(item_handle)
+                    mdl.unlink_component(comp_handle)
+                except:
+                    pass
             ENDCODE
         }
         
@@ -514,8 +534,12 @@ library "EMR Library" {
                 ENDCODE
             }
 
-            CODE component_init
-                component.unlink()
+            CODE init
+                try:
+                    comp_handle = mdl.get_sub_level_handle(item_handle)
+                    mdl.unlink_component(comp_handle)
+                except:
+                    pass
             ENDCODE
         }
 
@@ -586,8 +610,12 @@ library "EMR Library" {
                 ENDCODE
             }
 
-            CODE component_init
-                component.unlink()
+            CODE init
+                try:
+                    comp_handle = mdl.get_sub_level_handle(item_handle)
+                    mdl.unlink_component(comp_handle)
+                except:
+                    pass
             ENDCODE
 
         }
@@ -640,8 +668,12 @@ library "EMR Library" {
                 ENDCODE
             }
 
-            CODE component_init
-                component.unlink()
+            CODE init
+                try:
+                    comp_handle = mdl.get_sub_level_handle(item_handle)
+                    mdl.unlink_component(comp_handle)
+                except:
+                    pass
             ENDCODE
 
         }
@@ -685,8 +717,12 @@ library "EMR Library" {
                 description = "Weighting coupling inversion."
             }
 
-            CODE component_init
-                component.unlink()
+            CODE init
+                try:
+                    comp_handle = mdl.get_sub_level_handle(item_handle)
+                    mdl.unlink_component(comp_handle)
+                except:
+                    pass
             ENDCODE
 
         }
@@ -740,8 +776,12 @@ library "EMR Library" {
                 description = "Weighting coupling inversion with control."
             }
 
-            CODE component_init
-                component.unlink()
+            CODE init
+                try:
+                    comp_handle = mdl.get_sub_level_handle(item_handle)
+                    mdl.unlink_component(comp_handle)
+                except:
+                    pass
             ENDCODE
 
         }
@@ -785,8 +825,12 @@ library "EMR Library" {
                 description = "Distribution coupling inversion."
             }
 
-            CODE component_init
-                component.unlink()
+            CODE init
+                try:
+                    comp_handle = mdl.get_sub_level_handle(item_handle)
+                    mdl.unlink_component(comp_handle)
+                except:
+                    pass
             ENDCODE
         }
         
@@ -839,8 +883,12 @@ library "EMR Library" {
                 description = "Distribution coupling inversion with control"
             }
 
-            CODE component_init
-                component.unlink()
+            CODE init
+                try:
+                    comp_handle = mdl.get_sub_level_handle(item_handle)
+                    mdl.unlink_component(comp_handle)
+                except:
+                    pass
             ENDCODE
         }
 
@@ -892,8 +940,12 @@ library "EMR Library" {
                 description = "Indirect inversion."
             }
 
-            CODE component_init
-                component.unlink()
+            CODE init
+                try:
+                    comp_handle = mdl.get_sub_level_handle(item_handle)
+                    mdl.unlink_component(comp_handle)
+                except:
+                    pass
             ENDCODE
 
         }
@@ -927,8 +979,12 @@ library "EMR Library" {
                 description = "Direct inversion."
             }
 
-            CODE component_init
-                component.unlink()
+            CODE init
+                try:
+                    comp_handle = mdl.get_sub_level_handle(item_handle)
+                    mdl.unlink_component(comp_handle)
+                except:
+                    pass
             ENDCODE
 
         }
@@ -972,8 +1028,12 @@ library "EMR Library" {
                 description = "Direct inversion with disturbance rejection."
             }
 
-            CODE component_init
-                component.unlink()
+            CODE init
+                try:
+                    comp_handle = mdl.get_sub_level_handle(item_handle)
+                    mdl.unlink_component(comp_handle)
+                except:
+                    pass
             ENDCODE
 
         }
@@ -1025,8 +1085,12 @@ library "EMR Library" {
                 description = "Power Adaptation block for Energetic Macroscopic Representation of models."
             }
 
-            CODE component_init
-                component.unlink()
+            CODE init
+                try:
+                    comp_handle = mdl.get_sub_level_handle(item_handle)
+                    mdl.unlink_component(comp_handle)
+                except:
+                    pass
             ENDCODE
         }
 
@@ -1068,8 +1132,12 @@ library "EMR Library" {
                 description = "Estimation block for Energetic Macroscopic Representation of models."
             }
 
-            CODE component_init
-                component.unlink()
+            CODE init
+                try:
+                    comp_handle = mdl.get_sub_level_handle(item_handle)
+                    mdl.unlink_component(comp_handle)
+                except:
+                    pass
             ENDCODE
         }
 
@@ -1101,8 +1169,12 @@ library "EMR Library" {
                 description = "Estimation source block for Energetic Macroscopic Representation of models."
             }
 
-            CODE component_init
-                component.unlink()
+            CODE init
+                try:
+                    comp_handle = mdl.get_sub_level_handle(item_handle)
+                    mdl.unlink_component(comp_handle)
+                except:
+                    pass
             ENDCODE
 
         }
@@ -1135,8 +1207,12 @@ library "EMR Library" {
                 description = "Control strategy block for Energetic Macroscopic Representation of models."
             }
 
-            CODE component_init
-                component.unlink()
+            CODE init
+                try:
+                    comp_handle = mdl.get_sub_level_handle(item_handle)
+                    mdl.unlink_component(comp_handle)
+                except:
+                    pass
             ENDCODE
 
         }
