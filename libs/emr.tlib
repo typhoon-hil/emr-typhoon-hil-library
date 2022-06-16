@@ -122,6 +122,10 @@ library "EMR Library" {
                     pass
             ENDCODE
         }
+        [
+            position = 5064, 4216
+            size = 96, 160
+        ]
 
         component Subsystem "Mono-Physical Coupling" {
             layout = static
@@ -218,6 +222,10 @@ library "EMR Library" {
             ENDCODE
 
         }
+        [
+            position = 4880, 4216
+            size = 96, 160
+        ]
 
         component Subsystem "Multi-Physical Converter" {
             layout = static
@@ -294,6 +302,10 @@ library "EMR Library" {
                     pass
             ENDCODE
         }
+        [
+            position = 4336, 4168
+            size = 80, 64
+        ]
         
         component Subsystem "Multi-Physical Converter with Control" {
             layout = static
@@ -380,6 +392,10 @@ library "EMR Library" {
                     pass
             ENDCODE
         }
+        [
+            position = 4336, 4264
+            size = 80, 64
+        ]
 
         component Subsystem "Mono-Physical Converter" {
             layout = static
@@ -456,6 +472,10 @@ library "EMR Library" {
                     pass
             ENDCODE
         }
+        [
+            position = 4576, 4160
+            size = 80, 64
+        ]
         
         component Subsystem "Mono-Physical Converter with Control" {
             layout = static
@@ -542,6 +562,10 @@ library "EMR Library" {
                     pass
             ENDCODE
         }
+        [
+            position = 4576, 4264
+            size = 80, 64
+        ]
 
         component Subsystem "Energy Accumulation" {
             layout = static
@@ -619,6 +643,10 @@ library "EMR Library" {
             ENDCODE
 
         }
+        [
+            position = 4728, 4056
+            size = 80, 64
+        ]
 
         component Subsystem "Energy Source" {
             layout = static
@@ -677,6 +705,10 @@ library "EMR Library" {
             ENDCODE
 
         }
+        [
+            position = 4336, 4064
+            size = 80, 64
+        ]
 
         component Subsystem "Coupling Inversion Weighting" {
             layout = static
@@ -726,6 +758,10 @@ library "EMR Library" {
             ENDCODE
 
         }
+        [
+            position = 5120, 4360
+            size = 80, 80
+        ]
         
         component Subsystem "Coupling Inversion Weighting with Control" {
             layout = static
@@ -785,6 +821,10 @@ library "EMR Library" {
             ENDCODE
 
         }
+        [
+            position = 5128, 4480
+            size = 80, 80
+        ]
 
         component Subsystem "Coupling Inversion Distribution" {
             layout = static
@@ -833,6 +873,10 @@ library "EMR Library" {
                     pass
             ENDCODE
         }
+        [
+            position = 4880, 4360
+            size = 80, 80
+        ]
         
         component Subsystem "Coupling Inversion Distribution with Control" {
             layout = static
@@ -891,6 +935,10 @@ library "EMR Library" {
                     pass
             ENDCODE
         }
+        [
+            position = 4864, 4480
+            size = 80, 80
+        ]
 
         component Subsystem "Indirect Inversion" {
             layout = static
@@ -949,6 +997,10 @@ library "EMR Library" {
             ENDCODE
 
         }
+        [
+            position = 4720, 4368
+            size = 80, 64
+        ]
 
         component Subsystem "Direct Inversion" {
             layout = static
@@ -988,6 +1040,10 @@ library "EMR Library" {
             ENDCODE
 
         }
+        [
+            position = 4576, 4368
+            size = 80, 64
+        ]
         
         component Subsystem "Direct Inversion with Disturbance Rejection" {
             layout = static
@@ -1037,6 +1093,10 @@ library "EMR Library" {
             ENDCODE
 
         }
+        [
+            position = 4576, 4488
+            size = 80, 64
+        ]
 
         component Subsystem "Power Adaptation" {
             layout = static
@@ -1093,6 +1153,10 @@ library "EMR Library" {
                     pass
             ENDCODE
         }
+        [
+            position = 4336, 4368
+            size = 80, 64
+        ]
 
         component Subsystem "Estimation Square" {
             layout = static
@@ -1140,6 +1204,10 @@ library "EMR Library" {
                     pass
             ENDCODE
         }
+        [
+            position = 4576, 4056
+            size = 80, 64
+        ]
 
         component Subsystem "Estimation Oval" {
             layout = static
@@ -1178,6 +1246,10 @@ library "EMR Library" {
             ENDCODE
 
         }
+        [
+            position = 4456, 4056
+            size = 80, 64
+        ]
 
         component Subsystem "Strategy" {
             layout = static
@@ -1216,5 +1288,9 @@ library "EMR Library" {
             ENDCODE
 
         }
+        [
+            position = 4336, 4488
+            size = 112, 48
+        ]
     }
 }
