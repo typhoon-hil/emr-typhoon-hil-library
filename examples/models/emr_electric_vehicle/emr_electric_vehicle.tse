@@ -1,8 +1,7 @@
 version = 4.2
 
 //
-// Saved by sw version: 2021.3
-// Save timestamp: 16-Sep-2021 @ 11:59:27 AM
+// Saved by sw version: 2022.2
 //
 
 model "emr_electric_vehicle" {
@@ -20,6 +19,7 @@ model "emr_electric_vehicle" {
         device_ao_limit_enable = False
         reset_analog_outputs_on_sim_stop = True
         reset_digital_outputs_on_sim_stop = True
+        vhil_adio_loopback = False
         cpl_stb = False
         enb_dep_sw_detect = False
         code_section = "internal memory"
@@ -35,6 +35,7 @@ model "emr_electric_vehicle" {
         cpl_dynamics_analysis = False
         export_ss_to_pickle = False
         ground_scope_core = False
+        dss_num_tol = 1e-15
         cce_platform = "generic"
         cce_use_relative_names = False
         cce_type_mapping_real = "double"
@@ -45,6 +46,14 @@ model "emr_electric_vehicle" {
         cce_custom_type_uint = ""
         cce_custom_type_real = ""
         tunable_params = "component defined"
+        sp_compiler_type = "C compiler"
+        sig_stim = "off"
+        export_resource_list = ""
+        export_dependency_list = ""
+        export_out_file = ""
+        export_lock_top_level = True
+        export_encrypt_library = True
+        export_encrypt_resources = True
     }
 
     component Subsystem Root {
@@ -64,14 +73,14 @@ model "emr_electric_vehicle" {
             component gen_probe U {
             }
             [
-                position = 7936, 7928
+                position = 7936, 7920
                 rotation = left
             ]
 
             component gen_probe I {
             }
             [
-                position = 7992, 7928
+                position = 7992, 7920
                 rotation = left
             ]
 
@@ -115,13 +124,41 @@ model "emr_electric_vehicle" {
                 position = 7936, 8000
             ]
 
+            junction Junction2 sp
+            [
+                position = 7936, 8000
+            ]
+
             connect "Battery Voltage.out" Junction1 as Connection3
-            connect I.in P2 as Connection2
-            connect Junction1 P1 as Connection4
-            connect U.in Junction1 as Connection5
+            connect U.in Junction2 as Connection6
+            connect Junction2 Junction1 as Connection7
+            connect P1 Junction2 as Connection8
+            connect P2 I.in as Connection9
 
             mask {
                 icon = "image(\'emr_images/emr_energy_source.svg\')"
+                description = "Energy source block for Energetic Macroscopic Representation of models."
+
+                block_type {
+                    label = "Block type"
+                    widget = combo
+                    combo_values = "Simulation", "Estimation"
+                    type = string
+                    default_value = "Simulation"
+                    no_evaluate
+
+                    CODE property_value_changed
+                        mdl.refresh_icon(container_handle)
+                    ENDCODE
+                }
+
+                CODE define_icon
+                    images = {"Simulation": "emr_images/emr_energy_source.svg",
+                                "Estimation": "emr_images/emr_estimation_source.svg"}
+                
+                    block_type = mdl.get_property_value(mdl.prop(item_handle, "block_type"))
+                    mdl.set_component_icon_image(item_handle, images[block_type])
+                ENDCODE
 
                 CODE open
                     from typhoon.apps.schematic_editor.dialogs.component_property_dialogs.general import RegularComponentPropertiesDialog
@@ -135,9 +172,13 @@ model "emr_electric_vehicle" {
                     
                 ENDCODE
             }
+
+            CODE component_init
+                component.unlink()
+            ENDCODE
         }
         [
-            position = 7648, 8104
+            position = 7680, 8128
             size = 80, 64
         ]
 
@@ -146,20 +187,20 @@ model "emr_electric_vehicle" {
             component gen_product Product1 {
             }
             [
-                position = 7608, 7976
+                position = 7576, 8008
             ]
 
             component gen_product Product2 {
             }
             [
-                position = 7608, 8056
+                position = 7576, 8088
                 scale = -1, 1
             ]
 
             component gen_probe V_out {
             }
             [
-                position = 7840, 7920
+                position = 7808, 7944
                 rotation = left
             ]
 
@@ -172,7 +213,7 @@ model "emr_electric_vehicle" {
                 }
             }
             [
-                position = 7280, 7968
+                position = 7256, 8000
                 hide_name = True
             ]
 
@@ -185,7 +226,7 @@ model "emr_electric_vehicle" {
                 }
             }
             [
-                position = 7280, 8056
+                position = 7256, 8088
                 hide_name = True
                 scale = -1, 1
             ]
@@ -199,7 +240,7 @@ model "emr_electric_vehicle" {
                 }
             }
             [
-                position = 8040, 7976
+                position = 8040, 8008
                 hide_name = True
             ]
 
@@ -212,7 +253,7 @@ model "emr_electric_vehicle" {
                 }
             }
             [
-                position = 8040, 8048
+                position = 8040, 8080
                 hide_name = True
                 scale = -1, 1
             ]
@@ -226,40 +267,65 @@ model "emr_electric_vehicle" {
                 }
             }
             [
-                position = 7544, 8208
-                rotation = right
+                position = 7512, 8224
+                rotation = left
                 hide_name = True
-                scale = -1, -1
+                scale = -1, 1
             ]
 
-            junction Junction1 sp
+            junction Junction3 sp
             [
-                position = 7544, 8152
+                position = 7808, 8008
             ]
 
-            junction Junction2 sp
+            junction Junction4 sp
             [
-                position = 7840, 7976
+                position = 7512, 8152
             ]
 
-            connect Junction1 Product1.in1 as Connection6
+            connect P1 Product1.in as Connection12
+            connect P2 Product2.out as Connection13
+            connect V_out.in Junction3 as Connection14
+            connect P3 Junction3 as Connection16
+            connect P4 Product2.in as Connection17
+            connect Product1.out Junction3 as Connection18
             [
-                breakpoints = 7544, 8152; 7544, 7984
+                breakpoints = 7808, 8008
             ]
-            connect Junction2 P3 as Connection10
-            connect P1 Product1.in as Connection1
-            connect P2 Product2.out as Connection8
-            connect P5 Junction1 as Connection5
-            connect Product1.out Junction2 as Connection9
-            connect Product2.in1 Junction1 as Connection7
+            connect Product2.in1 Junction4 as Connection20
             [
-                breakpoints = 7672, 8064; 7672, 8152
+                breakpoints = 7632, 8096; 7632, 8152; 7616, 8152
             ]
-            connect Product2.in P4 as Connection3
-            connect V_out.in Junction2 as Connection11
+            connect Junction4 Product1.in1 as Connection21
+            [
+                breakpoints = 7512, 8152; 7512, 8016
+            ]
+            connect P5 Junction4 as Connection22
 
             mask {
                 icon = "image(\'emr_images/emr_mono_physical_converter_ctrl.svg\')"
+                description = "Mono-physical converter block with control for Energetic Macroscopic Representation of models."
+
+                block_type {
+                    label = "Block type"
+                    widget = combo
+                    combo_values = "Simulation", "Estimation"
+                    type = string
+                    default_value = "Simulation"
+                    no_evaluate
+
+                    CODE property_value_changed
+                        mdl.refresh_icon(container_handle)
+                    ENDCODE
+                }
+
+                CODE define_icon
+                    images = {"Simulation": "emr_images/emr_mono_physical_converter_ctrl.svg",
+                                "Estimation": "emr_images/emr_mono_physical_converter_ctrl_estimation.svg"}
+                
+                    block_type = mdl.get_property_value(mdl.prop(item_handle, "block_type"))
+                    mdl.set_component_icon_image(item_handle, images[block_type])
+                ENDCODE
 
                 CODE open
                     from typhoon.apps.schematic_editor.dialogs.component_property_dialogs.general import RegularComponentPropertiesDialog
@@ -273,9 +339,153 @@ model "emr_electric_vehicle" {
                     
                 ENDCODE
             }
+
+            CODE component_init
+                component.unlink()
+            ENDCODE
         }
         [
-            position = 7768, 8104
+            position = 7808, 8128
+            size = 80, 64
+        ]
+
+        component Subsystem "Machine Inductance" {
+            layout = static
+            component gen_z_domain_transfer TF {
+                a_coeff = "[1, -0.9946]"
+                b_coeff = "[0.007679, 0.007665]"
+            }
+            [
+                position = 7632, 8008
+            ]
+
+            component gen_sum Sum1 {
+                signs = "+-"
+            }
+            [
+                position = 7520, 8008
+            ]
+
+            component tm_delay "Unit Delay1" {
+            }
+            [
+                position = 7792, 8008
+            ]
+
+            port P1 {
+                position = -40.0, -16.0
+                kind = sp
+                direction =  out
+                sp_type {
+                    default = auto
+                }
+            }
+            [
+                position = 7256, 8000
+                hide_name = True
+            ]
+
+            port P2 {
+                position = -40.0, 16.0
+                kind = sp
+                direction =  in
+                sp_type {
+                    default = inherit
+                }
+            }
+            [
+                position = 7256, 8064
+                hide_name = True
+                scale = -1, 1
+            ]
+
+            port P3 {
+                position = 40.0, -16.0
+                kind = sp
+                direction =  in
+                sp_type {
+                    default = inherit
+                }
+            }
+            [
+                position = 8040, 8008
+                hide_name = True
+            ]
+
+            port P4 {
+                position = 40.0, 16.0
+                kind = sp
+                direction =  out
+                sp_type {
+                    default = auto
+                }
+            }
+            [
+                position = 8040, 8072
+                hide_name = True
+                scale = -1, 1
+            ]
+
+            junction Junction1 sp
+            [
+                position = 7696, 8008
+            ]
+
+            connect TF.in Sum1.out as Connection2
+            connect Sum1.in P1 as Connection9
+            connect "Unit Delay1.out" P3 as Connection10
+            connect P4 Sum1.in1 as Connection11
+            [
+                breakpoints = 7472, 8064; 7472, 8016
+            ]
+            connect "Unit Delay1.in" Junction1 as Connection13
+            connect Junction1 TF.out as Connection14
+            connect P2 Junction1 as Connection15
+
+            mask {
+                icon = "image(\'emr_images/emr_energy_accumulation.svg\')"
+                description = "Energy accumulation block for Energetic Macroscopic Representation of models."
+
+                block_type {
+                    label = "Block type"
+                    widget = combo
+                    combo_values = "Simulation", "Estimation"
+                    type = string
+                    default_value = "Simulation"
+                    no_evaluate
+
+                    CODE property_value_changed
+                        mdl.refresh_icon(container_handle)
+                    ENDCODE
+                }
+
+                CODE define_icon
+                    images = {"Simulation": "emr_images/emr_energy_accumulation.svg",
+                                "Estimation": "emr_images/emr_energy_accumulation_estimation.svg"}
+                
+                    block_type = mdl.get_property_value(mdl.prop(item_handle, "block_type"))
+                    mdl.set_component_icon_image(item_handle, images[block_type])
+                ENDCODE
+
+                CODE open
+                    from typhoon.apps.schematic_editor.dialogs.component_property_dialogs.general import RegularComponentPropertiesDialog
+                
+                    dialog = RegularComponentPropertiesDialog(
+                        component=component,
+                        property_container=component.masks[-1],
+                        current_diagram=current_diagram
+                    )
+                    dialog.exec_()
+                    
+                ENDCODE
+            }
+
+            CODE component_init
+                component.unlink()
+            ENDCODE
+        }
+        [
+            position = 7920, 8128
             size = 80, 64
         ]
 
@@ -374,17 +584,51 @@ model "emr_electric_vehicle" {
                 position = 7728, 8000
             ]
 
+            junction Junction3 sp
+            [
+                position = 7728, 8000
+            ]
+
+            junction Junction4 sp
+            [
+                position = 7816, 8064
+            ]
+
             connect Gain1.out Junction2 as Connection8
-            connect Gain1.in P1 as Connection1
             connect Gain2.in Junction1 as Connection5
-            connect Junction1 P4 as Connection6
-            connect Junction2 P3 as Connection9
-            connect P2 Gain2.out as Connection3
-            connect Speed.in Junction1 as Connection7
-            connect Torque.in Junction2 as Connection10
+            connect Gain1.in P1 as Connection11
+            connect P2 Gain2.out as Connection12
+            connect Torque.in Junction3 as Connection13
+            connect Junction3 Junction2 as Connection14
+            connect P3 Junction3 as Connection15
+            connect Speed.in Junction4 as Connection16
+            connect Junction4 Junction1 as Connection17
+            connect P4 Junction4 as Connection18
 
             mask {
                 icon = "image(\'emr_images/emr_multi_physical_converter.svg\')"
+                description = "Multi-physical converter block for Energetic Macroscopic Representation of models."
+
+                block_type {
+                    label = "Block type"
+                    widget = combo
+                    combo_values = "Simulation", "Estimation"
+                    type = string
+                    default_value = "Simulation"
+                    no_evaluate
+
+                    CODE property_value_changed
+                        mdl.refresh_icon(container_handle)
+                    ENDCODE
+                }
+
+                CODE define_icon
+                    images = {"Simulation": "emr_images/emr_multi_physical_converter.svg",
+                                "Estimation": "emr_images/emr_multi_physical_converter_estimation.svg"}
+                
+                    block_type = mdl.get_property_value(mdl.prop(item_handle, "block_type"))
+                    mdl.set_component_icon_image(item_handle, images[block_type])
+                ENDCODE
 
                 CODE open
                     from typhoon.apps.schematic_editor.dialogs.component_property_dialogs.general import RegularComponentPropertiesDialog
@@ -398,9 +642,13 @@ model "emr_electric_vehicle" {
                     
                 ENDCODE
             }
+
+            CODE component_init
+                component.unlink()
+            ENDCODE
         }
         [
-            position = 8008, 8104
+            position = 8048, 8128
             size = 80, 64
         ]
 
@@ -410,14 +658,14 @@ model "emr_electric_vehicle" {
                 gain = "red*eff_gear_diff"
             }
             [
-                position = 7600, 8000
+                position = 7624, 8000
             ]
 
             component gen_gain Gain2 {
                 gain = "red"
             }
             [
-                position = 7600, 8064
+                position = 7624, 8064
                 scale = -1, 1
             ]
 
@@ -475,13 +723,35 @@ model "emr_electric_vehicle" {
                 scale = -1, 1
             ]
 
+            connect P2 Gain2.out as Connection1
+            connect Gain1.in P1 as Connection2
             connect Gain1.out P3 as Connection3
-            connect Gain2.out P2 as Connection1
-            connect P1 Gain1.in as Connection2
             connect P4 Gain2.in as Connection4
 
             mask {
                 icon = "image(\'emr_images/emr_mono_physical_converter.svg\')"
+                description = "Mono-physical converter block for Energetic Macroscopic Representation of models."
+
+                block_type {
+                    label = "Block type"
+                    widget = combo
+                    combo_values = "Simulation", "Estimation"
+                    type = string
+                    default_value = "Simulation"
+                    no_evaluate
+
+                    CODE property_value_changed
+                        mdl.refresh_icon(container_handle)
+                    ENDCODE
+                }
+
+                CODE define_icon
+                    images = {"Simulation": "emr_images/emr_mono_physical_converter.svg",
+                                "Estimation": "emr_images/emr_mono_physical_converter_estimation.svg"}
+                
+                    block_type = mdl.get_property_value(mdl.prop(item_handle, "block_type"))
+                    mdl.set_component_icon_image(item_handle, images[block_type])
+                ENDCODE
 
                 CODE open
                     from typhoon.apps.schematic_editor.dialogs.component_property_dialogs.general import RegularComponentPropertiesDialog
@@ -495,9 +765,13 @@ model "emr_electric_vehicle" {
                     
                 ENDCODE
             }
+
+            CODE component_init
+                component.unlink()
+            ENDCODE
         }
         [
-            position = 8128, 8104
+            position = 8160, 8128
             size = 80, 64
         ]
 
@@ -507,21 +781,21 @@ model "emr_electric_vehicle" {
                 gain = "1.0/2.0"
             }
             [
-                position = 7392, 8000
+                position = 7440, 8000
             ]
 
             component gen_gain Gain2 {
                 gain = "1.0/2.0"
             }
             [
-                position = 7392, 8064
+                position = 7440, 8064
                 scale = -1, 1
             ]
 
             component gen_sum Sum1 {
             }
             [
-                position = 7496, 8064
+                position = 7536, 8064
                 scale = -1, 1
             ]
 
@@ -608,26 +882,54 @@ model "emr_electric_vehicle" {
 
             junction Junction1 sp
             [
-                position = 7944, 8000
+                position = 7936, 8000
             ]
 
-            connect Gain1.out Junction1 as Connection6
-            connect Gain1.in P1 as Connection2
-            connect Gain2.out P2 as Connection1
             connect Gain2.in Sum1.out as Connection7
-            connect Junction1 P5 as Connection5
+            connect Gain1.in P1 as Connection8
+            connect P2 Gain2.out as Connection9
+            connect P3 Junction1 as Connection11
             [
-                breakpoints = 7944, 8096
+                breakpoints = 7936, 7904
             ]
-            connect P3 Junction1 as Connection4
+            connect Junction1 Gain1.out as Connection12
             [
-                breakpoints = 7944, 7904
+                breakpoints = 7936, 8000
             ]
-            connect Sum1.in P4 as Connection8
-            connect Sum1.in1 P6 as Connection9
+            connect P5 Junction1 as Connection13
+            connect Sum1.in P4 as Connection14
+            [
+                breakpoints = 7984, 8056; 7984, 7968
+            ]
+            connect Sum1.in1 P6 as Connection15
+            [
+                breakpoints = 7984, 8072; 7984, 8160
+            ]
 
             mask {
                 icon = "image(\'emr_images/emr_mono_physical_coupling.svg\')"
+                description = "Mono-physical coupling block for Energetic Macroscopic Representation of models."
+
+                block_type {
+                    label = "Block type"
+                    widget = combo
+                    combo_values = "Simulation", "Estimation"
+                    type = string
+                    default_value = "Simulation"
+                    no_evaluate
+
+                    CODE property_value_changed
+                        mdl.refresh_icon(container_handle)
+                    ENDCODE
+                }
+
+                CODE define_icon
+                    images = {"Simulation": "emr_images/emr_mono_physical_coupling.svg",
+                                "Estimation": "emr_images/emr_mono_physical_coupling_estimation.svg"}
+                
+                    block_type = mdl.get_property_value(mdl.prop(item_handle, "block_type"))
+                    mdl.set_component_icon_image(item_handle, images[block_type])
+                ENDCODE
 
                 CODE open
                     from typhoon.apps.schematic_editor.dialogs.component_property_dialogs.general import RegularComponentPropertiesDialog
@@ -641,9 +943,13 @@ model "emr_electric_vehicle" {
                     
                 ENDCODE
             }
+
+            CODE component_init
+                component.unlink()
+            ENDCODE
         }
         [
-            position = 8256, 8104
+            position = 8288, 8128
             size = 96, 160
         ]
 
@@ -653,28 +959,28 @@ model "emr_electric_vehicle" {
                 gain = "1/Rwheel"
             }
             [
-                position = 7560, 8000
+                position = 7616, 8000
             ]
 
             component gen_gain Gain2 {
                 gain = "1/Rwheel"
             }
             [
-                position = 7560, 8064
+                position = 7616, 8064
                 scale = -1, 1
             ]
 
             component gen_probe Speed {
             }
             [
-                position = 7376, 7944
+                position = 7432, 7936
                 rotation = left
             ]
 
             component gen_probe Torque {
             }
             [
-                position = 7448, 7944
+                position = 7504, 7936
                 rotation = left
             ]
 
@@ -734,28 +1040,59 @@ model "emr_electric_vehicle" {
 
             junction Junction1 sp
             [
-                position = 7376, 8064
+                position = 7432, 8064
             ]
 
             junction Junction2 sp
             [
-                position = 7448, 8000
+                position = 7504, 8000
             ]
 
-            connect Gain1.out P3 as Connection21
-            connect Gain2.out Junction1 as Connection15
-            connect Gain2.in P4 as Connection13
+            junction Junction3 sp
             [
-                breakpoints = 7816, 8064
+                position = 7432, 8064
             ]
-            connect Junction1 P2 as Connection16
+
+            junction Junction4 sp
+            [
+                position = 7504, 8000
+            ]
+
+            connect Gain2.out Junction1 as Connection15
             connect Junction2 Gain1.in as Connection19
-            connect P1 Junction2 as Connection18
-            connect Speed.in Junction1 as Connection17
-            connect Torque.in Junction2 as Connection20
+            connect Gain1.out P3 as Connection21
+            connect Gain2.in P4 as Connection22
+            connect Speed.in Junction3 as Connection23
+            connect Junction3 Junction1 as Connection24
+            connect P2 Junction3 as Connection25
+            connect Torque.in Junction4 as Connection26
+            connect Junction4 Junction2 as Connection27
+            connect P1 Junction4 as Connection28
 
             mask {
                 icon = "image(\'emr_images/emr_mono_physical_converter.svg\')"
+                description = "Mono-physical converter block for Energetic Macroscopic Representation of models."
+
+                block_type {
+                    label = "Block type"
+                    widget = combo
+                    combo_values = "Simulation", "Estimation"
+                    type = string
+                    default_value = "Simulation"
+                    no_evaluate
+
+                    CODE property_value_changed
+                        mdl.refresh_icon(container_handle)
+                    ENDCODE
+                }
+
+                CODE define_icon
+                    images = {"Simulation": "emr_images/emr_mono_physical_converter.svg",
+                                "Estimation": "emr_images/emr_mono_physical_converter_estimation.svg"}
+                
+                    block_type = mdl.get_property_value(mdl.prop(item_handle, "block_type"))
+                    mdl.set_component_icon_image(item_handle, images[block_type])
+                ENDCODE
 
                 CODE open
                     from typhoon.apps.schematic_editor.dialogs.component_property_dialogs.general import RegularComponentPropertiesDialog
@@ -769,9 +1106,13 @@ model "emr_electric_vehicle" {
                     
                 ENDCODE
             }
+
+            CODE component_init
+                component.unlink()
+            ENDCODE
         }
         [
-            position = 8384, 8056
+            position = 8416, 8080
             size = 80, 64
         ]
 
@@ -781,28 +1122,28 @@ model "emr_electric_vehicle" {
                 gain = "1/Rwheel"
             }
             [
-                position = 7600, 8000
+                position = 7664, 8000
             ]
 
             component gen_gain Gain2 {
                 gain = "1/Rwheel"
             }
             [
-                position = 7600, 8064
+                position = 7664, 8064
                 scale = -1, 1
             ]
 
             component gen_probe Speed {
             }
             [
-                position = 7400, 7944
+                position = 7464, 7944
                 rotation = left
             ]
 
             component gen_probe Torque {
             }
             [
-                position = 7472, 7944
+                position = 7536, 7944
                 rotation = left
             ]
 
@@ -862,28 +1203,59 @@ model "emr_electric_vehicle" {
 
             junction Junction1 sp
             [
-                position = 7400, 8064
+                position = 7464, 8064
             ]
 
             junction Junction2 sp
             [
-                position = 7472, 8000
+                position = 7536, 8000
+            ]
+
+            junction Junction3 sp
+            [
+                position = 7464, 8064
+            ]
+
+            junction Junction4 sp
+            [
+                position = 7536, 8000
             ]
 
             connect Gain1.in Junction2 as Connection17
-            connect Gain1.out P3 as Connection20
             connect Junction1 Gain2.out as Connection15
-            connect Junction2 P1 as Connection18
-            connect P2 Junction1 as Connection14
-            connect P4 Gain2.in as Connection12
-            [
-                breakpoints = 7832, 8064
-            ]
-            connect Speed.in Junction1 as Connection16
-            connect Torque.in Junction2 as Connection19
+            connect Gain1.out P3 as Connection20
+            connect P4 Gain2.in as Connection21
+            connect Speed.in Junction3 as Connection22
+            connect Junction3 Junction1 as Connection23
+            connect P2 Junction3 as Connection24
+            connect Torque.in Junction4 as Connection25
+            connect Junction4 Junction2 as Connection26
+            connect P1 Junction4 as Connection27
 
             mask {
                 icon = "image(\'emr_images/emr_mono_physical_converter.svg\')"
+                description = "Mono-physical converter block for Energetic Macroscopic Representation of models."
+
+                block_type {
+                    label = "Block type"
+                    widget = combo
+                    combo_values = "Simulation", "Estimation"
+                    type = string
+                    default_value = "Simulation"
+                    no_evaluate
+
+                    CODE property_value_changed
+                        mdl.refresh_icon(container_handle)
+                    ENDCODE
+                }
+
+                CODE define_icon
+                    images = {"Simulation": "emr_images/emr_mono_physical_converter.svg",
+                                "Estimation": "emr_images/emr_mono_physical_converter_estimation.svg"}
+                
+                    block_type = mdl.get_property_value(mdl.prop(item_handle, "block_type"))
+                    mdl.set_component_icon_image(item_handle, images[block_type])
+                ENDCODE
 
                 CODE open
                     from typhoon.apps.schematic_editor.dialogs.component_property_dialogs.general import RegularComponentPropertiesDialog
@@ -897,9 +1269,13 @@ model "emr_electric_vehicle" {
                     
                 ENDCODE
             }
+
+            CODE component_init
+                component.unlink()
+            ENDCODE
         }
         [
-            position = 8384, 8152
+            position = 8416, 8176
             size = 80, 64
         ]
 
@@ -908,20 +1284,20 @@ model "emr_electric_vehicle" {
             component gen_sum Sum1 {
             }
             [
-                position = 7560, 7944
+                position = 7552, 7864
             ]
 
             component gen_product Product1 {
             }
             [
-                position = 7560, 8008
+                position = 7552, 7936
                 scale = -1, 1
             ]
 
             component gen_product Product2 {
             }
             [
-                position = 7576, 8168
+                position = 7568, 8088
                 scale = -1, 1
             ]
 
@@ -933,7 +1309,7 @@ model "emr_electric_vehicle" {
                 unit = ""
             }
             [
-                position = 7600, 8088
+                position = 7600, 8008
             ]
 
             component src_scada_input rwh_ref {
@@ -944,7 +1320,7 @@ model "emr_electric_vehicle" {
                 unit = ""
             }
             [
-                position = 7584, 8264
+                position = 7584, 8184
             ]
 
             port P1 {
@@ -956,9 +1332,9 @@ model "emr_electric_vehicle" {
                 }
             }
             [
-                position = 7840, 8048
+                position = 7968, 8024
                 hide_name = True
-                scale = -1, 1
+                scale = -1, -1
             ]
 
             port P2 {
@@ -970,8 +1346,9 @@ model "emr_electric_vehicle" {
                 }
             }
             [
-                position = 7840, 7944
+                position = 7968, 7864
                 hide_name = True
+                scale = 1, -1
             ]
 
             port P3 {
@@ -983,9 +1360,9 @@ model "emr_electric_vehicle" {
                 }
             }
             [
-                position = 7376, 8168
+                position = 7192, 8088
                 hide_name = True
-                scale = -1, 1
+                scale = -1, -1
             ]
 
             port P4 {
@@ -997,8 +1374,9 @@ model "emr_electric_vehicle" {
                 }
             }
             [
-                position = 7376, 8104
+                position = 7192, 8008
                 hide_name = True
+                scale = 1, -1
             ]
 
             port P5 {
@@ -1010,9 +1388,9 @@ model "emr_electric_vehicle" {
                 }
             }
             [
-                position = 7376, 8008
+                position = 7192, 7936
                 hide_name = True
-                scale = -1, 1
+                scale = -1, -1
             ]
 
             port P6 {
@@ -1024,31 +1402,57 @@ model "emr_electric_vehicle" {
                 }
             }
             [
-                position = 7376, 7912
+                position = 7192, 7856
                 hide_name = True
+                scale = 1, -1
             ]
 
             junction Junction1 sp
             [
-                position = 7752, 8048
+                position = 7808, 8024
             ]
 
-            connect Junction1 Product1.in as Connection8
-            [
-                breakpoints = 7752, 8048; 7752, 8000
-            ]
-            connect P1 Junction1 as Connection7
-            connect P4 Sum1.in1 as Connection2
-            connect P5 Product1.out as Connection4
-            connect P6 Sum1.in as Connection1
-            connect Product2.in Junction1 as Connection9
-            connect Product2.out P3 as Connection5
-            connect Sum1.out P2 as Connection3
             connect lwh_ref.out Product1.in1 as Connection10
             connect rwh_ref.out Product2.in1 as Connection11
+            connect Sum1.out P2 as Connection12
+            connect Product1.in Junction1 as Connection14
+            connect Junction1 P1 as Connection15
+            [
+                breakpoints = 7808, 8024
+            ]
+            connect Product2.in Junction1 as Connection16
+            connect P5 Product1.out as Connection19
+            connect P3 Product2.out as Connection20
+            connect P4 Sum1.in1 as Connection21
+            [
+                breakpoints = 7448, 8008; 7448, 7872
+            ]
+            connect Sum1.in P6 as Connection22
 
             mask {
                 icon = "image(\'emr_images/emr_mono_physical_coupling.svg\')"
+                description = "Mono-physical coupling block for Energetic Macroscopic Representation of models."
+
+                block_type {
+                    label = "Block type"
+                    widget = combo
+                    combo_values = "Simulation", "Estimation"
+                    type = string
+                    default_value = "Simulation"
+                    no_evaluate
+
+                    CODE property_value_changed
+                        mdl.refresh_icon(container_handle)
+                    ENDCODE
+                }
+
+                CODE define_icon
+                    images = {"Simulation": "emr_images/emr_mono_physical_coupling.svg",
+                                "Estimation": "emr_images/emr_mono_physical_coupling_estimation.svg"}
+                
+                    block_type = mdl.get_property_value(mdl.prop(item_handle, "block_type"))
+                    mdl.set_component_icon_image(item_handle, images[block_type])
+                ENDCODE
 
                 CODE open
                     from typhoon.apps.schematic_editor.dialogs.component_property_dialogs.general import RegularComponentPropertiesDialog
@@ -1062,89 +1466,15 @@ model "emr_electric_vehicle" {
                     
                 ENDCODE
             }
+
+            CODE component_init
+                component.unlink()
+            ENDCODE
         }
         [
-            position = 8512, 8104
+            position = 8544, 8128
             scale = -1, -1
             size = 96, 160
-        ]
-
-        component Subsystem Enviroment {
-            layout = static
-            component gen_product Product1 {
-            }
-            [
-                position = 7872, 8008
-            ]
-
-            component gen_gain Gain1 {
-                gain = "Kaero"
-            }
-            [
-                position = 7960, 8008
-            ]
-
-            port P1 {
-                position = 40.0, -16.0
-                kind = sp
-                direction =  in
-                sp_type {
-                    default = inherit
-                }
-            }
-            [
-                position = 7760, 8080
-                hide_name = True
-                scale = -1, 1
-            ]
-
-            port P2 {
-                position = 40.0, 16.0
-                kind = sp
-                direction =  out
-                sp_type {
-                    default = auto
-                }
-            }
-            [
-                position = 7760, 8000
-                hide_name = True
-            ]
-
-            junction Junction1 sp
-            [
-                position = 7808, 8000
-            ]
-
-            connect Gain1.out P1 as Connection6
-            connect Gain1.in Product1.out as Connection5
-            connect Junction1 P2 as Connection3
-            connect Product1.in Junction1 as Connection2
-            connect Product1.in1 Junction1 as Connection4
-            [
-                breakpoints = 7808, 8000
-            ]
-
-            mask {
-                icon = "image(\'emr_images/emr_energy_source.svg\')"
-
-                CODE open
-                    from typhoon.apps.schematic_editor.dialogs.component_property_dialogs.general import RegularComponentPropertiesDialog
-                
-                    dialog = RegularComponentPropertiesDialog(
-                        component=component,
-                        property_container=component.masks[-1],
-                        current_diagram=current_diagram
-                    )
-                    dialog.exec_()
-                    
-                ENDCODE
-            }
-        }
-        [
-            position = 8760, 8104
-            scale = -1, -1
-            size = 80, 64
         ]
 
         component Subsystem Chassis {
@@ -1153,7 +1483,7 @@ model "emr_electric_vehicle" {
                 signs = "+-"
             }
             [
-                position = 7544, 8008
+                position = 7480, 8008
             ]
 
             component gen_z_domain_transfer TF {
@@ -1161,26 +1491,26 @@ model "emr_electric_vehicle" {
                 b_coeff = "[5e-8, 5e-8]"
             }
             [
-                position = 7648, 8008
-            ]
-
-            component gen_probe V_speed {
-            }
-            [
-                position = 8032, 7920
+                position = 7584, 8008
             ]
 
             component gen_gain Gain1 {
                 gain = "[3.6]"
             }
             [
-                position = 7952, 7920
+                position = 7888, 7920
             ]
 
             component tm_delay "Unit Delay1" {
             }
             [
-                position = 7784, 8008
+                position = 7720, 8008
+            ]
+
+            component gen_probe V_speed {
+            }
+            [
+                position = 8040, 7920
             ]
 
             port P1 {
@@ -1239,27 +1569,61 @@ model "emr_electric_vehicle" {
 
             junction Junction1 sp
             [
-                position = 7712, 8008
+                position = 7800, 8008
             ]
 
             junction Junction2 sp
             [
-                position = 7864, 8008
+                position = 7640, 8008
             ]
 
-            connect Gain1.in Junction2 as Connection68
-            connect Junction1 "Unit Delay1.in" as Connection69
-            connect Junction2 P3 as Connection67
-            connect P1 Sum1.in as Connection3
-            connect P2 Junction1 as Connection8
-            connect P4 Sum1.in1 as Connection5
-            connect TF.out Junction1 as Connection6
             connect TF.in Sum1.out as Connection2
-            connect "Unit Delay1.out" Junction2 as Connection70
-            connect V_speed.in Gain1.out as Connection65
+            connect Sum1.in P1 as Connection71
+            connect V_speed.in Gain1.out as Connection72
+            connect "Unit Delay1.out" Junction1 as Connection78
+            [
+                breakpoints = 7792, 8008
+            ]
+            connect Junction1 Gain1.in as Connection79
+            [
+                breakpoints = 7800, 8008
+            ]
+            connect P3 Junction1 as Connection80
+            connect P4 Sum1.in1 as Connection85
+            [
+                breakpoints = 7440, 8064
+            ]
+            connect TF.out Junction2 as Connection86
+            connect Junction2 "Unit Delay1.in" as Connection87
+            [
+                breakpoints = 7648, 8008
+            ]
+            connect P2 Junction2 as Connection88
 
             mask {
                 icon = "image(\'emr_images/emr_energy_accumulation.svg\')"
+                description = "Energy accumulation block for Energetic Macroscopic Representation of models."
+
+                block_type {
+                    label = "Block type"
+                    widget = combo
+                    combo_values = "Simulation", "Estimation"
+                    type = string
+                    default_value = "Simulation"
+                    no_evaluate
+
+                    CODE property_value_changed
+                        mdl.refresh_icon(container_handle)
+                    ENDCODE
+                }
+
+                CODE define_icon
+                    images = {"Simulation": "emr_images/emr_energy_accumulation.svg",
+                                "Estimation": "emr_images/emr_energy_accumulation_estimation.svg"}
+                
+                    block_type = mdl.get_property_value(mdl.prop(item_handle, "block_type"))
+                    mdl.set_component_icon_image(item_handle, images[block_type])
+                ENDCODE
 
                 CODE open
                     from typhoon.apps.schematic_editor.dialogs.component_property_dialogs.general import RegularComponentPropertiesDialog
@@ -1273,63 +1637,32 @@ model "emr_electric_vehicle" {
                     
                 ENDCODE
             }
+
+            CODE component_init
+                component.unlink()
+            ENDCODE
         }
         [
-            position = 8640, 8104
+            position = 8672, 8128
             size = 80, 64
         ]
 
-        component Subsystem "Machine Inductance" {
+        component Subsystem Environment {
             layout = static
-            component gen_z_domain_transfer TF {
-                a_coeff = "[1, -0.9946]"
-                b_coeff = "[0.007679, 0.007665]"
+            component gen_product Product1 {
             }
             [
-                position = 7608, 8008
+                position = 8176, 8008
             ]
 
-            component gen_sum Sum1 {
-                signs = "+-"
+            component gen_gain Gain1 {
+                gain = "Kaero"
             }
             [
-                position = 7504, 8008
-            ]
-
-            component tm_delay "Unit Delay1" {
-            }
-            [
-                position = 7776, 8008
+                position = 8264, 8008
             ]
 
             port P1 {
-                position = -40.0, -16.0
-                kind = sp
-                direction =  out
-                sp_type {
-                    default = auto
-                }
-            }
-            [
-                position = 7256, 8000
-                hide_name = True
-            ]
-
-            port P2 {
-                position = -40.0, 16.0
-                kind = sp
-                direction =  in
-                sp_type {
-                    default = inherit
-                }
-            }
-            [
-                position = 7256, 8064
-                hide_name = True
-                scale = -1, 1
-            ]
-
-            port P3 {
                 position = 40.0, -16.0
                 kind = sp
                 direction =  in
@@ -1338,11 +1671,12 @@ model "emr_electric_vehicle" {
                 }
             }
             [
-                position = 8040, 8008
+                position = 8040, 8064
                 hide_name = True
+                scale = -1, 1
             ]
 
-            port P4 {
+            port P2 {
                 position = 40.0, 16.0
                 kind = sp
                 direction =  out
@@ -1351,26 +1685,48 @@ model "emr_electric_vehicle" {
                 }
             }
             [
-                position = 8040, 8072
+                position = 8040, 8000
                 hide_name = True
-                scale = -1, 1
             ]
 
             junction Junction1 sp
             [
-                position = 7688, 8008
+                position = 8112, 8000
             ]
 
-            connect Junction1 "Unit Delay1.in" as Connection8
-            connect P2 Junction1 as Connection7
-            connect P4 Sum1.in1 as Connection4
-            connect Sum1.in P1 as Connection1
-            connect TF.out Junction1 as Connection5
-            connect TF.in Sum1.out as Connection2
-            connect "Unit Delay1.out" P3 as Connection9
+            connect Gain1.in Product1.out as Connection5
+            connect Product1.in1 Junction1 as Connection12
+            connect Junction1 Product1.in as Connection13
+            [
+                breakpoints = 8112, 8000
+            ]
+            connect P2 Junction1 as Connection14
+            connect P1 Gain1.out as Connection15
 
             mask {
-                icon = "image(\'emr_images/emr_energy_accumulation.svg\')"
+                icon = "image(\'emr_images/emr_energy_source.svg\')"
+                description = "Energy source block for Energetic Macroscopic Representation of models."
+
+                block_type {
+                    label = "Block type"
+                    widget = combo
+                    combo_values = "Simulation", "Estimation"
+                    type = string
+                    default_value = "Simulation"
+                    no_evaluate
+
+                    CODE property_value_changed
+                        mdl.refresh_icon(container_handle)
+                    ENDCODE
+                }
+
+                CODE define_icon
+                    images = {"Simulation": "emr_images/emr_energy_source.svg",
+                                "Estimation": "emr_images/emr_estimation_source.svg"}
+                
+                    block_type = mdl.get_property_value(mdl.prop(item_handle, "block_type"))
+                    mdl.set_component_icon_image(item_handle, images[block_type])
+                ENDCODE
 
                 CODE open
                     from typhoon.apps.schematic_editor.dialogs.component_property_dialogs.general import RegularComponentPropertiesDialog
@@ -1384,56 +1740,40 @@ model "emr_electric_vehicle" {
                     
                 ENDCODE
             }
+
+            CODE component_init
+                component.unlink()
+            ENDCODE
         }
         [
-            position = 7888, 8104
+            position = 8800, 8128
+            scale = -1, -1
             size = 80, 64
         ]
 
-        connect Battery.P2 Inverter.P2 as Connection31
-        connect Chassis.P1 Coupling.P2 as Connection81
-        [
-            breakpoints = 8576, 8088
-        ]
-        connect Chassis.P3 Enviroment.P2 as Connection82
-        [
-            breakpoints = 8696, 8088
-        ]
-        connect Coupling.P1 Chassis.P2 as Connection64
-        connect Coupling.P5 "Left Wheel.P4" as Connection59
-        connect Coupling.P3 "Right Wheel.P4" as Connection57
-        connect "DC Machine.P3" Gearbox.P1 as Connection94
-        [
-            breakpoints = 8064, 8088
-        ]
-        connect "DC Machine.P1" "Machine Inductance.P3" as Connection95
-        [
-            breakpoints = 7936, 8088
-        ]
-        connect Differential.P1 Gearbox.P3 as Connection96
-        [
-            breakpoints = 8184, 8088
-        ]
-        connect Differential.P3 "Left Wheel.P1" as Connection84
-        [
-            breakpoints = 8320, 8040
-        ]
-        connect Differential.P6 "Right Wheel.P2" as Connection54
-        connect Enviroment.P1 Chassis.P4 as Connection61
-        connect Gearbox.P2 "DC Machine.P4" as Connection41
-        connect Gearbox.P4 Differential.P2 as Connection43
-        connect Inverter.P1 Battery.P1 as Connection30
-        connect Inverter.P5 "Duty Cycle.out" as Connection34
-        connect Inverter.P4 "Machine Inductance.P2" as Connection66
-        connect "Left Wheel.P3" Coupling.P6 as Connection83
-        [
-            breakpoints = 8440, 8040
-        ]
-        connect "Left Wheel.P2" Differential.P4 as Connection51
-        connect "Machine Inductance.P4" "DC Machine.P2" as Connection67
-        connect "Machine Inductance.P1" Inverter.P3 as Connection65
-        connect "Right Wheel.P3" Coupling.P4 as Connection58
-        connect "Right Wheel.P1" Differential.P5 as Connection53
+        connect Battery.P1 Inverter.P1 as Connection97
+        connect Battery.P2 Inverter.P2 as Connection98
+        connect "Duty Cycle.out" Inverter.P5 as Connection99
+        connect Inverter.P3 "Machine Inductance.P1" as Connection100
+        connect "Machine Inductance.P2" Inverter.P4 as Connection101
+        connect "Machine Inductance.P4" "DC Machine.P2" as Connection102
+        connect "DC Machine.P1" "Machine Inductance.P3" as Connection103
+        connect "DC Machine.P4" Gearbox.P2 as Connection104
+        connect "DC Machine.P3" Gearbox.P1 as Connection105
+        connect Differential.P1 Gearbox.P3 as Connection106
+        connect Gearbox.P4 Differential.P2 as Connection107
+        connect Differential.P4 "Left Wheel.P2" as Connection108
+        connect "Left Wheel.P1" Differential.P3 as Connection109
+        connect "Right Wheel.P2" Differential.P6 as Connection110
+        connect Differential.P5 "Right Wheel.P1" as Connection111
+        connect Coupling.P6 "Left Wheel.P3" as Connection112
+        connect "Left Wheel.P4" Coupling.P5 as Connection113
+        connect Coupling.P4 "Right Wheel.P3" as Connection114
+        connect "Right Wheel.P4" Coupling.P3 as Connection115
+        connect Chassis.P2 Coupling.P1 as Connection116
+        connect Coupling.P2 Chassis.P1 as Connection117
+        connect Chassis.P3 Environment.P2 as Connection118
+        connect Environment.P1 Chassis.P4 as Connection119
     }
 
     default {

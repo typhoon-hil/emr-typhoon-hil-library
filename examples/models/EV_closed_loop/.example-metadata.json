@@ -1,0 +1,9 @@
+{
+    "title": "Electric vehicle closed loop",
+    "description": "This example demonstrates how to use the EMR Library through an electric vehicle example.",
+    "model": "ev_closed_loop.tse",
+    "images": ["example_model.svg"],
+    "tags": ["ev_closed_loop", "package"],
+    "app_note": "",
+    "tests": []
+}

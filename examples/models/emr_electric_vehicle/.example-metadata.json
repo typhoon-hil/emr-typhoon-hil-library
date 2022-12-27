@@ -1,0 +1,9 @@
+{
+    "title": "Electric vehicle unit model",
+    "description": "This example demonstrates how to use the EMR Library through an electric vehicle example.",
+    "model": "emr_electric_vehicle.tse",
+    "images": ["example_model.svg"],
+    "tags": ["emr_electric_vehicle", "package"],
+    "app_note": "",
+    "tests": []
+}
